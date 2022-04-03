@@ -1,0 +1,86 @@
+.container {
+    display: flex;
+
+    .column {
+        margin: 5px;
+    }
+}
+
+.gap {
+    height: 5px;
+}
+
+#leftside {
+    align-self: flex-start;
+}
+
+.item {
+    color: black;
+    background-color: rgb(34, 34, 34);
+    border: 7px solid rgb(235, 232, 232);
+    border-radius: 0.1em;
+    margin: 5px;
+    padding: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    transition-duration: 0.5s;
+
+    .div {
+        height: 50px;
+    }
+
+    .name {
+        font-size: 1em;
+        font-weight: 700;
+    }
+
+    .lore {
+        font-style: italic;
+        color: gray
+    }
+
+    .damage {
+        font-weight: lighter;
+        font-style: oblique;
+    }
+
+    .defense {
+        font-weight: lighter;
+        font-style: oblique;
+    }
+
+    .powder {
+        color: gray;
+        font-weight: 600;
+    }
+
+    .typetier {
+        font-weight: 600;
+    }
+
+    .restriction {
+        color: RGB(239, 91, 93);
+    }
+
+    .requirements {
+        font-style: italic;
+        color: gray;
+        font-weight: 600;
+    }
+
+    .stat {
+        color: rgb(235, 234, 234);
+        font-weight: lighter;
+        font-style: italic;
+        font-size: medium;
+        width: 100%;
+    }
+}
+
+.item:hover {
+    background-color: rgb(68, 68, 68);
+
+    color: rgb(0, 243, 0)
+}
