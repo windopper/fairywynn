@@ -1,14 +1,11 @@
 import './Menu.scss'
-import { useEffect } from 'react'
+import { Link } from 'react-router-dom'
 export default function Menu() {
 
     return (
         <div className='menu'>
-            <div>이유진 멋있다</div>
-            <div>짱</div>
-            <div>짱짱</div>
-            <div>짱 멋짐</div>
-            <div>안물</div>
+            <Link className='link' to='/itemsearch'><div>Item Search</div></Link>
+            <Link className='link' to='/crafts'><div>Crafts</div></Link>
         </div>
     )
 }

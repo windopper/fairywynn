@@ -1,3 +1,5 @@
+export const rarity = ['Normal', 'Unique', 'Rare', 'Set', 'Legendary', 'Mythic', 'Fabled']
+
 export const nameColor = {
     Normal: 'white',
     Unique: 'RGB(255, 250, 84)',
@@ -121,7 +123,7 @@ export function getAttackSpeed(data) {
     }}>{split}</div>;
 }
 
-const requires = ['level', 'quest', 'type', 'strength', 'dexterity', 'intelligence', 'agility', 'defense']
+export const requires = ['level', 'quest', 'type', 'strength', 'dexterity', 'intelligence', 'agility', 'defense']
 const requireMapping = {
     level: 'Level Req',
     quest: 'Quest Req',
@@ -173,7 +175,7 @@ export function getRequires(data) {
 
 const identified = 'identified'
 
-const stats = [
+export const stats = [
   "healthRegen",
   "manaRegen",
   "spellDamage",
@@ -226,7 +228,7 @@ const statsMapping = {
     intelligencePoints: "Intelligence",
     agilityPoints: "Agility",
     defensePoints: "Defense",
-    thorns: 'Throns',
+    thorns: 'Thorns',
     exploding: 'Exploding',
     speed: 'Speed',
     attackSpeedBonus: 'Attack Speed',
@@ -275,16 +277,16 @@ const statsUnit = {
     healthRegenRaw: '',
     spellDamageRaw: '',
     damageBonusRaw: '',
-    bonusFireDamage: '',
-    bonusWaterDamage: '',
-    bonusAirDamage: '',
-    bonusThunderDamage: '',
-    bonusEarthDamage: '',
-    bonusFireDefense: '',
-    bonusWaterDefense: '',
-    bonusAirDefense: '',
-    bonusThunderDefense: '',
-    bonusEarthDefense: '',
+    bonusFireDamage: '%',
+    bonusWaterDamage: '%',
+    bonusAirDamage: '%',
+    bonusThunderDamage: '%',
+    bonusEarthDamage: '%',
+    bonusFireDefense: '%',
+    bonusWaterDefense: '%',
+    bonusAirDefense: '%',
+    bonusThunderDefense: '%',
+    bonusEarthDefense: '%',
 }
 
 export function getStats(data) {
