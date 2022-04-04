@@ -1,11 +1,13 @@
+import { useReducer } from "react"
+
 export const FILTERMINLEVEL = (level) => { return {
     type: 'filter/minLevel',
-    level: level
+    minLevel: level
 }}
 
 export const FILTERMAXLEVEL = (level) => { return {
     type: 'filter/maxLevel',
-    level: level
+    maxLevel: level
 }}
 
 export const FILTERCATEGORY = (category) => {
@@ -25,27 +27,29 @@ export const FILTERRARITY = (rarity) => {
 export const initialFilter = {
     minLevel: 0,
     maxLevel: 255,
-    Category: [],
-    Rarity: [],
-    Descending: [],
-    Ascending: [],
+    Category: 'all',
+    Rarity: 'All',
 }
 
-export function filteringReducer(state, action) {
-    switch(action) {
+export const filter = (state = initialFilter, action) => {
+    switch(action.type) {
         case 'filter/minLevel': {
-            state.minLevel = action.minLevel
+            if(action.minLevel === '-') state.minLevel = 0
+            else state.minLevel = action.minLevel
             return state
         }
         case 'filter/maxLevel': {
-            state.maxLevel = action.maxLevel
+            if(action.maxLevel === '-') state.maxLevel = 255
+            else state.maxLevel = action.maxLevel
             return state
         }
         case 'filter/category': {
-            state.Category = state.category
+            state.Category = action.category
+            return state
         }
         case 'filter/rarity': {
-            state.Rarity = state.rarity
+            state.Rarity = action.rarity
+            return state
         }
         default:
             return state;

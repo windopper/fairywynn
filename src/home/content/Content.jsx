@@ -10,60 +10,89 @@ import {
   getRequires,
   getStats,
 } from "./EnumParts";
+import { filtering } from "../reducer/filter";
+import { useDispatch, useSelector, useStore } from "react-redux";
+import { COMPLETE, FETCHING } from "../reducer/fetcher";
 
-export default function Content({ search, setLoading, loading }) {
+const breakpointColumnsObj = {
+  default: 4,
+  1100: 3,
+  700: 2,
+  500: 1,
+};
+
+export default function Content() {
+  const store = useStore();
+  const dispatch = useDispatch()
+
   const [data, setData] = useState([]);
+  const [filteredData, setFilteredData] = useState([]);
 
-  const query = search != "" ? `search=${search}` : `category=all`;
-
-  const breakpointColumnsObj = {
-    default: 4,
-    1100: 3,
-    700: 2,
-    500: 1,
-  };
+  const filter = useRef(store.getState().filter);
+  const search = useRef(store.getState().search);
 
   useEffect(() => {
-    setLoading(true);
-    fetch(`https://api.wynncraft.com/public_api.php?action=itemDB&${query}`)
+    console.log("fetching...");
+
+    fetch(`https://api.wynncraft.com/public_api.php?action=itemDB&category=all`)
       .then((res) => {
         return res.json();
       })
       .then((d) => {
-        setLoading(false);
-        if (d.error == undefined) {
-          setData(d);
-        } else {
-          setData([]);
-        }
-        console.log(d);
+        console.log(d.items.length + " items uploading");
+        setData(d);
+        dispatch(COMPLETE(d))
       })
-      .catch((e) => {
-        setLoading(false);
-      });
-  }, [search]);
+      .catch((e) => {});
+  }, []);
 
-  let mapped = [];
+  useEffect(() => {
 
-  if (loading) {
-    mapped = [];
-    for (let i = 0; i < 200; i++) {
-      mapped.push(
-        <div
-          className="item"
-          key={i}
-          style={{
-            height: Math.random() * 300 + 200 + "px",
-          }}
-        ></div>
+    const listener = () => {
+      filter.current = store.getState().filter;
+      search.current = store.getState().search;
+      filterData();
+    };
+  
+    store.subscribe(listener);
+  }, [data])
+
+  const filterData = () => {
+
+    if (data.items !== undefined) {
+      const s = search.current;
+      const f = filter.current;
+
+      let fd = data.items.filter((v) =>
+        v.name.toLowerCase().includes(s.currentSearch)
       );
-    }
-  } else {
-    mapped = data.length != 0 && data.items != undefined ? Item(data) : data;
-  }
+      fd = fd.filter((v, i) => v.level <= f.maxLevel && v.level >= f.minLevel);
+      if (f.Rarity !== "All") fd = fd.filter((v, i) => v.tier == f.Rarity);
+      if (f.Category !== "all")
+        fd = fd.filter((v, i) => {
+          if (v.type !== undefined) {
+            if (v.type.toLowerCase() == f.Category) return true;
+          } else if (v.accessoryType !== undefined) {
+            if (v.accessoryType.toLowerCase() == f.Category) return true;
+          }
+          return false;
+        });
+      fd = fd.filter((v, i) => i < 500);
 
-  if (data.error != undefined || data.items == 0)
+      setFilteredData(fd);
+    }
+  };
+
+
+  let mapped =
+    filteredData.length != 0 && filteredData != undefined
+      ? Item(filteredData)
+      : filteredData;
+
+  if (filteredData.length == 0 && search.current.currentSearch !== "") {
+    mapped = [];
     mapped.push(<div className="zerodata">검색 결과가 없습니다</div>);
+  }
 
   const MappedContainer = () => (
     <Masonry
@@ -84,7 +113,7 @@ function Gap() {
 
 function Item(data) {
   // console.log(data.length)
-  return data.items.map((d, i) => {
+  let mappingData = data.map((d, i) => {
     return (
       <div className="item" key={i}>
         <div
@@ -126,4 +155,5 @@ function Item(data) {
       </div>
     );
   });
+  return mappingData;
 }

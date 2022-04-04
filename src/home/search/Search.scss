@@ -81,7 +81,43 @@
         }
     }
 
+    > .filtersearchwrapper {
+        display: flex;
+        justify-content: flex-start;
+        align-items: center;
+        flex-direction: row;
 
+        div {
+            font-style: oblique;
+            background-color: rgb(62, 62, 62);
+            padding: 2px 5px;
+            margin: 5px;
+            color: rgb(180, 180, 180);
+            border-radius: 6px;
+            display: flex;
+            justify-content: flex-start;
+            flex-direction: row;
+
+        }
+
+        select {
+            appearance: none;
+            text-align: center;
+            padding: 5px;
+            background-color: gray;
+            color: white;
+            font-style: oblique;
+            border-radius: 0.2em;
+        }
+        option {
+            border: 0px;
+            transition-duration: 0.5s;
+        }
+
+        option:hover {
+            background-color: rgb(197, 197, 197);
+        }
+    }
 }
 
 

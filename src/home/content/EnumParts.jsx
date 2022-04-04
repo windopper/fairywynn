@@ -1,3 +1,4 @@
+export const category = ['all', 'helmet', 'chestplate', 'leggings', 'boots', 'wand', 'dagger', 'spear', 'bow', 'relik', 'ring', 'bracelet', 'ring', 'necklace']
 export const rarity = ['Normal', 'Unique', 'Rare', 'Set', 'Legendary', 'Mythic', 'Fabled']
 
 export const nameColor = {
