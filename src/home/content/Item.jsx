@@ -8,6 +8,7 @@ import {
     getAttackSpeed,
     getRequires,
     getStats,
+    getMajorIds,
   } from "./EnumParts";
   import { filtering } from "../reducer/filter";
 import { useRef, useState } from "react";
@@ -21,51 +22,100 @@ export default function Items(data) {
         <Item d={d} i={i}/>
     );
   });
-
-  function Item({d, i}) {
-
-    const [state, setState] = useState(false)
-
-    return <div className="item" key={i} onMouseEnter={() => setState(true)} onMouseLeave={() => setState(false)}>
-    <div
-      className="name"
-      style={{
-        color: getColorFromTier(d),
-      }}
-    >
-      {d.name}
-    </div>
-    {state ? <ItemButtonContainer data={d}/> : null}
-    <Gap />
-    {getAttackSpeed(d)}
-    <Gap />
-    <div className="damage">{getDamage(d)}</div>
-    <div className="defense">{getDefense(d)}</div>
-    <Gap />
-    {getRequires(d)}
-    <Gap />
-    {getStats(d)}
-    <Gap />
-    <Gap />
-    <div className="lore">{d.addedLore}</div>
-    <Gap />
-    <div className="powder" id="leftside">
-      {getPowderSockets(d.sockets)}
-    </div>
-    <div
-      className="typetier"
-      style={{
-        color: nameColor[d.tier],
-      }}
-      id="leftside"
-    >
-      {d.tier + " " + `${d.type == undefined ? d.accessoryType : d.type}`}
-    </div>
-    <div className="restriction" id="leftside">
-      {d.restrictions}
-    </div>
-  </div>
 }
+
+export function Item({d, i}) {
+
+  console.log(d)
+
+  const [state, setState] = useState(false)
+
+  return <div className="item" key={i} onMouseEnter={() => setState(true)} onMouseLeave={() => setState(false)}>
+  <div
+    className="name"
+    style={{
+      color: getColorFromTier(d),
+    }}
+  >
+    {d.name}
+  </div>
+  {state ? <ItemButtonContainer data={d}/> : null}
+  <Gap />
+  {getAttackSpeed(d)}
+  <Gap />
+  <div className="damage">{getDamage(d)}</div>
+  <div className="defense">{getDefense(d)}</div>
+  <Gap />
+  {getRequires(d)}
+  <Gap />
+  {getStats(d)}
+  <Gap />
+  <Gap />
+  {getMajorIds(d)}
+  <Gap />
+  <div className="lore">{d.addedLore}</div>
+  <Gap />
+  <div className="powder" id="leftside">
+    {getPowderSockets(d.sockets)}
+  </div>
+  <div
+    className="typetier"
+    style={{
+      color: nameColor[d.tier],
+    }}
+    id="leftside"
+  >
+    {d.tier + " " + `${d.type == undefined ? d.accessoryType : d.type}`}
+  </div>
+  <div className="restriction" id="leftside">
+    {d.restrictions}
+  </div>
+</div>
+}
+
+
+export function DisplayItem({d}) {
+
+  return <div className="item">
+  <div
+    className="name"
+    style={{
+      color: getColorFromTier(d),
+    }}
+  >
+    {d.name}
+  </div>
+  <Gap />
+  {getAttackSpeed(d)}
+  <Gap />
+  <div className="damage">{getDamage(d)}</div>
+  <div className="defense">{getDefense(d)}</div>
+  <Gap />
+  {getRequires(d)}
+  <Gap />
+  {getStats(d)}
+  <Gap />
+  <Gap />
+  {getMajorIds(d)}
+  <Gap />
+  <div className="lore">{d.addedLore}</div>
+  <Gap />
+  <div className="powder" id="leftside">
+    {getPowderSockets(d.sockets)}
+  </div>
+  <div
+    className="typetier"
+    style={{
+      color: nameColor[d.tier],
+    }}
+    id="leftside"
+  >
+    {d.tier + " " + `${d.type == undefined ? d.accessoryType : d.type}`}
+  </div>
+  <div className="restriction" id="leftside">
+    {d.restrictions}
+  </div>
+</div>
 }
 
 function Gap() {

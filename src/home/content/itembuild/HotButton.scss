@@ -4,7 +4,7 @@
     min-width: var(--length);
     min-height: var(--length);
     background-color: rgb(53, 53, 53);
-    box-shadow: 10px 5px 5px rgb(128, 128, 128);
+    box-shadow: 10px 5px 5px rgba(128, 128, 128, 0.765);
     top: 90px;
     border-radius: 0.5em;
     right: 10px;
@@ -29,6 +29,9 @@
         display: flex;
         align-items: center;
         justify-content: center;
+        font-weight: bold;
+
+        overflow: hidden;
     }
 
     .margin10 {
@@ -49,6 +52,23 @@
         display: flex;
         align-items: center;
         justify-content: center;
+
+        &:hover {
+            cursor: pointer;
+        }
+    }
+
+    .builddetail {
+        background-color: rgb(0, 142, 230);
+        min-width: 100px;
+        height: 5%;
+        border-radius: 0.5em;
+        margin: 5px;
+        padding: 5px;
+
+        &:hover {
+            cursor: pointer;
+        }
     }
 
     .smallitemlist {
@@ -109,4 +129,13 @@
     &:hover {
         cursor: pointer;
     }
+}
+
+.item-show-wrapper {
+    position: fixed;
+    width: 300px;
+    top: 15%;
+    left: 10px;
+    background-color: rgb(34, 34, 34);
+    overflow: hidden;
 }

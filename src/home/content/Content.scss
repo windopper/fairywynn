@@ -92,6 +92,16 @@
         font-size: medium;
         width: 100%;
     }
+
+    .majorId {
+        color: RGB(100, 247, 252);
+        font-style: oblique;
+        font-weight: lighter;
+
+        > span {
+            color: RGB(16, 163, 161);
+        }
+    }
 }
 
 .item:hover {

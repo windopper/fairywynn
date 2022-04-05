@@ -26,6 +26,7 @@ export default function Content() {
       .then((d) => {
         console.log(d.items.length + " items uploading");
         api.current = d
+        console.log(d)
         dispatch(COMPLETE(d))
       })
       .catch((e) => {});

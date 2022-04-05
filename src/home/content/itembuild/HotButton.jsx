@@ -22,6 +22,7 @@ export default function HotButton() {
       {hover ? null : <div className="remaining">{`${remain}/9`}</div>}
       {hover ? null : <div className="margin10">CURRENT BUILD</div>}
       {hover ? <div className="createbuild">CREATE BUILD</div> : null}
+      {hover ? <div className="builddetail">BUILD DETAIL</div> : null}
       {hover
         ? BUILDEQUIPS.map((v, i) => {
             return <BuildItems v={v} equips={equips} />;

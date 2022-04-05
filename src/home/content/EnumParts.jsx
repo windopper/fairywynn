@@ -212,6 +212,7 @@ export const stats = [
   "bonusAirDefense",
   "bonusThunderDefense",
   "bonusEarthDefense",
+  "jumpHeight",
   "spellCostPct1",
   "spellCostPct2",
   "spellCostPct3",
@@ -258,6 +259,7 @@ const statsMapping = {
     bonusAirDefense: 'Air Defense',
     bonusThunderDefense: 'Thunder Defense',
     bonusEarthDefense: 'Earth Defense',
+    jumpHeight: 'Jump Height',
     spellCostPct1: '1st Spell Cost',
     spellCostPct3: '2nd Spell Cost',
     spellCostPct4: '3rd Spell Cost',
@@ -304,6 +306,7 @@ const statsUnit = {
     bonusAirDefense: '%',
     bonusThunderDefense: '%',
     bonusEarthDefense: '%',
+    jumpHeight: '',
     spellCostPct1: '%',
     spellCostPct3: '%',
     spellCostPct4: '%',
@@ -356,6 +359,56 @@ export function getStats(data) {
     return (
         <div className="stat">
             {divs}
+        </div>
+    )
+}
+
+const majorIdDescription = {
+    'Cavalryman': 'You may cast spells and attack with a 70% damage penalty while on a horse',
+    'Cherry Bombs': 'Your Smoke Bombs explode instantly on contact, dealing 110% damage each',
+    'Entropy': 'Meteor falls three times faster',
+    'Explosive Impact': 'Your "Exploding" ID can trigger when hitting mobs with your basic attack',
+    'Fission': 'Explosions from your "Exploding" ID are twice as big and twice as strong',
+    'Flashfreeze': 'Ice Snake is instant and freezes for longer at a reduced range',
+    'Freerunner': 'Double your sprint speed when your sprint bar is under 30%',
+    'Furious Effigy': 'Totem effects are twice as fast, but duration is halved',
+    'Geocentrism': 'Aura radiates from you instead of your Totem and can be cast at any time',
+    'Guardian': '50% of damage taken by nearby allies is redirected to you',
+    'Greed': 'Picking up emeralds heals you and nearby players for 15% max health',
+    'Hawkeye': 'Arrow Storm fires 5 arrows each dealing 80% damage',
+    'Heart of the Pack': 'Nearby players gain 35% of the health you naturally regen',
+    'Lightweight': 'You no longer take fall damage',
+    'Madness': 'Casts a random ability every 3 seconds',
+    'Magnet': 'Pulls items within an 8 block radius towards you',
+    'Peaceful Effigy': 'Your totem will last twice as long',
+    'Plague': 'Poisoned mobs spread their poison to nearby mobs',
+    'Rally': 'Charge heals you by 10% and nearby allies by 15% on impact, but becomes harmless',
+    'Roving Assassin': 'Vanish no longer drains mana while invisible',
+    "Saviour's Sacrifice": 'While under 50% maximum health, nearby allies gain 30`% bonus damage and defense',
+    'Sorcery': '30% chance for spells and attacks to cast a second time at no additional cost',
+    'Taunt': 'Mobs within 12 blocks target you upon casting War Scream',
+    'Transcendence': '50% chance for spells to cost no mana when cast'
+}
+
+export function getMajorIds(data) {
+    const majorId = data.majorIds
+    if(majorId == undefined) return null
+    let majorIdName = majorId[0].toLowerCase();
+    let nameArray = majorIdName.split('_')
+    let transformedName = ""
+
+    for(let i in nameArray) {
+        console.log(nameArray[i])
+        transformedName += nameArray[i].charAt(0).toUpperCase() + nameArray[i].slice(1)
+        if(nameArray.length-1 > i) transformedName += ' ';
+    }
+
+    console.log(transformedName)
+
+    const description = majorIdDescription[transformedName]
+    return (
+        <div className="majorId" id="leftside">
+            {`+${majorId[0]}:`} <span>{`${description}`}</span>
         </div>
     )
 }
