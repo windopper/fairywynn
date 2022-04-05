@@ -29,6 +29,10 @@ export const initialFilter = {
     maxLevel: 255,
     Category: 'all',
     Rarity: 'All',
+    Filter1: '',
+    Filter2: '',
+    Filter3: '',
+    Filter4: ''
 }
 
 export const filter = (state = initialFilter, action) => {

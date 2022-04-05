@@ -212,6 +212,14 @@ export const stats = [
   "bonusAirDefense",
   "bonusThunderDefense",
   "bonusEarthDefense",
+  "spellCostPct1",
+  "spellCostPct2",
+  "spellCostPct3",
+  "spellCostPct4",
+  "spellCostRaw1",
+  "spellCostRaw2",
+  "spellCostRaw3",
+  "spellCostRaw4",
 ];
 
 const statsMapping = {
@@ -250,6 +258,14 @@ const statsMapping = {
     bonusAirDefense: 'Air Defense',
     bonusThunderDefense: 'Thunder Defense',
     bonusEarthDefense: 'Earth Defense',
+    spellCostPct1: '1st Spell Cost',
+    spellCostPct3: '2nd Spell Cost',
+    spellCostPct4: '3rd Spell Cost',
+    spellCostPct2: '4th Spell Cost',
+    spellCostRaw1: '1st Spell Cost',
+    spellCostRaw2: '2nd Spell Cost',
+    spellCostRaw3: '3rd Spell Cost',
+    spellCostRaw4: '4th Spell Cost',
 }
 
 const statsUnit = {
@@ -288,6 +304,14 @@ const statsUnit = {
     bonusAirDefense: '%',
     bonusThunderDefense: '%',
     bonusEarthDefense: '%',
+    spellCostPct1: '%',
+    spellCostPct3: '%',
+    spellCostPct4: '%',
+    spellCostPct2: '%',
+    spellCostRaw1: '',
+    spellCostRaw2: '',
+    spellCostRaw3: '',
+    spellCostRaw4: '',
 }
 
 export function getStats(data) {

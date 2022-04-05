@@ -8,7 +8,6 @@ export default function Loading() {
 
     const store = useStore()
     
-
     const [update, setUpdate] = useState(false)
 
     const searching = useRef(store.getState().search.currentSearch)
@@ -22,15 +21,20 @@ export default function Loading() {
             coreLength.current = store.getState().fetcher.length
             setUpdate(u => !u)
         }
-        store.subscribe(listener)
+        let unsubscribe = store.subscribe(listener)
+        return () => {
+            unsubscribe()
+        }
     }, [])
 
 
     return (
         <div className="loading" >
-            {searching.current !== '' ? `'${searching.current}'의 검색결과` : null}
+            {preSearch.current.length !== 0 ? `'${searching.current}'의 검색결과` : null}
             {preSearch.current.length === 0 && searching.current === '' && coreLength.current !== 0 ? '아이템을 검색해주세요' : null}
             {coreLength.current === 0 ? '서버로부터 API를 받아오는 중...' : null}
+            <div className="loading-info">
+            </div>
         </div>
     )
 }

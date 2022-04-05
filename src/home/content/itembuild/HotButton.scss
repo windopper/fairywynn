@@ -1,0 +1,112 @@
+.hotbutton {
+    --length: 50px;
+    position: fixed;
+    min-width: var(--length);
+    min-height: var(--length);
+    background-color: rgb(53, 53, 53);
+    box-shadow: 10px 5px 5px rgb(128, 128, 128);
+    top: 90px;
+    border-radius: 0.5em;
+    right: 10px;
+    transition-duration: 1s;
+    color: white;
+    font-style: italic;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    flex-grow: 1;
+
+    .remaining {
+        position: absolute;
+        border-radius: 1.5em;
+        width: 50px;
+        height: 23px;
+        top: -10px;
+        left: -15px;
+        font-style: normal;
+        background-color: rgb(255, 31, 31);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .margin10 {
+        margin: 10px;
+    }
+
+    .createbuild {
+        background-color: rgb(2, 184, 2);
+        font-size: 1em;
+        margin: 6px 3px 3px 3px;
+        padding: 5px;
+        color: white;
+        font-weight: lighter;
+        min-width: 100px;
+        height: 5%;
+        border-radius: 0.5em;
+        text-align: center;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .smallitemlist {
+        color: white;
+        position: relative;
+        background-color: rgb(53, 52, 52);
+        border: 5px solid rgb(235, 232, 232);
+        border-radius: 0.5em;
+        margin: 3px;
+        min-width: 100px;
+        height: 5%;
+        padding: 10px;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        flex-direction: row;
+        font-size: 1em;
+        font-weight: 700;
+        text-align: center;
+
+        animation: appear 0.5s;
+        animation-fill-mode: both;
+
+        &:hover {
+            cursor: pointer;
+            background-color: rgb(90, 90, 90);
+        }
+    }
+}
+
+
+@keyframes appear {
+    from {
+        opacity: 0;
+    }
+    to {
+        opacity: 1;
+    }
+}
+
+.removeitem {
+    width: 15px;
+    height: 15px;
+    margin: 0px 10px 0px 0px;
+    background-color: red;
+    border: 2px solid rgb(217, 217, 217);
+    border-radius: 0.25em;
+
+    &::before {
+        content: "\00d7";
+        position: relative;
+        top: -7.5px;
+        font-size: 15pt;
+        color: white;
+        transform: rotote(45deg);
+    }
+
+    &:hover {
+        cursor: pointer;
+    }
+}

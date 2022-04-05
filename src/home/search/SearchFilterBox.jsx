@@ -21,14 +21,8 @@ export default function SearchFilterBox() {
     
         const selectContainer = (data, reducer) => {
           return (
-            <select onChange={(e) => selectDispatch(e.target.value, reducer)}>
+            <select onChange={(e) => selectDispatch(e.target.value, reducer)} defaultValue={data[0]}>
             {data.map((v, i) => {
-              if (i == 0)
-                return (
-                  <option value={v} key={i} selected>
-                    {v}
-                  </option>
-                );
               return (
                 <option value={v} key={i}>
                   {v}

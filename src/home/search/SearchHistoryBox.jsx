@@ -58,9 +58,7 @@ export default function SearchHistoryBox() {
         <div
           className="searchButton"
           onClick={() => {
-            if (input.current !== "") {
-              dispatchSearch(input.current);
-            }
+            dispatchSearch(input.current);
           }}
         >
           Search

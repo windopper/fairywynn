@@ -11,4 +11,13 @@
 .loading {
     animation-duration: 1.5s;
     animation-name: loading;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    
+    > .loading-info {
+      color: gray;
+      font-size: 0.7em;
+    }
 }
