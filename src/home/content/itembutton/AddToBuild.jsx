@@ -13,10 +13,8 @@ export default function AddToBuild(props) {
         return batch(() => {
             console.log(hasItemInBuild(props.data))
             if(hasItemInBuild(props.data)) {
-                console.log('warn')
                 showWarningPopUps(props.data.name, 3000)
             } else {
-                console.log('check')
                 showCheckingPopUps(props.data.name, 3000)
             }
             dispatch(additem(props.data))
