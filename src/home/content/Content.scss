@@ -43,25 +43,25 @@
     flex-direction: column;
     transition-duration: 0.5s;
 
-    font-size: 1.4vw;
+    font-size: 1rem;
 
     .div {
         height: 50px;
     }
 
     .name {
-        font-size: 1.5vw;
+        font-size: 1rem;
         font-weight: 700;
     }
 
     .lore {
-        font-size: 1.4vw;
+        font-size: 0.9rem;
         font-style: italic;
         color: gray
     }
 
     .damage {
-        font-weight: lighter;
+        // font-weight: lighter;
         font-style: oblique;
     }
 
@@ -87,11 +87,11 @@
     .requirements {
         font-style: italic;
         color: gray;
-        font-weight: 500;
+        font-weight: 400;
     }
 
     .stat {
-        font-size: 1.4vw;
+        font-size: 1rem;
         color: rgb(235, 234, 234);
         font-weight: 350;
         font-style: italic;
@@ -116,7 +116,7 @@
 .searchsize {
     color:rgb(68, 68, 68);
     text-align: center;
-    font-size: 3vw;
+    font-size: 20px;
     width: 100%;
     font-style: oblique;
     opacity: 0.7;

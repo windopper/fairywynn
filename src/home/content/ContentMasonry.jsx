@@ -3,7 +3,8 @@ import Masonry from "react-masonry-css";
 import { useState } from "react";
 
 const breakpointColumnsObj = {
-    default: 4,
+    default: 5,
+    1300: 4,
     1100: 3,
     700: 2,
     500: 1,
