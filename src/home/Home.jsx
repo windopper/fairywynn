@@ -5,6 +5,7 @@ import Menu from './menu/Menu'
 import Search from './search/Search'
 import HotButton from './content/itembuild/HotButton'
 import Alerts from '../alerts/Alerts'
+import BuildDetail from './content/builddetail/BuildDetail'
 
 export default function Home() {
 
@@ -17,6 +18,7 @@ export default function Home() {
             <div className="content"><Content/></div>
             <div className="list"></div>
             <HotButton />
+            <BuildDetail />
             <Alerts/>
         </div>
     )

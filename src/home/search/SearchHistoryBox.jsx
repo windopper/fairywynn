@@ -38,7 +38,7 @@ export default function SearchHistoryBox() {
               key={i}
               onClick={() => dispatchSearch(v)}
             >
-              {v}
+              {v.length > 10 ? v.slice(0, 10)+"..." : v}
             </div>
           );
         })}
@@ -54,6 +54,7 @@ export default function SearchHistoryBox() {
           className="searchInput"
           placeholder="Search Items.."
           onChange={(e) => (input.current = e.target.value)}
+          onKeyDown={(e) => e.key === 'Enter' ? dispatchSearch(input.current) : null}
         ></input>
         <div
           className="searchButton"

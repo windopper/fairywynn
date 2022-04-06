@@ -13,6 +13,7 @@ export default function Content() {
 
   const api = useRef([])
 
+  const [_, Update] = useState(false)
   const [filteredData, search, filter] = useSearchConditionUpdate(api.current)
 
 
@@ -27,6 +28,7 @@ export default function Content() {
         console.log(d.items.length + " items uploading");
         api.current = d
         console.log(d)
+        Update(u=>!u)
         dispatch(COMPLETE(d))
       })
       .catch((e) => {});

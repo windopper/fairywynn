@@ -2,8 +2,10 @@ import { store } from "../.."
 
 const ADD = 'popup/add'
 const REMOVE = 'popup/remove'
+
 const REGISTERSUCCESS = 'popup/registersuccess'
 const REMOVESUCCESS = 'popup/removesuccess'
+const REGISTERWARN = 'popup/registerwarn'
 
 const add = (v, i, alertType) => {
     return {
@@ -63,6 +65,18 @@ export function showCheckingPopUps(text, mili) {
     }, mili)
 }
 
+export function showWarningPopUps(text, mili) {
+    if(currentTimer) {
+        clearTimeout(currentTimer)
+        store.dispatch(remove())
+    }
+    setTimeout(() => store.dispatch(add(text, mili, REGISTERWARN)), 10)
+    currentTimer = setTimeout(() => {
+        store.dispatch(remove())
+        currentTimer = undefined;
+    }, mili)
+}
+
 export function showRemovingPopUps(text, mili) {
     if(currentTimer) {
         clearTimeout(currentTimer)
@@ -81,4 +95,8 @@ export function isRegisteringPopUp(state) {
 
 export function isRemovingPopUp(state) {
     return state.alertType === REMOVESUCCESS
+}
+
+export function isRegisteringWarnPopUp(state) {
+    return state.alertType === REGISTERWARN
 }

@@ -1,28 +1,16 @@
-@keyframes itemoption-appear {
+@keyframes item-option-appear {
     0% {
         color: transparent;
         background-color: transparent;
-        transform: translateY(75%);
-    }
-    25% {
-    }
-    50% {
-        transform: translateY(-10%);
-        
-    }
-    75% {
-        
+        top: -20px;
     }
     100%{
-        transform: translateY(0%);
+        top: 0px;
     }
 }
 
 .itembutton {
     position: relative;
-    animation-name: itemoption-appear;
-    animation-duration: 0.5s;
-    animation-fill-mode: both;
     margin: 10px;
     padding: 7px;
     background-color: white;
@@ -30,6 +18,10 @@
     text-align: center;
     font-weight: lighter;
     font-style: oblique;
+
+    animation-name: item-option-appear;
+    animation-duration: 0.5s;
+    animation-fill-mode: both;
 
     &.build {
         color: white;

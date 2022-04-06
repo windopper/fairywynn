@@ -26,11 +26,9 @@ export default function Items(data) {
 
 export function Item({d, i}) {
 
-  console.log(d)
-
   const [state, setState] = useState(false)
 
-  return <div className="item" key={i} onMouseEnter={() => setState(true)} onMouseLeave={() => setState(false)}>
+  return <div className="item" key={i} onMouseEnter={() => setState(true)} onMouseLeave={() => setState(false)} >
   <div
     className="name"
     style={{

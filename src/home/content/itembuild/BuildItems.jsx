@@ -8,14 +8,11 @@ import { DisplayItem } from "../Item";
 export default function BuildItems({ v, equips }) {
 
   const [hover, setHover] = useState(false)
-  const [click, setClick] = useState(false)
 
   const onMouseEnter = () => setHover(true)
   const onMouseLeave = () => {
     setHover(false)
-    setClick(false)
   }
-  const onClick = () => setClick(true)
 
   const item = useBuildItemUpdate(v)
 
@@ -30,9 +27,8 @@ export default function BuildItems({ v, equips }) {
         }}
         onMouseEnter={() => onMouseEnter()}
         onMouseLeave={() => onMouseLeave()}
-        onClick={() => onClick()}
       >
-        {click ? <div className="item-show-wrapper"><DisplayItem d={equips[v].item}/></div> : null}
+        {hover ? <div className="item-show-wrapper"><DisplayItem d={equips[v].item}/></div> : null}
         <RemoveButton type={v} item={equips[v].item}/>
         {equips[v].item.name}
       </div>

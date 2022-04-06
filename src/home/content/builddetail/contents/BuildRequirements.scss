@@ -1,0 +1,67 @@
+.buildrequirements {
+    position: relative;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    flex-wrap: wrap;
+    width: 90%;
+}
+
+.individual-stat {
+    position: relative;
+    // margin: 10px;
+    flex-grow: 1;
+    font-style: oblique;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+
+    > .stat-text {
+        
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+
+        > :nth-child(1) {
+            font-size: 8vw;
+            text-shadow: 2px;
+            font-style: normal;
+        }
+        > :nth-child(2) {
+            font-size: 2vw;
+            margin-bottom: 5px;
+        }
+        > :nth-child(3) {
+            font-size: 1.5vw;
+        }
+    }
+
+    &:hover {
+        cursor:help;
+    }
+}
+
+.stat-info {
+    position: absolute;
+    height: 40px;
+    z-index: 6;
+    border-radius: 0.3em;
+    font-weight: bold;
+    font-size: 0.5vw;
+    color: rgb(230, 230, 230);
+
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+
+
+    > :nth-child(1) {
+        font-size: 2.5vw;
+    }
+    > :nth-child(2) {
+        font-size: 1.5vw;
+    }
+}

@@ -10,7 +10,7 @@
     right: 10px;
     transition-duration: 1s;
     color: white;
-    font-style: italic;
+    font-style: oblique;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -86,10 +86,10 @@
         justify-content: space-between;
         flex-direction: row;
         font-size: 1em;
-        font-weight: 700;
+        font-weight: medium;
         text-align: center;
 
-        animation: appear 0.5s;
+        animation: appear 0.2s;
         animation-fill-mode: both;
 
         &:hover {
@@ -134,8 +134,9 @@
 .item-show-wrapper {
     position: fixed;
     width: 300px;
-    top: 15%;
+    top: 10%;
     left: 10px;
     background-color: rgb(34, 34, 34);
     overflow: hidden;
+    z-index: 2;
 }

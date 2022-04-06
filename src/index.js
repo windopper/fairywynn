@@ -4,11 +4,12 @@ import "./index.css";
 import App from "./App";
 import reportWebVitals from "./reportWebVitals";
 import { BrowserRouter } from "react-router-dom";
-import { createStore } from "redux";
+import { applyMiddleware, createStore } from "redux";
 import rootReducer from "./home/reducer/Reducers";
 import { Provider } from "react-redux";
+import logger from "redux-logger";
 
-export const store = createStore(rootReducer);
+export const store = createStore(rootReducer, applyMiddleware(logger));
 console.log(store.getState())
 ReactDOM.render(
   <Provider store={store}>

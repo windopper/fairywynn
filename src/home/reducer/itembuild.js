@@ -1,3 +1,5 @@
+import { store } from "../.."
+
 const ADDITEM = 'build/additem'
 const REMOVEITEM = 'build/removeitem'
 
@@ -56,4 +58,16 @@ export const itembuild = (state = initialState, action) => {
         }
         default: return state
     }
+}
+
+export const hasItemInBuild = (item) => {
+    for(let v in BUILDEQUIPS) {
+        // console.log(v)
+        if(store.getState().itembuild[BUILDEQUIPS[v]] !== undefined) {
+            if(store.getState().itembuild[BUILDEQUIPS[v]].item.name === item.name) {
+                return true
+            }
+        }
+    }
+    return false
 }

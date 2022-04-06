@@ -47,21 +47,29 @@
     justify-content: center;
     color: white;
     font-weight: lighter;
-    font-size: 20px;
+    font-size: 2vw;
 
     div {
         margin: 10px;
     }
+
+
 }
 
-.registering {
+.alert.registering {
     background-color: rgb(42, 176, 22);
     box-shadow: 0px 0px 2px #259c08;
 }
 
-.removing {
+.alert.removing {
     background-color: rgb(176, 22, 22);
 }
+
+.alert.alreadyinbuild {
+    background-color: rgb(255, 191, 0);
+}
+
+
 
 @keyframes checkmark-animation {
     0% {
@@ -81,6 +89,12 @@
 }
 
 .fa-solid.fa-check {
+    animation-name: checkmark-animation;
+    animation-duration: 0.5s;
+    margin-left: 10px;
+}
+
+.fa-solid.fa-diamond-exclamation {
     animation-name: checkmark-animation;
     animation-duration: 0.5s;
     margin-left: 10px;

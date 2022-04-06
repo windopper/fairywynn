@@ -5,7 +5,7 @@
     top: 0px;
     background-color: white;
     border-bottom: 0.5px solid rgb(228, 228, 228);
-    z-index: 1;
+    // z-index: 1;
     opacity: 0.9;
 }
 
@@ -26,13 +26,16 @@
     position: relative;
     margin-top: 80px;
     width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
 
 .loading {
     position: relative;
     margin: 20px 0px 20px 0px;
     color: rgb(61, 61, 61);
-    font-size: 40px;
+    font-size: 4vw;
     font-style: oblique;  
     font-weight: lighter;
 }

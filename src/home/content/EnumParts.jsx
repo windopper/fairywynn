@@ -223,7 +223,7 @@ export const stats = [
   "spellCostRaw4",
 ];
 
-const statsMapping = {
+export const statsMapping = {
     healthRegen: "Heath Regen",
     manaRegen: "Mana Regen",
     spellDamage: "Spell Damage",
@@ -240,7 +240,7 @@ const statsMapping = {
     defensePoints: "Defense",
     thorns: 'Thorns',
     exploding: 'Exploding',
-    speed: 'Speed',
+    speed: 'Walk Speed',
     attackSpeedBonus: 'Attack Speed',
     poison: 'Poison',
     healthBonus: 'Health',
@@ -261,16 +261,16 @@ const statsMapping = {
     bonusEarthDefense: 'Earth Defense',
     jumpHeight: 'Jump Height',
     spellCostPct1: '1st Spell Cost',
-    spellCostPct3: '2nd Spell Cost',
-    spellCostPct4: '3rd Spell Cost',
-    spellCostPct2: '4th Spell Cost',
+    spellCostPct3: '3rd Spell Cost',
+    spellCostPct4: '4th Spell Cost',
+    spellCostPct2: '2nd Spell Cost',
     spellCostRaw1: '1st Spell Cost',
     spellCostRaw2: '2nd Spell Cost',
     spellCostRaw3: '3rd Spell Cost',
     spellCostRaw4: '4th Spell Cost',
 }
 
-const statsUnit = {
+export const statsUnit = {
     healthRegen: "%",
     manaRegen: "/4s",
     spellDamage: "%",
@@ -345,10 +345,14 @@ export function getStats(data) {
                     color: `${calStat[0] < 0 ? 'red' : 'rgb(0, 243, 0)'}`
                 }}>{calStat[0]+statsUnit[type]}</div>}
 
-                <div>{statsMapping[type]}</div>
+                <div style={{
+                    textAlign: 'center',
+                    margin: '0px 3px',
+                }}>{statsMapping[type]}</div>
 
                 {ided || canIDed(type) ? <div style={{
-                    color: `${value < 0 ? 'red' : 'rgb(0, 243, 0)'}`
+                    color: `${value < 0 ? 'red' : 'rgb(0, 243, 0)'}`,
+
                 }}>{value+statsUnit[type]}</div> : <div style={{
                     color: `${calStat[1] < 0 ? 'red' : 'rgb(0, 243, 0)'}`
                 }}>{calStat[1]+statsUnit[type]}</div>}
@@ -377,6 +381,7 @@ const majorIdDescription = {
     'Greed': 'Picking up emeralds heals you and nearby players for 15% max health',
     'Hawkeye': 'Arrow Storm fires 5 arrows each dealing 80% damage',
     'Heart of the Pack': 'Nearby players gain 35% of the health you naturally regen',
+    'Altruism': 'Nearby players gain 35% of the health you naturally regen',
     'Lightweight': 'You no longer take fall damage',
     'Madness': 'Casts a random ability every 3 seconds',
     'Magnet': 'Pulls items within an 8 block radius towards you',
@@ -385,6 +390,7 @@ const majorIdDescription = {
     'Rally': 'Charge heals you by 10% and nearby allies by 15% on impact, but becomes harmless',
     'Roving Assassin': 'Vanish no longer drains mana while invisible',
     "Saviour's Sacrifice": 'While under 50% maximum health, nearby allies gain 30`% bonus damage and defense',
+    "Hero": 'While under 50% maximum health, nearby allies gain 30`% bonus damage and defense',
     'Sorcery': '30% chance for spells and attacks to cast a second time at no additional cost',
     'Taunt': 'Mobs within 12 blocks target you upon casting War Scream',
     'Transcendence': '50% chance for spells to cost no mana when cast'
@@ -398,12 +404,12 @@ export function getMajorIds(data) {
     let transformedName = ""
 
     for(let i in nameArray) {
-        console.log(nameArray[i])
+        // console.log(nameArray[i])
         transformedName += nameArray[i].charAt(0).toUpperCase() + nameArray[i].slice(1)
         if(nameArray.length-1 > i) transformedName += ' ';
     }
 
-    console.log(transformedName)
+    // console.log(transformedName)
 
     const description = majorIdDescription[transformedName]
     return (
