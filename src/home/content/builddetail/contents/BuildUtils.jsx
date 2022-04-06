@@ -331,11 +331,14 @@ function getMaxValue(base) {
 }
 
 function Filter(data, value) {
-  return BUILDEQUIPS.filter((v) => data[v] !== undefined)
+  let filtered = BUILDEQUIPS.filter((v) => data[v] !== undefined)
     .filter(
       (v) => data[v].item[value] !== undefined && data[v].item[value] !== 0
     )
     .map((v) => data[v].item[value]);
+
+    if(filtered.length === 0) return [0];
+    return filtered
 }
 
 function getMaxSum(data, value, fixed = false) {
