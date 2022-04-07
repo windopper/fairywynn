@@ -1,6 +1,6 @@
 import { BUILDEQUIPS } from '../../../reducer/itembuild'
 import './BuildStats.scss'
-import { AdditionalStats, ElementDefense, Health, HealthRegen, LifeSteal, ManaRegen, ManaSteal, ExtraStats } from './BuildUtils'
+import { AdditionalStats, ElementDefense, Health, HealthRegen, LifeSteal, ManaRegen, ManaSteal, ExtraStats, MajorIds } from './BuildUtils'
 
 export default function BuildStats({data}) {
     return (
@@ -9,6 +9,7 @@ export default function BuildStats({data}) {
             <div className='buildstats-content'>
                 <ContentPart1 data={data} />
                 <ContentPart2 data={data} />
+                <ContentPart3 data={data} />
             </div>
         </div>
     )
@@ -38,6 +39,14 @@ function ContentPart2({data}) {
             <ManaSteal data={data} />
             <ExtraStats data={data} />
             <br/>
+        </div>
+    )
+}
+
+function ContentPart3({data}) {
+    return (
+        <div className='buildstats-content-part'>
+            <MajorIds data={data} />
         </div>
     )
 }

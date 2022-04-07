@@ -5,6 +5,7 @@ import { itembuild } from "./itembuild";
 import { builddetail } from "./builddetail";
 import { popup } from "./popup";
 import { searchReducer } from "./search";
+import { powderbuild } from "./powderbuild";
 
 const rootReducer = combineReducers({
     filter: filter,
@@ -12,7 +13,8 @@ const rootReducer = combineReducers({
     fetcher: fetcher,
     itembuild: itembuild,
     popup: popup,
-    builddetail: builddetail
+    builddetail: builddetail,
+    powderbuild: powderbuild
 })
 
 export default rootReducer

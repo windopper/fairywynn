@@ -11,7 +11,7 @@ export default function AddToBuild(props) {
     const dispatchCallBack = useCallback(() => {
 
         return batch(() => {
-            console.log(hasItemInBuild(props.data))
+            // console.log(hasItemInBuild(props.data))
             if(hasItemInBuild(props.data)) {
                 showWarningPopUps(props.data.name, 3000)
             } else {

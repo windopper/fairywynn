@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import useBuildItemUpdate from "../../hooks/useBuildItemUpdate";
 import { getColorFromTier } from "../../../utils/ColorPicker";
 import { DisplayItem } from "../Item";
+import AddPowderButton from "./AddPowderButton";
 
 export default function BuildItems({ v, equips }) {
 
@@ -30,6 +31,7 @@ export default function BuildItems({ v, equips }) {
       >
         {hover ? <div className="item-show-wrapper"><DisplayItem d={equips[v].item}/></div> : null}
         <RemoveButton type={v} item={equips[v].item}/>
+        <AddPowderButton item={equips[v].item} type={v} />
         {equips[v].item.name}
       </div>
     );

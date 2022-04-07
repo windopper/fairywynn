@@ -6,6 +6,7 @@ import Search from './search/Search'
 import HotButton from './content/itembuild/HotButton'
 import Alerts from '../alerts/Alerts'
 import BuildDetail from './content/builddetail/BuildDetail'
+import PowderBuild from './content/powderbuild/PowderBuild'
 
 export default function Home() {
 
@@ -19,6 +20,7 @@ export default function Home() {
             <div className="list"></div>
             <HotButton />
             <BuildDetail />
+            <PowderBuild />
             <Alerts/>
         </div>
     )

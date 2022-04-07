@@ -1,6 +1,6 @@
 import "./BuildUtils.scss";
 import { BUILDEQUIPS } from "../../../reducer/itembuild";
-import { statsMapping, statsUnit } from "../../EnumParts";
+import { majorIdDescription, statsMapping, statsUnit } from "../../EnumParts";
 
 const statTypeColor = {
   neutral: "RGB(252, 165, 14)",
@@ -12,13 +12,13 @@ const statTypeColor = {
 };
 
 const elementEmoji = {
-    damage: "✤",
-    fire: "✹",
-    earth: "✤",
-    water: "❉",
-    air:"❋",
-    thunder: "✦",
-}
+  damage: "✤",
+  fire: "✹",
+  earth: "✤",
+  water: "❉",
+  air: "❋",
+  thunder: "✦",
+};
 
 const extrastats = [
   "spellDamage",
@@ -121,7 +121,7 @@ export function HealthRegen({ data }) {
   const result = RawPercentCalculate(
     getMaxSum(data, "healthRegenRaw"),
     getMaxSum(data, "healthRegen")
-  );
+  ).toFixed(1)
 
   return (
     <div
@@ -154,23 +154,23 @@ export function ElementDefense({ data }) {
   const earthResult = RawPercentCalculate(
     getMaxSum(data, "earthDefense", true),
     getMaxSum(data, "bonusEarthDefense")
-  );
+  ).toFixed(1);
   const thunderResult = RawPercentCalculate(
     getMaxSum(data, "thunderDefense", true),
     getMaxSum(data, "bonusThunderDefense")
-  );
+  ).toFixed(1);
   const waterResult = RawPercentCalculate(
     getMaxSum(data, "waterDefense", true),
     getMaxSum(data, "bonusWaterDefense")
-  );
+  ).toFixed(1);
   const fireResult = RawPercentCalculate(
     getMaxSum(data, "fireDefense", true),
     getMaxSum(data, "bonusFireDefense")
-  );
+  ).toFixed(1);
   const airResult = RawPercentCalculate(
     getMaxSum(data, "airDefense", true),
     getMaxSum(data, "bonusAirDefense")
-  );
+  ).toFixed(1);
 
   return (
     <>
@@ -261,10 +261,10 @@ export function ExtraStats({ data }) {
   let divs = null;
   divs = extrastats.map((v) => {
     const sum = getMaxSum(data, v);
-    if(sum === 0) return;
+    if (sum === 0) return;
     return (
       <div className="buildutil">
-          <GetElementsColorComponent value={statsMapping[v]} />
+        <GetElementsColorComponent value={statsMapping[v]} />
         {stateReverse.includes(v) ? (
           <ReverseREDOrGREEN v={sum} content={statsUnit[v]} />
         ) : (
@@ -276,30 +276,72 @@ export function ExtraStats({ data }) {
   return <>{divs}</>;
 }
 
-function GetElementsColorComponent({value}) {
-    const lowercase = value.toLowerCase()
-    const split = value.split(' ')
-    let element = ''
-    if(lowercase.includes('earth')) {
-        element = 'earth'
-    } else if(lowercase.includes('thunder')) {
-        element = 'thunder'
-    } else if(lowercase.includes('water')) {
-        element= 'water'
-    } else if(lowercase.includes('fire')) {
-        element = 'fire'
-    } else if(lowercase.includes('air')) {
-        element = 'air'
-    } else {
-        <WHITE v={value} />
-    }
-    return (
-        <div style={{
-            color: `${element === '' ? 'white' : statTypeColor[element]}`
-        }}>
-            {elementEmoji[element]} {split[0]} <WHITE v={split[1]} />
-        </div>
-    )
+export function MajorIds({ data }) {
+  const filtered = Filter(data, "majorIds");
+  const overlap = []
+  return (
+    <>
+      {filtered.map((v) => {
+        if(v === 0) return null
+        if(overlap.includes(v[0])) return null
+        overlap.push(v[0])
+        let name = v[0].toLowerCase();
+        name = name.split("_");
+        let resultName = "";
+        for (let i in name) {
+          resultName += name[i].charAt(0).toUpperCase() + name[i].slice(1);
+          if (name.length - 1 > i) resultName += " ";
+        }
+        // console.log(majorIdDescription[resultName]);
+        return (
+          <div className="majorId smallfont">
+            <span
+              style={{
+                color: "RGB(100, 247, 252)",
+              }}
+            >
+              {resultName}: {} 
+            </span>
+            <span
+              style={{
+                color: "RGB(16, 163, 161)",
+              }}
+            >
+              {majorIdDescription[resultName]}
+            </span>
+          </div>
+        );
+      })}
+    </>
+  );
+}
+
+function GetElementsColorComponent({ value }) {
+  const lowercase = value.toLowerCase();
+  const split = value.split(" ");
+  let element = "";
+  if (lowercase.includes("earth")) {
+    element = "earth";
+  } else if (lowercase.includes("thunder")) {
+    element = "thunder";
+  } else if (lowercase.includes("water")) {
+    element = "water";
+  } else if (lowercase.includes("fire")) {
+    element = "fire";
+  } else if (lowercase.includes("air")) {
+    element = "air";
+  } else {
+    <WHITE v={value} />;
+  }
+  return (
+    <div
+      style={{
+        color: `${element === "" ? "white" : statTypeColor[element]}`,
+      }}
+    >
+      {elementEmoji[element]} {split[0]} <WHITE v={split[1]} />
+    </div>
+  );
 }
 
 function RawPercentCalculate(raw, percent) {
@@ -337,11 +379,11 @@ function Filter(data, value) {
     )
     .map((v) => data[v].item[value]);
 
-    if(filtered.length === 0) return [0];
-    return filtered
+  if (filtered.length === 0) return [0];
+  return filtered;
 }
 
-function getMaxSum(data, value, fixed = false) {
+export function getMaxSum(data, value, fixed = false) {
   let filtered = BUILDEQUIPS.filter((v) => data[v] !== undefined).filter(
     (v) => data[v].item[value] !== undefined && data[v].item[value] !== 0
   );
@@ -356,10 +398,10 @@ function getMaxSum(data, value, fixed = false) {
         return getMaxValue(data[v].item[value]);
       }
     })
-    .reduce((ac, v) => ac + v);
+    .reduce((ac, v) => ac + v)
 }
 
-function isIDed(data) {
+export function isIDed(data) {
   const identified = "identified";
   return data[identified] == undefined || data[identified] == false
     ? false

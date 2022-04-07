@@ -8,8 +8,7 @@
     }
 }
 
-
-.build-detail-wrapper {
+.powderbuild-container-wrapper {
     animation-name: build-detail-appear;
     animation-duration: 0.5s;
     animation-fill-mode: both;
@@ -26,19 +25,21 @@
     justify-content: center;
 }
 
-.build-detail {
+.powderbuild-container {
     width: 80%;
-    height: 90%;
+    height: 80%;
     background-color: rgb(42, 42, 42);
     border-radius: 1em;
     z-index: 4;
 
     display: flex;
-    flex-direction: column;
+    flex-direction: column;    
+    // justify-content: center;
     align-items: center;
 
+    // flex-wrap: wrap;
+
     overflow-y: scroll;
-    overflow-x: hidden;
 
     &::-webkit-scrollbar-thumb {
         background-color: rgb(216, 216, 216);
@@ -54,34 +55,16 @@
         width: 15px;
     }
 
-}
-
-.hidebutton {
-    position: absolute;
-    width: 25px;
-    height: 25px;
-    margin: 0px 10px 0px 0px;
-    top: 21%;
-    right: 15%;
-    background-color: red;
-    border: 2px solid rgb(217, 217, 217);
-    border-radius: 20%;
-    z-index: 5;
-
-    &::before {
-        content: "\00d7";
-        position: relative;
-        top: -16px;
-        font-size: 37px;
-        color: white;
-        transform: rotote(45deg);
-    }
-
-    &:hover {
-        cursor: pointer;
+    > div {
+        margin: 10px 20px;
     }
 }
 
-.left {
-    align-self: flex;
+.powderbuild-itemdisplay-wrapper {
+    position: relative;
+    width: 90%;
+    margin: 10px;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
 }

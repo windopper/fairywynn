@@ -1,7 +1,9 @@
 import { useState, useRef } from "react";
 import { SkillPointToPercentage } from "../../../../utils/WynnMath";
 import { BUILDEQUIPS } from "../../../reducer/itembuild";
+import { getMaxSum } from "./BuildUtils";
 import "./BuildRequirements.scss";
+import { StatAssignCalculateFunction } from "./StatRemain";
 
 const statTypeColor = {
   neutral: "RGB(252, 165, 14)",
@@ -30,10 +32,13 @@ const statType = [
 ];
 
 export default function BuildRequirements({ data }) {
+
+  const cal_Data = StatAssignCalculateFunction(data)
+
   return (
     <div className="buildrequirements">
       {statType.map((v) => (
-        <RequirementsGetter _statType={v} data={data} />
+        <RequirementsGetter _statType={v} data={cal_Data} />
       ))}
     </div>
   );
@@ -42,14 +47,9 @@ export default function BuildRequirements({ data }) {
 function RequirementsGetter({ _statType, data }) {
   const [show, setShow] = useState(false);
 
-  let maximumStatValue = Math.max.apply(
-    null,
-    BUILDEQUIPS.filter((v) => data[v] !== undefined).map((v) => {
-      return data[v].item[_statType];
-    })
-  );
-  if(maximumStatValue == -Infinity) maximumStatValue = 0
-  let percent = SkillPointToPercentage(maximumStatValue);
+  let percent = 0
+  if (data.finalStatTypePoints[_statType] > 0) percent = SkillPointToPercentage(data.finalStatTypePoints[_statType]);
+  
 
   return (
     <div
@@ -58,7 +58,7 @@ function RequirementsGetter({ _statType, data }) {
       onMouseEnter={() => setShow(true)}
     >
       <div
-      className="stat-text"
+        className="stat-text"
         style={{
           filter: `${show ? "blur(3px)" : ""}`,
         }}
@@ -82,7 +82,7 @@ function RequirementsGetter({ _statType, data }) {
             color: statTypeColor[_statType],
           }}
         >
-          {maximumStatValue}
+          {data.finalStatTypePoints[_statType]}
         </div>
       </div>
       {show ? (

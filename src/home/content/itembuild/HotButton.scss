@@ -83,10 +83,10 @@
         padding: 10px;
         display: flex;
         align-items: center;
-        justify-content: space-between;
+        justify-content: flex-start;
         flex-direction: row;
         font-size: 1em;
-        font-weight: medium;
+        font-weight: 600;
         text-align: center;
 
         animation: appear 0.2s;
@@ -112,7 +112,7 @@
 .removeitem {
     width: 15px;
     height: 15px;
-    margin: 0px 10px 0px 0px;
+    margin: 0px 5px 0px 0px;
     background-color: red;
     border: 2px solid rgb(217, 217, 217);
     border-radius: 0.25em;
@@ -130,6 +130,28 @@
         cursor: pointer;
     }
 }
+
+.plusbutton {
+    width: 15px;
+    height: 15px;
+    margin: 0px 10px 0px 0px;
+    background-color: rgb(16, 137, 22);
+    border: 2px solid rgb(217, 217, 217);
+    border-radius: 0.25em;
+
+    &::before {
+        content: "+";
+        position: relative;
+        top: -7.5px;
+        font-size: 15pt;
+        color: white;
+        // transform: rotote(60deg);
+    }
+
+    &:hover {
+        cursor: pointer;
+    }
+  }
 
 .item-show-wrapper {
     position: fixed;

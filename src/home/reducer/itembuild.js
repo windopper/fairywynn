@@ -2,6 +2,7 @@ import { store } from "../.."
 
 const ADDITEM = 'build/additem'
 const REMOVEITEM = 'build/removeitem'
+const ADDPOWDER = 'build/addpowder'
 
 const weapons = ['dagger', 'spear', 'wand', 'bow', 'relik']
 
@@ -34,6 +35,14 @@ export const removeitem = (type) => {
     }
 }
 
+export const addpowder = (type, powder) => {
+    return {
+        type: ADDPOWDER,
+        equip: type,
+        powder: powder,
+    }
+}
+
 export const itembuild = (state = initialState, action) => {
     switch(action.type) {
         case ADDITEM: {
@@ -54,6 +63,10 @@ export const itembuild = (state = initialState, action) => {
         }
         case REMOVEITEM: {
             state[action.equip] = undefined
+            return state
+        }
+        case ADDPOWDER: {
+            state[action.equip].powder.push(action.powder)
             return state
         }
         default: return state

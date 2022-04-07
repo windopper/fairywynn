@@ -6,6 +6,8 @@ import "./BuildDetail.scss";
 import HideButton from "./HideButton";
 import BuildRequirements from "./contents/BuildRequirements";
 import BuildStats from "./contents/BuildStats";
+import StatRemain from "./contents/StatRemain";
+import BuildItemUsed from "./contents/BuildItemUsed";
 
 export default function BuildDetail() {
   const isCursorInside = useRef(false);
@@ -39,6 +41,8 @@ export default function BuildDetail() {
             onMouseLeave={() => onLeave()}
           >
             <BuildRequirements data={currentItemBuild} />
+            <StatRemain data={currentItemBuild} />
+            <BuildItemUsed data={currentItemBuild} />
             <BuildStats data={currentItemBuild}/>
           </div>
         </div>

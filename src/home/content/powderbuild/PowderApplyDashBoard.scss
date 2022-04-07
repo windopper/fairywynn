@@ -1,0 +1,25 @@
+.powderapplydashboard-container {
+    width: 60%;
+    height: 500px;
+    // background-color: white;
+    display: flex;
+    flex-direction: column;
+    // justify-content: center;
+    align-items: center;
+}
+
+.powderline {
+    font-size: 3.5rem;
+    display: flex;
+    flex-direction: row;
+    height: 65px;
+
+    .emojidiv {
+        &:hover {
+            // text-shadow: 3px 0 white;
+            text-shadow: -2px 0 white, 0 2px white, 2px 0 white, 0 -2px white;
+            cursor: pointer;
+        }
+    }
+}
+

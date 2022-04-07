@@ -244,7 +244,7 @@ export const statsMapping = {
     attackSpeedBonus: 'Attack Speed',
     poison: 'Poison',
     healthBonus: 'Health',
-    soulPoints: 'SoulPoints',
+    soulPoints: 'Soul Point Regen',
     emeraldStealing: 'Stealing',
     healthRegenRaw: 'Health Regen',
     spellDamageRaw: 'Spell Damage',
@@ -367,7 +367,7 @@ export function getStats(data) {
     )
 }
 
-const majorIdDescription = {
+export const majorIdDescription = {
     'Cavalryman': 'You may cast spells and attack with a 70% damage penalty while on a horse',
     'Cherry Bombs': 'Your Smoke Bombs explode instantly on contact, dealing 110% damage each',
     'Entropy': 'Meteor falls three times faster',
