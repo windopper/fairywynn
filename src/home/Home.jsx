@@ -12,12 +12,12 @@ export default function Home() {
 
     return (
         <div className='home'>
-            <div className='menu'><Menu/></div>
-            <div className="title"></div>
+            {/* <div className='menu'><Menu/></div> */}
+            {/* <div className="title"></div> */}
             <div className='search'><Search/></div>
             <div className='loading'><Loading/></div>
             <div className="content"><Content/></div>
-            <div className="list"></div>
+            {/* <div className="list"></div> */}
             <HotButton />
             <BuildDetail />
             <PowderBuild />
