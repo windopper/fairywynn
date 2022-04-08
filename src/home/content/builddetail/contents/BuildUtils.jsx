@@ -1,6 +1,7 @@
 import "./BuildUtils.scss";
 import { BUILDEQUIPS } from "../../../reducer/itembuild";
 import { majorIdDescription, statsMapping, statsUnit } from "../../EnumParts";
+import { useStore } from "react-redux";
 
 const statTypeColor = {
   neutral: "RGB(252, 165, 14)",
@@ -151,24 +152,36 @@ export function ManaRegen({ data }) {
 }
 
 export function ElementDefense({ data }) {
+
+  const store = useStore()
+  const filteredArmorDefenses = BUILDEQUIPS.filter(v => store.getState().itembuild[v] !== undefined && store.getState().itembuild[v].armorDefense != null)
+  
+  const elementDefenseSum = (element) => {
+    if(filteredArmorDefenses.length == 0) {
+      return 0
+    }
+    return filteredArmorDefenses.map(v => store.getState().itembuild[v].armorDefense[element]).reduce((a , s) => a + s)
+  }
+  
+
   const earthResult = RawPercentCalculate(
-    getMaxSum(data, "earthDefense", true),
+    elementDefenseSum('earthDefense'),
     getMaxSum(data, "bonusEarthDefense")
   ).toFixed(1);
   const thunderResult = RawPercentCalculate(
-    getMaxSum(data, "thunderDefense", true),
+    elementDefenseSum('thunderDefense'),
     getMaxSum(data, "bonusThunderDefense")
   ).toFixed(1);
   const waterResult = RawPercentCalculate(
-    getMaxSum(data, "waterDefense", true),
+    elementDefenseSum('waterDefense'),
     getMaxSum(data, "bonusWaterDefense")
   ).toFixed(1);
   const fireResult = RawPercentCalculate(
-    getMaxSum(data, "fireDefense", true),
+    elementDefenseSum('fireDefense'),
     getMaxSum(data, "bonusFireDefense")
   ).toFixed(1);
   const airResult = RawPercentCalculate(
-    getMaxSum(data, "airDefense", true),
+    elementDefenseSum('airDefense'),
     getMaxSum(data, "bonusAirDefense")
   ).toFixed(1);
 

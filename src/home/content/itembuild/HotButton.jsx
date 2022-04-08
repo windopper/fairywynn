@@ -6,6 +6,7 @@ import BuildItems from "./BuildItems";
 import useBuildItemsUpdate from "../../hooks/useBuildItemsUpdate";
 import BuildDetail from "../builddetail/BuildDetail";
 import { showBuildDetail } from "../../reducer/builddetail";
+import ExportButton from "./ExportButton";
 
 export default function HotButton() {
 
@@ -26,6 +27,7 @@ export default function HotButton() {
       onMouseEnter={() => setHover(true)}
       onMouseLeave={() => setHover(false)}
     >
+      {hover ? <ExportButton /> : null}
       {hover ? null : <div className="remaining">{`${remain}/9`}</div>}
       {hover ? null : <div className="margin10">CURRENT BUILD</div>}
       {hover ? <div className="createbuild">CREATE BUILD</div> : null}

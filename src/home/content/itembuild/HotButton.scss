@@ -162,3 +162,18 @@
     overflow: hidden;
     z-index: 2;
 }
+
+.exportbutton {
+    position: relative;
+    min-width: 100px;
+    margin: 6px 3px 3px 3px;
+    background-color: rgb(115, 0, 138);
+    font-weight: 500;
+    padding: 5px;
+    border-radius: 0.5em;
+    font-size: 17px;
+
+    &:hover {
+        cursor: pointer
+    }
+}

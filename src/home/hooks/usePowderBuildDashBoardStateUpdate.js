@@ -22,6 +22,7 @@ export default function usePowderBuildDashBoardStateUpdate() {
 
     return {
         state: ref.current.state,
-        item: ref.current.item
+        item: ref.current.item,
+        equipType: ref.current.equipType
     }
 }

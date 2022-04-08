@@ -23,15 +23,22 @@
         flex-wrap: wrap;
         align-items: stretch;
         align-content: center;
-        justify-content: space-evenly;
+        // justify-content: space-evenly;
 
         > .buildstats-content-part {
             margin: 2%;
-            // width: 45%;
+            width: 45%;
+            min-width: 300px;
             flex: 1 1 40%;
             border-radius: 0.2em;
-            min-width: 300px;
             background-color: rgb(58, 58, 58);
+
         }
+    }
+}
+
+@media (max-width:800px) {
+    .buildstats-content-part {
+        width: 90%;
     }
 }

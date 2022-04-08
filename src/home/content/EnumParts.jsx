@@ -1,3 +1,6 @@
+import { useStore } from "react-redux"
+import { powderDamageConvert } from "../../utils/WynnData"
+
 export const category = ['all', 'helmet', 'chestplate', 'leggings', 'boots', 'wand', 'dagger', 'spear', 'bow', 'relik', 'ring', 'bracelet', 'ring', 'necklace']
 export const rarity = ['Normal', 'Unique', 'Rare', 'Set', 'Legendary', 'Mythic', 'Fabled']
 
@@ -34,6 +37,22 @@ export const damageEmoji = {
     thunderDamage: "✦",
 }
 
+export const damageEmojiReverse = {
+    "✹": 'fireDamage',
+    "✤": 'earthDamage',
+    "❉": 'waterDamage',
+    "❋": 'airDamage',
+    "✦": 'thunderDamage'
+}
+
+export const defenseEmojiReverse = {
+    "✹": 'fireDefense',
+    "✤": 'earthDefense',
+    "❉": 'waterDefense',
+    "❋": 'airDefense',
+    "✦": 'thunderDefense'
+}
+
 export function getDamage(data) {
 
     const divs = []
@@ -60,7 +79,114 @@ export function getDamage(data) {
     )
 }
 
-export const defenses = ['health', 'fireDefense', 'waterDefense', 'airDefense', 'thunderDefense', 'earthDefense']
+export function GetDamagesWithPowder({equipType}) {
+
+    const store = useStore()
+    const itembuild = store.getState().itembuild[equipType]
+    if(equipType !== 'weapon') return null
+    if(itembuild === undefined) return null
+
+    const item = itembuild.item
+    const powders = itembuild.powder
+
+    const divs = []
+    const neutralDamage = itembuild.item['damage']
+
+    const minNeutralDamage = parseInt(neutralDamage.split("-")[0])
+    const maxNeutralDamage = parseInt(neutralDamage.split("-")[1])
+
+    let currentMinNeutralDamage = minNeutralDamage;
+    let currentMaxNeutralDamage = maxNeutralDamage;
+    
+    let converted = 0.0
+
+    const weaponDamage = {
+        "damage": item.damage,
+        "earthDamage": item.earthDamage,
+        "thunderDamage": item.thunderDamage,
+        "waterDamage": item.waterDamage,
+        "fireDamage": item.fireDamage,
+        "airDamage": item.airDamage
+    }
+
+    for(const _ in powders) {
+
+        let currentTypePowder = powders[_]
+        const currentElement = damageEmojiReverse[currentTypePowder.charAt(0)]
+        let currentDamageData = weaponDamage[currentElement]
+        let mincurrentDamage = parseFloat(currentDamageData.split("-")[0])
+        let maxcurrentDamage = parseFloat(currentDamageData.split("-")[1])
+
+        if(converted <= 1) {
+            if(converted + powderDamageConvert[currentTypePowder].fromNeutral >= 1) {
+                
+                mincurrentDamage += (1 - converted) * minNeutralDamage
+                maxcurrentDamage += (1 - converted) * maxNeutralDamage
+                currentMinNeutralDamage -= (1 - converted) * minNeutralDamage
+                currentMaxNeutralDamage -= (1 - converted) * maxNeutralDamage
+
+            } else {
+
+                mincurrentDamage += powderDamageConvert[currentTypePowder].fromNeutral * minNeutralDamage
+                maxcurrentDamage += powderDamageConvert[currentTypePowder].fromNeutral * maxNeutralDamage
+                currentMinNeutralDamage -= powderDamageConvert[currentTypePowder].fromNeutral * minNeutralDamage
+                currentMaxNeutralDamage -= powderDamageConvert[currentTypePowder].fromNeutral * maxNeutralDamage
+            }
+        }
+
+        mincurrentDamage += parseFloat(powderDamageConvert[currentTypePowder].plus.split("-")[0])
+        maxcurrentDamage += parseFloat(powderDamageConvert[currentTypePowder].plus.split("-")[1])
+
+        mincurrentDamage = Math.floor(mincurrentDamage)
+        maxcurrentDamage = Math.floor(maxcurrentDamage)
+        currentMaxNeutralDamage = Math.floor(currentMaxNeutralDamage)
+        currentMinNeutralDamage = Math.floor(currentMinNeutralDamage)
+
+        weaponDamage[currentElement] = mincurrentDamage+"-"+maxcurrentDamage
+        converted += parseFloat(powderDamageConvert[currentTypePowder].fromNeutral)
+    }
+
+
+    for(let damage in damages) {
+
+        const currentElement = damages[damage]
+
+        if(currentElement === 'damage') continue;
+        if(weaponDamage[currentElement] === '0-0') continue;
+        const emoji = damageEmoji[currentElement]
+
+        divs.push(
+        <div style={{
+            color: damageColor[currentElement],
+            display: "flex",
+            justifyContent: 'center'
+        }}
+        key={damage}>
+            {emoji + " " + currentElement +": "+`${weaponDamage[currentElement]}`}
+        </div>)
+    }
+
+    if(currentMinNeutralDamage > 0 || currentMaxNeutralDamage > 0) {
+
+        
+
+        divs.splice(0, 0,
+            <div style={{
+                color: damageColor['damage'],
+                display: "flex",
+                justifyContent: 'center'
+            }}
+            key={'damage'}>
+                {damageEmoji['damage'] + " " + 'damage' +": "+currentMinNeutralDamage+"-"+currentMaxNeutralDamage}
+            </div>)
+    }
+
+
+
+    return divs
+}
+
+export const defenses = ['health', 'earthDefense', 'thunderDefense', 'waterDefense', 'fireDefense', 'airDefense']
 
 export const defenseColor = {
     health: 'red',
@@ -388,7 +514,7 @@ export const majorIdDescription = {
     'Peaceful Effigy': 'Your totem will last twice as long',
     'Plague': 'Poisoned mobs spread their poison to nearby mobs',
     'Rally': 'Charge heals you by 10% and nearby allies by 15% on impact, but becomes harmless',
-    'Roving Assassin': 'Vanish no longer drains mana while invisible',
+    'Rovingassassin': 'Vanish no longer drains mana while invisible',
     "Saviour's Sacrifice": 'While under 50% maximum health, nearby allies gain 30`% bonus damage and defense',
     "Hero": 'While under 50% maximum health, nearby allies gain 30`% bonus damage and defense',
     'Sorcery': '30% chance for spells and attacks to cast a second time at no additional cost',
@@ -404,12 +530,9 @@ export function getMajorIds(data) {
     let transformedName = ""
 
     for(let i in nameArray) {
-        // console.log(nameArray[i])
         transformedName += nameArray[i].charAt(0).toUpperCase() + nameArray[i].slice(1)
         if(nameArray.length-1 > i) transformedName += ' ';
     }
-
-    // console.log(transformedName)
 
     const description = majorIdDescription[transformedName]
     return (

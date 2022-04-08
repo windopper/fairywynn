@@ -7,7 +7,7 @@ export default function AddPowderButton({item, type}) {
 
     const dispatch = useDispatch()
     const onClick = useCallback(() => {
-        return dispatch(openPowderBuild(item))
+        return dispatch(openPowderBuild(item, type))
     }, [dispatch])
 
     return (
