@@ -551,10 +551,10 @@ function computeAsAssasin(
       let selectedGrade = "";
       // 스킬 등급 선택
       ENUM_GRADE.forEach((v) => {
-        if (CLASSSKILLS.archer[i][v].level < currentLevel) selectedGrade = v;
+        if (CLASSSKILLS.assasin[i][v].level < currentLevel) selectedGrade = v;
       });
   
-      const selectedAbility = CLASSSKILLS.archer[i][selectedGrade]
+      const selectedAbility = CLASSSKILLS.assasin[i][selectedGrade]
 
 
       if(i==2) continue;

@@ -290,7 +290,7 @@ export const CLASSSKILLS = {
                 'damage': 1.5,
                 'conversionOrder': ['thunderDamage'],
                 'conversion': {
-                    'thunderDamage': 0.25
+                    'thunderDamage': 0.3
                 },
                 'lore': [
                     'Disease: Stun enemies hit for 1 second',
@@ -302,12 +302,12 @@ export const CLASSSKILLS = {
             'name': 'Vanish',
             'grade1': {
                 'level': 11,
-                'mana': 2,
+                'mana': 1,
                 'duration': '5s',
             },
             'grade2': {
                 'level': 26,
-                'mana': 2,
+                'mana': 1,
                 'duration': '5s',
                 'lore': [
                     'Stealth Attack: Grants a 80% damage and 15% resistance boost while vanished. The bonus lasts an additional 2 seconds after you exit invisbility'
@@ -315,7 +315,7 @@ export const CLASSSKILLS = {
             },
             'grade3': {
                 'level': 46,
-                'mana': 2,
+                'mana': 1,
                 'duration': '5s',
                 'lore': [
                     'Stealth Attack: Grants a 80% damage and 15% resistance boost while vanished. The bonus lasts an additional 2 seconds after you exit invisbility',
@@ -324,6 +324,7 @@ export const CLASSSKILLS = {
             },
         },
         '3': {
+            // 스텟 부정확함 수정 요망
             'name': 'MultiHit',
             'grade1': {
                 'level': 21,
@@ -347,7 +348,7 @@ export const CLASSSKILLS = {
                     'waterDamage': 0.15
                 },
                 'lore': [
-                    'Fatality: Hit an additional time at the end, knocking the enemy back and dealing 120% damage'
+                    'Fatality: hit another time at the end, knockbacking the enemy and causing 120% damage'
                 ]
             },
             'grade3': {
@@ -363,7 +364,7 @@ export const CLASSSKILLS = {
                 },
                 'lore': [
                     'Force: You can move the enemies trapped in your Multihit by moving your head left or right',
-                    'Fatality: Hit an additional time at the end, knocking the enemy back and dealing 120% damage'
+                    'Fatality: hit another time at the end, knockbacking the enemy and causing 120% damage'
                 ]
             },
         },

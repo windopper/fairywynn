@@ -94,15 +94,15 @@ export function damageSpellConversion(
     conversionOrder,
     conversion,
   ) {
-  
       if(conversionOrder == undefined || conversionOrder.length === 0) return weaponDamages
-  
+      console.log(conversionOrder)
       conversionOrder.forEach(v => {
           let minConversion = minOriginNeutralDamage * conversion[v]
           let maxConversion = maxOriginNeuturalDamage * conversion[v]
           if(weaponDamages.mindamage <= minConversion && weaponDamages.maxdamage <= maxConversion) {
               weaponDamages[`min${v}`] += weaponDamages.mindamage
               weaponDamages[`max${v}`] += weaponDamages.maxdamage
+              console.log(weaponDamages.mindamage)
               weaponDamages.mindamage = 0
               weaponDamages.maxdamage = 0
           } else if(weaponDamages.mindamage > minConversion && weaponDamages.maxdamage > maxConversion) {
@@ -111,10 +111,10 @@ export function damageSpellConversion(
               weaponDamages.mindamage -= minConversion
               weaponDamages.maxdamage -= maxConversion
           }
-          weaponDamages[`min${v}`] = Math.floor(weaponDamages[`min${v}`])
-          weaponDamages[`max${v}`] = Math.floor(weaponDamages[`max${v}`])
-          weaponDamages.mindamage = Math.floor(weaponDamages.mindamage)
-          weaponDamages.maxdamage = Math.floor(weaponDamages.maxdamage)
+          // weaponDamages[`min${v}`] = weaponDamages[`min${v}`]
+          // weaponDamages[`max${v}`] = weaponDamages[`max${v}`]
+          // weaponDamages.mindamage = weaponDamages.mindamage
+          // weaponDamages.maxdamage = weaponDamages.maxdamage
       })
   
   
@@ -181,6 +181,7 @@ export function computeBuildSpellDamage(
 
     let copiedWeaponDamage = deepCopy(weaponDamage)
 
+
     let convertedWeaponDamage = damageSpellConversion(
         minOriginNeutralDamage,
         maxOriginNeutralDamage,
@@ -188,9 +189,11 @@ export function computeBuildSpellDamage(
         conversionOrder,
         conversion
     )
+    console.log(convertedWeaponDamage)
     let modifier = DamageModifier(elementDamage, statAssigned, spellDamage, isCritical, additionalElementDamage)
+    console.log(modifier)
     let computeDamage = computeFinalDamage(convertedWeaponDamage, modifier, attackSpeedMultiplier, spellDamageMultiplier)
-    let computeSpellDamageRaw = spellDamageRaw > 0 ? spellDamageRaw * spellDamageMultiplier * SkillPointToPercentage(statAssigned.strength) : 0
+    let computeSpellDamageRaw = spellDamageRaw > 0 ? spellDamageRaw * spellDamageMultiplier * SkillPointToPercentage(statAssigned.strength) / 100 : 0
     
     computeDamage.mindamage += computeSpellDamageRaw
     computeDamage.maxdamage += computeSpellDamageRaw
