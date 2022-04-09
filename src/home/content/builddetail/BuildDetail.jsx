@@ -8,8 +8,10 @@ import BuildRequirements from "./contents/BuildRequirements";
 import BuildStats from "./contents/BuildStats";
 import StatRemain from "./contents/StatRemain";
 import BuildItemUsed from "./contents/BuildItemUsed";
+import { getBuildDamages } from "../../../utils/WynnMath";
 
 export default function BuildDetail() {
+
   const isCursorInside = useRef(false);
 
   const onEnter = () => (isCursorInside.current = true);
@@ -26,6 +28,8 @@ export default function BuildDetail() {
   const showBuildDetail = useBuildDetailDashBoardStateUpdate();
 
   const currentItemBuild = store.getState().itembuild;
+  console.log(getBuildDamages(currentItemBuild))
+  // getBuildDamage(currentItemBuild)
 
   return (
     <>

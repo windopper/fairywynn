@@ -244,3 +244,394 @@ export const powderDamageConvert = {
         plus:"5-20"
     },
 }
+
+export const CLASSSKILLS = {
+    "warrior": {
+        '1': {
+
+        },
+        '2': {
+
+        },
+        '3': {
+
+        },
+        '4': {
+
+        },
+    },
+    "assasin": {
+        '1': {
+            'name': 'Spin Attack',
+            'grade1': {
+                'level': 1,
+                'mana': 6,
+                'damage': 1.5,
+                'conversionOrder': ['thunderDamage'],
+                'conversion': {
+                    'thunderDamage': 0.2
+                }
+            },
+            'grade2': {
+                'level': 16,
+                'mana': 6,
+                'damage': 1.5,
+                'conversionOrder': ['thunderDamage'],
+                'conversion': {
+                    'thunderDamage': 0.25
+                },
+                'lore': [
+                    'Disease: Stun enemies hit for 1 second'
+                ]
+            },
+            'grade3': {
+                'level': 36,
+                'mana': 6,
+                'damage': 1.5,
+                'conversionOrder': ['thunderDamage'],
+                'conversion': {
+                    'thunderDamage': 0.25
+                },
+                'lore': [
+                    'Disease: Stun enemies hit for 1 second',
+                    'Vampire: Steal all the positive effects the enemies hit have, and cleanse all the negative ones you have'
+                ]
+            },
+        },
+        '2': {
+            'name': 'Vanish',
+            'grade1': {
+                'level': 11,
+                'mana': 2,
+                'duration': '5s',
+            },
+            'grade2': {
+                'level': 26,
+                'mana': 2,
+                'duration': '5s',
+                'lore': [
+                    'Stealth Attack: Grants a 80% damage and 15% resistance boost while vanished. The bonus lasts an additional 2 seconds after you exit invisbility'
+                ]
+            },
+            'grade3': {
+                'level': 46,
+                'mana': 2,
+                'duration': '5s',
+                'lore': [
+                    'Stealth Attack: Grants a 80% damage and 15% resistance boost while vanished. The bonus lasts an additional 2 seconds after you exit invisbility',
+                    'Shadow Travel: Grants speed 5 while vanished'
+                ]
+            },
+        },
+        '3': {
+            'name': 'MultiHit',
+            'grade1': {
+                'level': 21,
+                'mana': 8,
+                'damage': 0.27,
+                'hits': 10,
+                'conversionOrder': ['thunderDamage'],
+                'conversion': {
+                    'thunderDamage': 0.2
+                }
+            },
+            'grade2': {
+                'level': 36,
+                'mana': 8,
+                'damage': 0.27,
+                'hits': 10,
+                'fatalityDamage': 1.2,
+                'conversionOrder': ['thunderDamage, waterDamage'],
+                'conversion': {
+                    'thunderDamage': 0.3,
+                    'waterDamage': 0.15
+                },
+                'lore': [
+                    'Fatality: Hit an additional time at the end, knocking the enemy back and dealing 120% damage'
+                ]
+            },
+            'grade3': {
+                'level': 56,
+                'mana': 8,
+                'damage': 0.27,
+                'hits': 10,
+                'fatalityDamage': 1.2,
+                'conversionOrder': ['thunderDamage, waterDamage'],
+                'conversion': {
+                    'thunderDamage': 0.3,
+                    'waterDamage': 0.5,
+                },
+                'lore': [
+                    'Force: You can move the enemies trapped in your Multihit by moving your head left or right',
+                    'Fatality: Hit an additional time at the end, knocking the enemy back and dealing 120% damage'
+                ]
+            },
+        },
+        '4': {
+            'name': 'Smoke Bomb',
+            'grade1': {
+                'level': 31,
+                'mana': 8,
+                'damage': 1.2,
+                'duration': '5s',
+                'conversionOrder': ['earthDamage', 'airDamage'],
+                'conversion': {
+                    'earthDamage': 0.15,
+                    'airDamage': 0.2
+                }
+            },
+            'grade2': {
+                'level': 46,
+                'mana': 8,
+                'damage': 1.2,
+                'duration': '5s',
+                'conversionOrder': ['earthDamage', 'airDamage'],
+                'conversion': {
+                    'earthDamage': 0.25,
+                    'airDamage': 0.2
+                },
+                'lore': [
+                    'Choke: Enemies in the smoke are greatly slowed'
+                ]
+            },
+            'grade3': {
+                'level': 66,
+                'mana': 8,
+                'damage': 1.2,
+                'duration': '5s',
+                'conversionOrder': ['earthDamage', 'airDamage'],
+                'conversion': {
+                    'earthDamage': 0.25,
+                    'airDamage': 0.25
+                },
+                'lore': [
+                    'Choke: Enemies in the smoke are greatly slowed',
+                    'Wall of Smoke: Throw three smoke bombs at the same time instead of one, creating a large wall of smoke'
+                ]
+            },
+        },
+    },
+    "mage": {
+        '1': {
+
+        },
+        '2': {
+
+        },
+        '3': {
+
+        },
+        '4': {
+
+        },
+    },
+    "shaman": {
+        '1': {
+
+        },
+        '2': {
+
+        },
+        '3': {
+
+        },
+        '4': {
+
+        },
+    },
+    "archer": {
+        '1': {
+            'name': 'Arrow Storm',
+            'grade1': {
+                'level': 1,
+                'mana': 6,
+                'damage': 0.3,
+                'arrows': 10,
+                'conversionOrder': ['fireDamage'],
+                'conversion': {
+                    'fireDamage': 0.15
+                }
+            },
+            'grade2': {
+                'level': 16,
+                'mana': 6,
+                'damage': '0.2',
+                'arrows': 20,
+                'conversionOrder': ['fireDamage', 'thunderDamage'],
+                'conversion': {
+                    'fireDamage': 0.15,
+                    'thunderDamage': 0.25,
+                },
+                'lore': [
+                    'Haste: Double the amount of arrows and the firerate'
+                ]
+            },
+            'grade3': {
+                'level': 36,
+                'mana': 6,
+                'damage': 0.1,
+                'arrows': 60,
+                'conversionOrder': ['fireDamage', 'thunderDamage'],
+                'conversion': {
+                    'fireDamage': 0.15,
+                    'thunderDamage': 0.25
+                },
+                'lore': [
+                    'Haste: Double the amount of arrows and the firerate',
+                    'Triple Shot: Triple the amount of arrows you shoot and fire them in an arc'
+                ]
+            },
+        },
+        '2': {
+            'name': 'Escape',
+            'grade1': {
+                'level': 11,
+                'mana': 3,
+            },
+            'grade2': {
+                'level': 26,
+                'mana': 3,
+                'lore': [
+                    'Speed: Grants speed 3 for 3 minutes to the player and nearby allies upon casting Escape'
+                ]
+            },
+            'grade3': {
+                'level': 46,
+                'mana': 3,
+                'damage': 1,
+                'conversionOrder': ['airDamage'],
+                'conversion': {
+                    'airDamage': 0.5
+                },
+                'lore': [
+                    'Speed: Grants speed 3 to the player and nearby allies upon casting Escape',
+                    'Surprise Strike: Holding Shift while falling will now damage nearby enemies for 100% damage upon landing and blind them for 1 second'
+                ]
+            },
+        },
+        '3': {
+            'name': 'Bomb Arrow',
+            'grade1': {
+                'level': 21,
+                'mana': 8,
+                'damage': 2.5,
+                'conversionOrder': ['earthDamage', 'fireDamage'],
+                'conversion': {
+                    'earthDamage': 0.15,
+                    'fireDamage': 0.15,
+                }
+            },
+            'grade2': {
+                'level': 36,
+                'mana': 8,
+                'damage': 2.5,
+                'conversionOrder': ['earthDamage', 'fireDamage'],
+                'conversion': {
+                    'earthDamage': 0.25,
+                    'fireDamage': 0.15,
+                },
+                'lore': [
+                    'Leg Breaking: Enemies hit are heavily slowed and cannot jump for 4 seconds',
+                ]
+            },
+            'grade3': {
+                'level': 56,
+                'mana': 8,
+                'damage': 2.5,
+                'conversionOrder': ['earthDamage', 'fireDamage'],
+                'conversion': {
+                    'earthDamage': 0.25,
+                    'fireDamage': 0.15,
+                },
+                'lore': [
+                    'Leg Breaking: Enemies hit are heavily slowed and cannot jump for 4 seconds',
+                    'Bounce: After impacting, Bomb Arrow will bounce off of enemies and terrain up to 2 more times'
+                ]
+            },
+        },
+        '4': {
+            'name': 'After Shield',
+            'grade1': {
+                'level': 31,
+                'mana': 8,
+                'damage': 1.5,
+                'conversionOrder': ['airDamage'],
+                'conversion': {
+                    'airDamage': 0.3
+                }
+            },
+            'grade2': {
+                'level': 46,
+                'mana': 9,
+                'damage': 1,
+                'conversionOrder': ['airDamage'],
+                'conversion': {
+                    'airDamage': 0.3
+                },
+                'lore': [
+                    'Charges: Arrow Shield can be triggered up to three times without disappearing',
+                ]
+            },
+            'grade3': {
+                'level': 66,
+                'mana': 10,
+                'shieldDamage': 2.5,
+                'shieldDamageConversionOrder': ['airDamage'],
+                'shieldDamageConversion': {
+                    'airDamage': 0.3
+                },
+                'rainDamage': 2,
+                'rainArrows': 100,
+                'rainDamageConversionOrder': ['airDamage'],
+                'rainDamageConversion': {
+                    'airDamage': 0.3
+                },
+                'lore': [
+                    'Charges: Arrow Shield can be triggered up to three times without disappearing',
+                    'Arrow Rain: When you take damage, summon a hail of arrows from the sky that deal 200% damage per arrow that land on enemies nearby'
+                ]
+            },
+        },
+    }
+}
+
+export const BOOSTS = {
+
+    // Wind Prison Only Boosts Air Damage
+    'Wind Prison': {
+        4: 4,
+        4.5: 4.5,
+        5: 5,
+        5.5: 5.5,
+        6: 6
+    },
+    'Courage': {
+        4: 0.7,
+        4.5: 0.9,
+        5: 1.1,
+        5.5: 1.3,
+        6: 1.5,
+    },
+    'Curse': {
+        4: 0.9,
+        4.5: 1.2,
+        5: 1.5,
+        5.5: 1.8,
+        6: 2.1
+    },
+    'Rage': 4,
+    'KillStreak': 2,
+    'Concentration': 1.5,
+    'Endurance': 2,
+    'Dodge': 1.5
+}
+
+export const AttackSpeedMultipliers = {
+    'SUPER_FAST': 4.3,
+    'VERY_FAST': 3.1,
+    'FAST': 2.5,
+    'NORMAL': 2.05,
+    'SLOW': 1.5,
+    'VERY_SLOW': 0.83,
+    'SUPER_SLOW': 0.51
+}

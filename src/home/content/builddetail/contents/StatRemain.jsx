@@ -105,10 +105,6 @@ export default function StatRemain({ data }) {
 
     const cal_Data = StatAssignCalculateFunction(data)
 
-//   console.log(cal_Data.finalStatTypePoints)
-//   console.log(cal_Data.finalStatTypePointsWithoutWeapon)
-//   console.log(cal_Data.properStatAssign)
-//   console.log(`Stat Point Remain ${cal_Data.remainStatPoints}`)
   return <div className="statremain-container">
       <div></div>
   </div>;

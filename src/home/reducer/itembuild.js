@@ -12,6 +12,26 @@ const weapons = ['dagger', 'spear', 'wand', 'bow', 'relik']
 export const BUILDEQUIPS = ['helmet', 'chestplate', 'leggings', 'boots', 'weapon', 'ring1', 'ring2', 'bracelet', 'necklace']
 
 const initialState = {
+    settings: {
+        level: 106,
+        boosts: []
+    },
+    currentBuild: {
+        finalStats: {
+            'strength': 0,
+            'dexterity': 0,
+            'intelligence': 0,
+            'defense': 0,
+            'agility': 0,
+        },
+        properAssign: {
+            'strength': 0,
+            'dexterity': 0,
+            'intelligence': 0,
+            'defense': 0,
+            'agility': 0,
+        }
+    },
     helmet: undefined,
     chestplate: undefined,
     leggings: undefined,
@@ -129,4 +149,8 @@ export const hasItemInBuild = (item) => {
         }
     }
     return false
+}
+
+export const hasItemTypeInBuild = (equipType) => {
+    return store.getState().itembuild[equipType] !== undefined
 }
