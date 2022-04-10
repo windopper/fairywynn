@@ -87,7 +87,7 @@ function RequirementsGetter({ _statType, data }) {
       </div>
       {show ? (
         <div className="stat-info">
-          <div>{percent}%</div>
+          <div>{percent.toFixed(1)}%</div>
           <div>Percentage Value</div>
         </div>
       ) : null}

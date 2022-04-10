@@ -10,7 +10,12 @@ import {
 } from "../home/content/EnumParts";
 import { hasItemInBuild, hasItemTypeInBuild } from "../home/reducer/itembuild";
 import { deepCopy } from "./FairyWynnUtil";
-import { damageSpellConversion, DamageModifier, computeFinalDamage, computeBuildSpellDamage } from "./WynnDamageCalculation";
+import {
+  damageSpellConversion,
+  DamageModifier,
+  computeFinalDamage,
+  computeBuildSpellDamage,
+} from "./WynnDamageCalculation";
 
 const BUILDEQUIPS = [
   "helmet",
@@ -33,7 +38,7 @@ export function SkillPointToPercentage(x) {
   }
   const round = Math.round(sum * 10) / 10;
   // console.log(round)
-  return round;
+  return sum;
 }
 
 export function GetWeaponDamageWithPowder(equipType, state) {
@@ -118,10 +123,10 @@ export function GetWeaponDamageWithPowder(equipType, state) {
 
   if (currentMaxNeutralDamage <= 0) currentMaxNeutralDamage = 0;
   if (currentMinNeutralDamage <= 0) currentMinNeutralDamage = 0;
-  if(currentMinNeutralDamage > currentMaxNeutralDamage) {
-      let temp = currentMaxNeutralDamage
-      currentMaxNeutralDamage = currentMinNeutralDamage
-      currentMinNeutralDamage = temp
+  if (currentMinNeutralDamage > currentMaxNeutralDamage) {
+    let temp = currentMaxNeutralDamage;
+    currentMaxNeutralDamage = currentMinNeutralDamage;
+    currentMinNeutralDamage = temp;
   }
   weaponDamage.damage = currentMinNeutralDamage + "-" + currentMaxNeutralDamage;
 
@@ -316,6 +321,16 @@ export function getMaxValue(base) {
   return max;
 }
 
+export function getDefaultHealth(level) {
+  return 5 + 5 * level;
+}
+
+export function getAverageDamage(nonCritDamage, critDamage, dexterityPoint) {
+  const dexterityPercent = SkillPointToPercentage(dexterityPoint) / 100;
+  console.log(dexterityPercent)
+  return (1 - dexterityPercent) * nonCritDamage + dexterityPercent * critDamage
+}
+
 export function getBuildDamages(itembuildData) {
   let finalSkillDamages = {
     1: {
@@ -410,10 +425,11 @@ export function getBuildDamages(itembuildData) {
   if (!hasItemTypeInBuild("weapon")) return finalSkillDamages;
 
   const weaponItem = itembuildData.weapon.item;
-  const weaponType = weaponItem.type.toLowerCase()
+  const weaponType = weaponItem.type.toLowerCase();
 
-
-  const attackSpeedMultiplier = parseFloat(AttackSpeedMultipliers[weaponItem.attackSpeed]);
+  const attackSpeedMultiplier = parseFloat(
+    AttackSpeedMultipliers[weaponItem.attackSpeed]
+  );
 
   const elementDamage = {
     earthDamage: getMaxSum(itembuildData, "bonusEarthDamage") / 100,
@@ -423,9 +439,9 @@ export function getBuildDamages(itembuildData) {
     airDamage: getMaxSum(itembuildData, "bonusAirDamage") / 100,
   };
 
-  const spellDamage = getMaxSum(itembuildData, 'spellDamage')
+  const spellDamage = getMaxSum(itembuildData, "spellDamage") / 100;
 
-  const spellDamageRaw = getMaxSum(itembuildData, 'spellDamageRaw')
+  const spellDamageRaw = getMaxSum(itembuildData, "spellDamageRaw");
 
   const weaponDamageSplit = weaponDamageSplitter(
     GetWeaponDamageWithPowder("weapon", itembuildData)
@@ -433,50 +449,78 @@ export function getBuildDamages(itembuildData) {
 
   const statAssigned = StatAssignCalculateFunction(itembuildData);
 
-
-  switch(weaponType) {
-      case 'bow': {
-        finalSkillDamages = computeAsArcher(
-            weaponDamageSplit,
-            statAssigned.finalStatTypePoints,
-            elementDamage,
-            spellDamage,
-            spellDamageRaw,
-            finalSkillDamages,
-            itembuildData,
-            weaponItem
-          );
-          break;
-      }
-      case 'dagger': {
-        finalSkillDamages = computeAsAssasin(
-            weaponDamageSplit,
-            statAssigned.finalStatTypePoints,
-            elementDamage,
-            spellDamage,
-            spellDamageRaw,
-            finalSkillDamages,
-            itembuildData,
-            weaponItem
-          );
-        break;
-      }
-      case 'wand': {
-          break;
-      }
-      case 'spear': {
-        break;
-      }
-      case 'relik': {
-        break;
-      }
-      default: break;
+  switch (weaponType) {
+    case "bow": {
+      finalSkillDamages = computeAsArcher(
+        weaponDamageSplit,
+        statAssigned.finalStatTypePoints,
+        elementDamage,
+        spellDamage,
+        spellDamageRaw,
+        finalSkillDamages,
+        itembuildData,
+        weaponItem
+      );
+      break;
+    }
+    case "dagger": {
+      finalSkillDamages = computeAsAssasin(
+        weaponDamageSplit,
+        statAssigned.finalStatTypePoints,
+        elementDamage,
+        spellDamage,
+        spellDamageRaw,
+        finalSkillDamages,
+        itembuildData,
+        weaponItem
+      );
+      break;
+    }
+    case "wand": {
+      finalSkillDamages = computeAsMage(
+        weaponDamageSplit,
+        statAssigned.finalStatTypePoints,
+        elementDamage,
+        spellDamage,
+        spellDamageRaw,
+        finalSkillDamages,
+        itembuildData,
+        weaponItem
+      );
+      break;
+    }
+    case "spear": {
+      finalSkillDamages = computeAsWarrior(
+        weaponDamageSplit,
+        statAssigned.finalStatTypePoints,
+        elementDamage,
+        spellDamage,
+        spellDamageRaw,
+        finalSkillDamages,
+        itembuildData,
+        weaponItem
+      )
+      break;
+    }
+    case "relik": {
+      finalSkillDamages = computeAsShaman(
+        weaponDamageSplit,
+        statAssigned.finalStatTypePoints,
+        elementDamage,
+        spellDamage,
+        spellDamageRaw,
+        finalSkillDamages,
+        itembuildData,
+        weaponItem
+      )
+      break;
+    }
+    default:
+      break;
   }
 
   return finalSkillDamages;
 }
-
-
 
 // If Weapon Type is Bow
 function computeAsArcher(
@@ -491,32 +535,179 @@ function computeAsArcher(
 ) {
   const currentLevel = itemBuildData.settings.level;
 
-  for (let i = 1; i < 4; i++) {
+  for (let i = 1; i < 5; i++) {
     let selectedGrade = "";
     // 스킬 등급 선택
     ENUM_GRADE.forEach((v) => {
       if (CLASSSKILLS.archer[i][v].level < currentLevel) selectedGrade = v;
     });
 
-    const selectedAbility = CLASSSKILLS.archer[i][selectedGrade]
+    const selectedAbility = CLASSSKILLS.archer[i][selectedGrade];
 
-    if(i == 4 && selectedGrade == 'grade3') {
-        continue;
-        // let shieldSpellMultiplier = selectedAbility.shieldDamage;
-        // let rainSpellMultiplier = selectedAbility.rainDamage;
-        // let shieldConversionOrder = selectedAbility.shieldDamageConversionOrder
-        // let shieldConversion = selectedAbility.shieldDamageConversion
-        // let rainConversionOrder = selectedAbility.rainDamageConversionOrder
-        // let rainConversion = selectedAbility.rainDamageConversion
+    if (i == 1) {
+      let spellMultiplier = selectedAbility.damage;
+      let conversionOrder = selectedAbility.conversionOrder;
+      let conversion = selectedAbility.conversion;
 
-    
-        // finalSkillDamage[i] = finalDamage
+      let spellTotalSpellMultiplier =
+        selectedAbility.damage * selectedAbility.arrows;
 
+      let finalDamage = computeBuildSpellDamage(
+        weaponDamage,
+        weaponItem,
+        elementDamage,
+        statAssigned,
+        conversionOrder,
+        conversion,
+        spellDamage,
+        spellDamageRaw,
+        spellMultiplier
+      );
+
+      let totalArrowDamage = computeBuildSpellDamage(
+        weaponDamage,
+        weaponItem,
+        elementDamage,
+        statAssigned,
+        conversionOrder,
+        conversion,
+        spellDamage,
+        spellDamageRaw,
+        spellTotalSpellMultiplier
+      );
+
+      finalSkillDamage[i] = {
+        perArrow: finalDamage,
+        totalArrow: totalArrowDamage,
+      };
+    } 
+    else if (i == 2 && (selectedGrade == "grade1" || selectedGrade == "grade2"))
+      continue;
+    else if (i == 4 && selectedGrade == "grade3") {
+      let shieldSpellMultiplier = selectedAbility.shieldDamage;
+      let rainSpellMultiplier = selectedAbility.rainDamage;
+      let shieldConversionOrder = selectedAbility.shieldDamageConversionOrder;
+      let shieldConversion = selectedAbility.shieldDamageConversion;
+      let rainConversionOrder = selectedAbility.rainDamageConversionOrder;
+      let rainConversion = selectedAbility.rainDamageConversion;
+
+      let shieldFinalDamage = computeBuildSpellDamage(
+        weaponDamage,
+        weaponItem,
+        elementDamage,
+        statAssigned,
+        shieldConversionOrder,
+        shieldConversion,
+        spellDamage,
+        spellDamageRaw,
+        shieldSpellMultiplier
+      );
+
+      let rainFinalDamage = computeBuildSpellDamage(
+        weaponDamage,
+        weaponItem,
+        elementDamage,
+        statAssigned,
+        rainConversionOrder,
+        rainConversion,
+        spellDamage,
+        spellDamageRaw,
+        rainSpellMultiplier
+      );
+      finalSkillDamage[i] = {
+        shieldFinalDamage: shieldFinalDamage,
+        rainFinalDamage: rainFinalDamage,
+      };
     } else {
-        let spellMultiplier = selectedAbility.damage;
-        let conversionOrder = selectedAbility.conversionOrder
-        let conversion = selectedAbility.conversion
-        let finalDamage = computeBuildSpellDamage(
+      let spellMultiplier = selectedAbility.damage;
+      let conversionOrder = selectedAbility.conversionOrder;
+      let conversion = selectedAbility.conversion;
+      let finalDamage = computeBuildSpellDamage(
+        weaponDamage,
+        weaponItem,
+        elementDamage,
+        statAssigned,
+        conversionOrder,
+        conversion,
+        spellDamage,
+        spellDamageRaw,
+        spellMultiplier
+      );
+
+      finalSkillDamage[i] = finalDamage;
+    }
+  }
+
+  return finalSkillDamage;
+}
+
+function computeAsAssasin(
+  weaponDamage,
+  statAssigned,
+  elementDamage,
+  spellDamage,
+  spellDamageRaw,
+  finalSkillDamage,
+  itemBuildData,
+  weaponItem
+) {
+  const currentLevel = itemBuildData.settings.level;
+
+  for (let i = 1; i < 5; i++) {
+    let selectedGrade = "";
+    // 스킬 등급 선택
+    ENUM_GRADE.forEach((v) => {
+      if (CLASSSKILLS.assasin[i][v].level < currentLevel) selectedGrade = v;
+    });
+
+    const selectedAbility = CLASSSKILLS.assasin[i][selectedGrade];
+
+    if (i == 2) continue;
+    else if(i==3) {
+
+      let conversionOrder = selectedAbility.conversionOrder;
+      let conversion = selectedAbility.conversion;
+      
+      let hits = selectedAbility.hits;
+      let spellMultiplier = selectedAbility.damage;
+
+      let HitDamage = computeBuildSpellDamage(
+        weaponDamage,
+        weaponItem,
+        elementDamage,
+        statAssigned,
+        [],
+        {},
+        spellDamage,
+        spellDamageRaw,
+        spellMultiplier
+      );
+
+      let totalHitDamage = computeBuildSpellDamage(
+        weaponDamage,
+        weaponItem,
+        elementDamage,
+        statAssigned,
+        [],
+        {},
+        spellDamage,
+        spellDamageRaw,
+        spellMultiplier * hits
+      )
+
+      switch(selectedGrade) {
+        case 'grade1': {
+          finalSkillDamage[i] = {
+            'hitDamage': HitDamage,
+            'totalHitDamage': totalHitDamage
+          }
+          break;
+        }
+        case 'grade2':
+        case 'grade3': {
+
+          let fatalitySpellMultiplier = selectedAbility.lastDamage
+          let fatalityDamage = computeBuildSpellDamage(
             weaponDamage,
             weaponItem,
             elementDamage,
@@ -525,69 +716,246 @@ function computeAsArcher(
             conversion,
             spellDamage,
             spellDamageRaw,
-            spellMultiplier,
-        )
-    
-        finalSkillDamage[i] = finalDamage
+            fatalitySpellMultiplier
+          );
+          finalSkillDamage[i] = {
+            'hitDamage': HitDamage,
+            'totalHitDamage': totalHitDamage,
+            'fatalityDamage': fatalityDamage,
+          }
+          break;
+        }
+      }
+      continue;
+    }
+    else if(i==4) {
+      let spellMultiplier = selectedAbility.damage;
+      let conversionOrder = selectedAbility.conversionOrder;
+      let conversion = selectedAbility.conversion;
+      let totalHits = selectedAbility.totalCount
+  
+      let oneHitDamage = computeBuildSpellDamage(
+        weaponDamage,
+        weaponItem,
+        elementDamage,
+        statAssigned,
+        conversionOrder,
+        conversion,
+        spellDamage,
+        spellDamageRaw,
+        spellMultiplier
+      );
+
+      let totalHitDamage = computeBuildSpellDamage(
+        weaponDamage,
+        weaponItem,
+        elementDamage,
+        statAssigned,
+        conversionOrder,
+        conversion,
+        spellDamage,
+        spellDamageRaw,
+        spellMultiplier * totalHits
+      );
+
+      finalSkillDamage[i] = {
+        'hitDamage': oneHitDamage,
+        'totalHitDamage': totalHitDamage,
+      }
+      continue;
+    } else {
+      let spellMultiplier = selectedAbility.damage;
+      let conversionOrder = selectedAbility.conversionOrder;
+      let conversion = selectedAbility.conversion;
+  
+      let finalDamage = computeBuildSpellDamage(
+        weaponDamage,
+        weaponItem,
+        elementDamage,
+        statAssigned,
+        conversionOrder,
+        conversion,
+        spellDamage,
+        spellDamageRaw,
+        spellMultiplier
+      );
+  
+      finalSkillDamage[i] = finalDamage;
     }
   }
 
   return finalSkillDamage;
 }
 
-function computeAsAssasin(
-    weaponDamage,
-    statAssigned,
-    elementDamage,
-    spellDamage,
-    spellDamageRaw,
-    finalSkillDamage,
-    itemBuildData,
-    weaponItem
-  ) {
-    const currentLevel = itemBuildData.settings.level;
+function getMageWaterHealRate(waterDamage) {
+  return Math.min(1.75, 1 + 0.5 * waterDamage);
+}
 
-    for (let i = 1; i < 5; i++) {
-      let selectedGrade = "";
-      // 스킬 등급 선택
-      ENUM_GRADE.forEach((v) => {
-        if (CLASSSKILLS.assasin[i][v].level < currentLevel) selectedGrade = v;
-      });
-  
-      const selectedAbility = CLASSSKILLS.assasin[i][selectedGrade]
+function computeAsMage(
+  weaponDamage,
+  statAssigned,
+  elementDamage,
+  spellDamage,
+  spellDamageRaw,
+  finalSkillDamage,
+  itemBuildData,
+  weaponItem
+) {
+  const currentLevel = itemBuildData.settings.level;
+  const currentHealth =
+    getMaxSum(itemBuildData, "health", true) + getDefaultHealth(currentLevel);
+  console.log(currentHealth);
 
+  for (let i = 1; i < 5; i++) {
+    let selectedGrade = "";
+    // 스킬 등급 선택
+    ENUM_GRADE.forEach((v) => {
+      if (CLASSSKILLS.mage[i][v].level < currentLevel) selectedGrade = v;
+    });
 
-      if(i==2) continue;
+    const selectedAbility = CLASSSKILLS.mage[i][selectedGrade];
 
-    //   if(i==3 && (selectedGrade == 'grade2' || selectedGrade == 'grade3')) {
-    //     let spellMultiplier = selectedAbility.fatalityDamage;
-    //     let conversionOrder = selectedAbility.conversionOrder
-    //     let conversion = selectedAbility.conversion
-    //     let finalDamage = computeBuildSpellDamage(
-    //         weaponDamage,
-    //         weaponItem,
-    //         elementDamage,
-    //         statAssigned,
-    //         conversionOrder,
-    //         conversion,
-    //         spellDamage,
-    //         spellDamageRaw,
-    //         spellMultiplier,
-    //     )
-    
-    //     finalSkillDamage[i] = {
-    //         ...finalSkillDamage[i],
-    //         fatality: {
-    //             finalDamage
-    //         }
-    //     }
-    //   }
+    if (i == 1) {
+      let waterDamageRate = elementDamage.waterDamage;
+      let computedMageWaterHealRate = getMageWaterHealRate(waterDamageRate);
+
+      switch (selectedGrade) {
+        case "grade1":
+        case "grade2": {
+          let firstPulse =
+            currentHealth *
+            selectedAbility.healConversion *
+            computedMageWaterHealRate;
+          let firstAllyPulse =
+            currentHealth *
+            selectedAbility.healAllyConversion *
+            computedMageWaterHealRate;
+          firstAllyPulse = Math.round(firstAllyPulse);
+          firstPulse = Math.round(firstPulse);
+          finalSkillDamage[i] = {
+            firstPulse: firstPulse,
+            firstAllyPulse: firstAllyPulse,
+          };
+          break;
+        }
+        case "grade3": {
+          let firstPulse =
+            currentHealth *
+            selectedAbility.firstPulseHealConversion *
+            computedMageWaterHealRate;
+          let firstAllyPulse =
+            currentHealth *
+            selectedAbility.firstPulseHealAllyConversion *
+            computedMageWaterHealRate;
+          let afterPulse =
+            currentHealth *
+            selectedAbility.afterPulseHealConversion *
+            computedMageWaterHealRate;
+          let afterAllyPulse =
+            currentHealth *
+            selectedAbility.afterPulseHealAllyConversion *
+            computedMageWaterHealRate;
+          firstPulse = Math.round(firstPulse);
+          firstAllyPulse = Math.round(firstAllyPulse);
+          afterPulse = Math.round(afterPulse);
+          afterAllyPulse = Math.round(afterAllyPulse);
+          finalSkillDamage[i] = {
+            firstPulse: firstPulse,
+            firstAllyPulse: firstAllyPulse,
+            afterPulse: afterPulse,
+            afterAllyPulse: afterAllyPulse,
+          };
+          break;
+        }
+      }
+    } else if (i == 3 && selectedGrade == "grade3") {
+      //Meteor Burning Damage
 
       let spellMultiplier = selectedAbility.damage;
-      let conversionOrder = selectedAbility.conversionOrder
-      let conversion = selectedAbility.conversion
+      let meteorBurningMultiplier = selectedAbility.burnDamage;
+      let conversionOrder = selectedAbility.conversionOrder;
+      let conversion = selectedAbility.conversion;
 
       let finalDamage = computeBuildSpellDamage(
+        weaponDamage,
+        weaponItem,
+        elementDamage,
+        statAssigned,
+        conversionOrder,
+        conversion,
+        spellDamage,
+        spellDamageRaw,
+        spellMultiplier
+      );
+
+      let finalMeteorBurnDamage = computeBuildSpellDamage(
+        weaponDamage,
+        weaponItem,
+        elementDamage,
+        statAssigned,
+        [],
+        {},
+        spellDamage,
+        spellDamageRaw,
+        meteorBurningMultiplier
+      );
+
+      finalSkillDamage[i] = {
+        blastDamage: finalDamage,
+        burningDamage: finalMeteorBurnDamage,
+      };
+    } else {
+      let spellMultiplier = selectedAbility.damage;
+      let conversionOrder = selectedAbility.conversionOrder;
+      let conversion = selectedAbility.conversion;
+
+      let finalDamage = computeBuildSpellDamage(
+        weaponDamage,
+        weaponItem,
+        elementDamage,
+        statAssigned,
+        conversionOrder,
+        conversion,
+        spellDamage,
+        spellDamageRaw,
+        spellMultiplier
+      );
+
+      finalSkillDamage[i] = finalDamage;
+    }
+  }
+
+  return finalSkillDamage;
+}
+
+function computeAsWarrior(
+  weaponDamage,
+  statAssigned,
+  elementDamage,
+  spellDamage,
+  spellDamageRaw,
+  finalSkillDamage,
+  itemBuildData,
+  weaponItem
+) {
+  const currentLevel = itemBuildData.settings.level;
+
+  for (let i = 1; i < 5; i++) {
+    let selectedGrade = "";
+    // 스킬 등급 선택
+    ENUM_GRADE.forEach((v) => {
+      if (CLASSSKILLS.warrior[i][v].level < currentLevel) selectedGrade = v;
+    });
+
+    const selectedAbility = CLASSSKILLS.warrior[i][selectedGrade];
+
+    if (i == 1) {
+      if (selectedGrade == "grade2" || selectedGrade == "grade3") {
+        let spellMultiplier = selectedAbility.damage;
+        let conversionOrder = selectedAbility.conversionOrder;
+        let conversion = selectedAbility.conversion;
+
+        let firstExplosionDamage = computeBuildSpellDamage(
           weaponDamage,
           weaponItem,
           elementDamage,
@@ -596,14 +964,269 @@ function computeAsAssasin(
           conversion,
           spellDamage,
           spellDamageRaw,
-          spellMultiplier,
-      )
-  
-      finalSkillDamage[i] = finalDamage
+          spellMultiplier
+        );
 
+        let secondExplosionDamage = computeBuildSpellDamage(
+          weaponDamage,
+          weaponItem,
+          elementDamage,
+          statAssigned,
+          [],
+          {},
+          spellDamage,
+          spellDamageRaw,
+          spellMultiplier
+        );
+
+        finalSkillDamage[i] = {
+          firstDamage: firstExplosionDamage,
+          secondDamage: secondExplosionDamage,
+        };
+        continue;
+      }
+    } 
+    else if (i == 3) {
+      if (selectedGrade == "grade2") {
+        let firstSpellMultiplier = selectedAbility.firstDamage;
+        let firstConversionOrder = selectedAbility.firstConversionOrder;
+        let firstConversion = selectedAbility.firstConversion;
+
+        let secondSpellMultiplier = selectedAbility.secondDamage;
+        let secondConversionOrder = selectedAbility.secondConversionOrder;
+        let secondConversion = selectedAbility.secondConversion;
+
+        let firstDamage = computeBuildSpellDamage(
+          weaponDamage,
+          weaponItem,
+          elementDamage,
+          statAssigned,
+          firstConversionOrder,
+          firstConversion,
+          spellDamage,
+          spellDamageRaw,
+          firstSpellMultiplier
+        );
+
+        let secondDamage = computeBuildSpellDamage(
+          weaponDamage,
+          weaponItem,
+          elementDamage,
+          statAssigned,
+          secondConversionOrder,
+          secondConversion,
+          spellDamage,
+          spellDamageRaw,
+          secondSpellMultiplier
+        );
+
+        finalSkillDamage[i] = {
+          firstDamage: firstDamage,
+          secondDamage: secondDamage,
+        };
+        continue;
+      } else if (selectedGrade == "grade3") {
+        let firstSpellMultiplier = selectedAbility.firstDamage;
+        let firstConversionOrder = selectedAbility.firstConversionOrder;
+        let firstConversion = selectedAbility.firstConversion;
+
+        let secondSpellMultiplier = selectedAbility.secondDamage;
+        let secondConversionOrder = selectedAbility.secondConversionOrder;
+        let secondConversion = selectedAbility.secondConversion;
+
+        let thirdSpellMultiplier = selectedAbility.thirdDamage;
+        let thirdConversionOrder = selectedAbility.thirdConversionOrder;
+        let thirdConversion = selectedAbility.thirdConversion;
+
+        let firstDamage = computeBuildSpellDamage(
+          weaponDamage,
+          weaponItem,
+          elementDamage,
+          statAssigned,
+          firstConversionOrder,
+          firstConversion,
+          spellDamage,
+          spellDamageRaw,
+          firstSpellMultiplier
+        );
+
+        let secondDamage = computeBuildSpellDamage(
+          weaponDamage,
+          weaponItem,
+          elementDamage,
+          statAssigned,
+          secondConversionOrder,
+          secondConversion,
+          spellDamage,
+          spellDamageRaw,
+          secondSpellMultiplier
+        );
+
+        let thirdDamage = computeBuildSpellDamage(
+          weaponDamage,
+          weaponItem,
+          elementDamage,
+          statAssigned,
+          thirdConversionOrder,
+          thirdConversion,
+          spellDamage,
+          spellDamageRaw,
+          thirdSpellMultiplier
+        );
+
+        finalSkillDamage[i] = {
+          firstDamage: firstDamage,
+          secondDamage: secondDamage,
+          thirdDamage: thirdDamage,
+        };
+        continue;
+      }
+    }
+    else if (i == 4) {
+      if(selectedGrade == 'grade2' || selectedGrade == 'grade3') {
+        let firstSpellMultiplier = selectedAbility.firstDamage;
+        let firstConversionOrder = selectedAbility.firstConversionOrder;
+        let firstConversion = selectedAbility.firstConversion;
+
+        let afterSpellMultiplier = selectedAbility.afterDamage;
+        let afterConversionOrder = selectedAbility.afterConversionOrder;
+        let afterConversion = selectedAbility.afterConversion;
+    
+        let firstDamage = computeBuildSpellDamage(
+          weaponDamage,
+          weaponItem,
+          elementDamage,
+          statAssigned,
+          firstConversionOrder,
+          firstConversion,
+          spellDamage,
+          spellDamageRaw,
+          firstSpellMultiplier
+        );
+
+        let afterDamage = computeBuildSpellDamage(
+          weaponDamage,
+          weaponItem,
+          elementDamage,
+          statAssigned,
+          afterConversionOrder,
+          afterConversion,
+          spellDamage,
+          spellDamageRaw,
+          afterSpellMultiplier
+        );
+
+        finalSkillDamage[i] = {
+          'firstDamage': firstDamage,
+          'afterDamage': afterDamage,
+        }
+      }
+      continue;
     }
 
-    return finalSkillDamage
+    let spellMultiplier = selectedAbility.damage;
+    let conversionOrder = selectedAbility.conversionOrder;
+    let conversion = selectedAbility.conversion;
+
+    let finalDamage = computeBuildSpellDamage(
+      weaponDamage,
+      weaponItem,
+      elementDamage,
+      statAssigned,
+      conversionOrder,
+      conversion,
+      spellDamage,
+      spellDamageRaw,
+      spellMultiplier
+    );
+
+    finalSkillDamage[i] = finalDamage;
+  }
+
+  return finalSkillDamage
 }
 
+function computeAsShaman(
+  weaponDamage,
+  statAssigned,
+  elementDamage,
+  spellDamage,
+  spellDamageRaw,
+  finalSkillDamage,
+  itemBuildData,
+  weaponItem
+) {
+  const currentLevel = itemBuildData.settings.level;
 
+  for (let i = 1; i < 5; i++) {
+    let selectedGrade = "";
+    // 스킬 등급 선택
+    ENUM_GRADE.forEach((v) => {
+      console.log(i)
+      if (CLASSSKILLS.shaman[i][v].level < currentLevel) selectedGrade = v;
+    });
+
+    const selectedAbility = CLASSSKILLS.shaman[i][selectedGrade];
+
+    if(i==1 && selectedGrade == 'grade3') {
+      let spellMultiplier = selectedAbility.damage;
+      let conversionOrder = selectedAbility.conversionOrder;
+      let conversion = selectedAbility.conversion;
+
+      let smashSpellMultiplier = selectedAbility.smashDamage;
+      let smashConversionOrder = selectedAbility.smashConversionOrder
+      let smashConversion = selectedAbility.smashConversion
+
+      let smashDamage = computeBuildSpellDamage(
+        weaponDamage,
+        weaponItem,
+        elementDamage,
+        statAssigned,
+        smashConversionOrder,
+        smashConversion,
+        spellDamage,
+        spellDamageRaw,
+        smashSpellMultiplier
+      )
+  
+      let finalDamage = computeBuildSpellDamage(
+        weaponDamage,
+        weaponItem,
+        elementDamage,
+        statAssigned,
+        conversionOrder,
+        conversion,
+        spellDamage,
+        spellDamageRaw,
+        spellMultiplier
+      );
+
+      finalSkillDamage[i] = {
+        'smashDamage': smashDamage,
+        'tickDamage': finalDamage,
+      }
+  
+      continue;
+    }
+    else if(i==2 && selectedGrade == 'grade1') continue;
+
+    let spellMultiplier = selectedAbility.damage;
+    let conversionOrder = selectedAbility.conversionOrder;
+    let conversion = selectedAbility.conversion;
+
+    let finalDamage = computeBuildSpellDamage(
+      weaponDamage,
+      weaponItem,
+      elementDamage,
+      statAssigned,
+      conversionOrder,
+      conversion,
+      spellDamage,
+      spellDamageRaw,
+      spellMultiplier
+    );
+
+    finalSkillDamage[i] = finalDamage;
+  }
+  return finalSkillDamage
+}

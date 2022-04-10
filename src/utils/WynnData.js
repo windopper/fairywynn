@@ -248,16 +248,191 @@ export const powderDamageConvert = {
 export const CLASSSKILLS = {
     "warrior": {
         '1': {
-
+            'name': 'Bash',
+            'grade1': {
+                'level': 1,
+                'mana': 6,
+                'damage': 1.7,
+                'conversionOrder': ['earthDamage'],
+                'conversion': {
+                    'earthDamage': 0.2
+                }
+            },
+            'grade2': {
+                'level': 16,
+                'mana': 6,
+                'damage': 1.3,
+                // conversion applied only the first explosion
+                'conversionOrder': ['earthDamage'],
+                'conversion': {
+                    'earthDamage': 0.2
+                },
+                'lore': [
+                    'Double Explosion: causing twice the amount of damage',
+                ]
+            },
+            'grade3': {
+                'level': 36,
+                'mana': 6,
+                'damage': 1.3,
+                // conversion applied only the first explosion
+                'conversionOrder': ['earthDamage'],
+                'conversion': {
+                    'earthDamage': 0.4
+                },
+                'lore': [
+                    'Double Explosion: causing twice the amount of damage',
+                    'Earthquake: breaks the legs of your enemies and slows them down for 4 seconds'
+                ]
+            }
         },
         '2': {
-
+            'name': 'Charge',
+            'grade1': {
+                'level': 11,
+                'mana': 4,
+                'damage': 1.5,
+                'conversionOrder': ['fireDamage'],
+                'conversion': {
+                    'fireDamage': 0.4
+                }
+            },
+            'grade2': {
+                'level': 26,
+                'mana': 4,
+                'damage': 1.5,
+                'conversionOrder': ['fireDamage'],
+                'conversion': {
+                    'fireDamage': 0.4
+                },
+                'lore': [
+                    'Inspire: hitting enemies when charging increases your defence by 50%',
+                ]
+            },
+            'grade3': {
+                'level': 14,
+                'mana': 4,
+                'damage': 1.5,
+                'conversionOrder': ['fireDamage'],
+                'conversion': {
+                    'fireDamage': 0.4
+                },
+                'lore': [
+                    'Inspire: hitting enemies when charging increases your defence by 50%',
+                    'Aerodynamics: you can now control your character while charging'
+                ]
+            }
         },
         '3': {
-
+            'name': 'Upper Cut',
+            'grade1': {
+                'level': 21,
+                'mana': 9,
+                'damage': 3,
+                'conversionOrder': ['earthDamage', 'thunderDamage'],
+                'conversion': {
+                    'earthDamage': .1,
+                    'thunderDamage': .1,
+                }
+            },
+            'grade2': {
+                'level': 36,
+                'mana': 9,
+                'firstDamage': 3,
+                'firstConversionOrder': ['earthDamage', 'thunderDamage'],
+                'firstConversion': {
+                    'earthDamage': .15,
+                    'thunderDamage': .1,
+                },
+                'secondDamage': .5,
+                'secondConversionOrder': ['thunderDamage'],
+                'secondConversion': {
+                    'thunderDamage': .4,
+                },
+                'lore': [
+                    'Fireworks: your opponent will explode midair, hurting them again for 50% damage',
+                ]
+            },
+            'grade3': {
+                'level': 56,
+                'mana': 9,
+                'firstDamage': 3,
+                'firstConversionOrder': ['earthDamage', 'thunderDamage'],
+                'firstConversion': {
+                    'earthDamage': .2,
+                    'thunderDamage': .1,
+                },
+                'secondDamage': .5,
+                'secondConversionOrder': ['thunderDamage'],
+                'secondConversion': {
+                    'thunderDamage': .4,
+                },
+                'thirdDamage': .5,
+                'thirdConversionOrder': ['thunderDamage'],
+                'thirdConversion': {
+                    'thunderDamage': .2,
+                },
+                'lore': [
+                    'Fireworks: your opponent will explode midair, hurting them again for 50% damage',
+                    'Comet: Your opponent will crash into the ground after the fireworks effect, hurting them again for 50% damage'
+                ]
+            }
         },
         '4': {
-
+            'name': 'War Scream',
+            'grade1': {
+                'level': 31,
+                'mana': 6,
+                'damage': .5,
+                'conversionOrder': ['fireDamage', 'airDamage'],
+                'conversion': {
+                    'fireDamage': .75,
+                    'airDamage': .25,
+                },
+                'lore': [
+                    'Grants +10% resistance for 2 minutes to yourself and allies',
+                ]
+            },
+            'grade2': {
+                'level': 46,
+                'mana': 6,
+                'firstDamage': .5,
+                'firstConversionOrder': ['fireDamage', 'airDamage'],
+                'firstConversion': {
+                    'fireDamage': .75,
+                    'airDamage': .25,
+                },
+                'afterDamage': .3,
+                'afterConversionOrder': ['fireDamage', 'airDamage'],
+                'afterConversion': {
+                    'fireDamage': .75,
+                    'airDamage': .25,
+                },
+                'lore': [
+                    'Grants +10% resistance for 2 minutes to yourself and allies',
+                    'Air Shout: Throw a projectile with high knockback that can go through walls, dealing 30% damage multiple times'
+                ]
+            },
+            'grade3': {
+                'level': 66,
+                'mana': 6,
+                'firstDamage': .5,
+                'firstConversionOrder': ['fireDamage', 'airDamage'],
+                'firstConversion': {
+                    'fireDamage': .75,
+                    'airDamage': .25,
+                },
+                'afterDamage': .3,
+                'afterConversionOrder': ['fireDamage', 'airDamage'],
+                'afterConversion': {
+                    'fireDamage': .75,
+                    'airDamage': .25,
+                },
+                'lore': [
+                    'Grants +20% resistance and +10% damage for 4 minutes to yourself and allies',
+                    'Air Shout: Throw a projectile with high knockback that can go through walls, dealing 30% damage multiple times'
+                ]
+            }
         },
     },
     "assasin": {
@@ -324,25 +499,21 @@ export const CLASSSKILLS = {
             },
         },
         '3': {
-            // 스텟 부정확함 수정 요망
             'name': 'MultiHit',
             'grade1': {
                 'level': 21,
                 'mana': 8,
                 'damage': 0.27,
                 'hits': 10,
-                'conversionOrder': ['thunderDamage'],
-                'conversion': {
-                    'thunderDamage': 0.2
-                }
             },
             'grade2': {
                 'level': 36,
                 'mana': 8,
                 'damage': 0.27,
                 'hits': 10,
-                'fatalityDamage': 1.2,
-                'conversionOrder': ['thunderDamage, waterDamage'],
+                'lastDamage': 1.2,
+                // element conversion only applied to fatality attack
+                'conversionOrder': ['thunderDamage', 'waterDamage'],
                 'conversion': {
                     'thunderDamage': 0.3,
                     'waterDamage': 0.15
@@ -356,8 +527,9 @@ export const CLASSSKILLS = {
                 'mana': 8,
                 'damage': 0.27,
                 'hits': 10,
-                'fatalityDamage': 1.2,
-                'conversionOrder': ['thunderDamage, waterDamage'],
+                'lastDamage': 1.2,
+                // element conversion only applied to fatality attack
+                'conversionOrder': ['thunderDamage', 'waterDamage'],
                 'conversion': {
                     'thunderDamage': 0.3,
                     'waterDamage': 0.5,
@@ -373,8 +545,9 @@ export const CLASSSKILLS = {
             'grade1': {
                 'level': 31,
                 'mana': 8,
-                'damage': 1.2,
+                'damage': 0.6,
                 'duration': '5s',
+                'totalCount': 10,
                 'conversionOrder': ['earthDamage', 'airDamage'],
                 'conversion': {
                     'earthDamage': 0.15,
@@ -384,8 +557,9 @@ export const CLASSSKILLS = {
             'grade2': {
                 'level': 46,
                 'mana': 8,
-                'damage': 1.2,
+                'damage': 0.6,
                 'duration': '5s',
+                'totalCount': 10,
                 'conversionOrder': ['earthDamage', 'airDamage'],
                 'conversion': {
                     'earthDamage': 0.25,
@@ -398,8 +572,9 @@ export const CLASSSKILLS = {
             'grade3': {
                 'level': 66,
                 'mana': 8,
-                'damage': 1.2,
+                'damage': 0.6,
                 'duration': '5s',
+                'totalCount': 10, //  maximum hits
                 'conversionOrder': ['earthDamage', 'airDamage'],
                 'conversion': {
                     'earthDamage': 0.25,
@@ -414,30 +589,293 @@ export const CLASSSKILLS = {
     },
     "mage": {
         '1': {
-
+            'name': 'Heal',
+            'grade1': {
+                'level': 1,
+                'mana': 8,
+                'healConversion': 0.1,
+                'healAllyConverison': 0.15,
+            },
+            'grade2': {
+                'level': 16,
+                'mana': 7,
+                'healConversion': 0.15,
+                'healAllyConversion': 0.2,
+                'lore': [
+                    'Purification: Clear Weakness, slowness, and fire from the players healed',
+                ]
+            },
+            'grade3': {
+                'level': 36,
+                'mana': 6,
+                'firstPulseHealConversion': 0.12,
+                'afterPulseHealConversion': 0.06,
+                'firstPulseHealAllyConversion': 0.2,
+                'afterPulseHealAllyConversion': 0.1,
+                'lore': [
+                    'Purification: Clear Weakness, slowness, and fire from the players healed',
+                    'Pulse: Heals for a reduced amount every second for 2 additional seconds after casting Heal. These secondary heals also clear negative effects and fire'
+                ]
+            }
         },
         '2': {
-
+            'name': 'Teleport',
+            'grade1': {
+                'level': 11,
+                'mana': 4,
+                'damage': 0,
+                'conversionOrder': ['thunderDamage'],
+                'conversion': {
+                    'thunderDamage': 0.4
+                }
+            },
+            'grade2': {
+                'level': 26,
+                'mana': 4,
+                'damage': 1.5,
+                'conversionOrder': ['thunderDamage'],
+                'conversion': {
+                    'thunderDamage': 0.4
+                },
+                'lore': [
+                    'Slash: Hit enemies you cross while teleporting for 100% damage'
+                ]
+            },
+            'grade3': {
+                'level': 46,
+                'mana': 4,
+                'damage': 1.5,
+                'conversionOrder': ['thunderDamage'],
+                'conversion': {
+                    'thunderDamage': 0.4
+                },
+                'lore': [
+                    'Slash: Hit enemies you cross while teleporting for 100% damage',
+                    'Eye-Piercing: Blind mobs you damage for 1 second',
+                ]
+            }
         },
         '3': {
+            'name': 'Meteor',
+            'grade1': {
+                'level': 21,
+                'mana': 8,
+                'damage': 5,
+                'conversionOrder': ['earthDamage', 'fireDamage'],
+                'conversion': {
+                    'earthDamage': 0.2,
+                    'fireDamage': 0.2,
+                }
+            },
+            'grade2': {
+                'level': 36,
+                'mana': 8,
+                'damage': 5,
+                'conversionOrder': ['earthDamage', 'fireDamage'],
+                'conversion': {
+                    'earthDamage': 0.3,
+                    'fireDamage': 0.2,
+                },
+                'lore': [
+                    'Mesosphere Fall: Meteor now falls much faster'
+                ]
+            },
+            'grade3': {
+                'level': 56,
+                'mana': 8,
+                'damage': 5,
+                'burnDamage': 1.25,
+                'conversionOrder': ['earthDamage', 'fireDamage'],
+                'conversion': {
+                    'earthDamage': 0.3,
+                    'fireDamage': 0.3,
+                },
+                'lore': [
+                    'Mesosphere Fall: Meteor now falls much faster',
+                    'Burning Ground: The impact creates a large burning area for few seconds, damaging enemies on it for 100% damage each second',
 
+                ]
+            }
         },
         '4': {
-
+            'name': 'Ice Snake',
+            'grade1': {
+                'level': 31,
+                'mana': 4,
+                'damage': 0.7,
+                'conversionOrder': ['waterDamage'],
+                'conversion': {
+                    'waterDamage': 0.5,
+                }
+            },
+            'grade2': {
+                'level': 46,
+                'mana': 4,
+                'damage': 0.7,
+                'conversionOrder': ['waterDamage'],
+                'conversion': {
+                    'waterDamage': 0.5,
+                },
+                'lore': [
+                    'Freezing: Freeze enemies hit for 1 second'
+                ]
+            },
+            'grade3': {
+                'level': 66,
+                'mana': 8,
+                'damage': 0.7,
+                'conversionOrder': ['waterDamage'],
+                'conversion': {
+                    'waterDamage': 0.5,
+                },
+                'lore': [
+                    'Freezing: Freeze enemies hit for 1 second',
+                    "Mind Control: You can control Ice Snake's path by moving your head left or right"
+                ]
+            }
         },
     },
     "shaman": {
         '1': {
-
+            'name': 'Totem',
+            'grade1': {
+                'level': 1,
+                'mana': 4,
+                'damage': 0.2,
+                'conversionOrder': ['airDamage'],
+                'conversion': {
+                    'airDamage': 0.2,
+                },
+            },
+            'grade2': {
+                'level': 16,
+                'mana': 4,
+                'damage': 0.2,
+                'conversionOrder': ['airDamage'],
+                'conversion': {
+                    'airDamage': 0.2,
+                },
+                'lore': [
+                    'Regeneration: heals 4% of your max HP per second',
+                ]
+            },
+            'grade3': {
+                'level': 36,
+                'mana': 4,
+                'damage': 0.2,
+                'smashDamage': 1,
+                'smashConversionOrder': ['fireDamage'],
+                'smashConversion': {
+                    'fireDamage': 0.2,
+                },
+                'conversionOrder': ['airDamage'],
+                'conversion': {
+                    'airDamage': 0.2,
+                },
+                'lore': [
+                    'Regeneration: heals 4% of your max HP per second',
+                    'Totemic Smash: Deals 100% damage when touching the ground after being thrown',
+                ]
+            },
         },
         '2': {
-
+            'name': 'Haul',
+            'grade1': {
+                'level': 11,
+                'mana': 3,
+            },
+            'grade2': {
+                'level': 26,
+                'mana': 2,
+                'damage': 1,
+                'conversionOrder': ['thunderDamage'],
+                'conversion': {
+                    'thunderDamage': .2,
+                },
+                'lore':[
+                    "Nature's Jolt: Deal 100% damage to nearby mobs upon landing and throw them upwards",
+                ]
+            },
+            'grade3': {
+                'level': 46,
+                'mana': 1,
+                'damage': 1,
+                'conversionOrder': ['thunderDamage'],
+                'conversion': {
+                    'thunderDamage': .2,
+                },
+                'lore':[
+                    "Nature's Jolt: Deal 100% damage to nearby mobs upon landing and throw them upwards",
+                    'Stagnation: Mobs hit are also slowed down by 60% for 3 seconds',
+                ]
+            }
         },
         '3': {
-
+            'name': 'Aura',
+            'grade1': {
+                'level': 21,
+                'mana': 8,
+                'damage': 2,
+                'conversionOrder': ['waterDamage'],
+                'conversion': {
+                    'waterDamage': .2,
+                }
+            },
+            'grade2': {
+                'level': 36,
+                'mana': 8,
+                'damage': 2,
+                'conversionOrder': ['waterDamage'],
+                'conversion': {
+                    'waterDamage': .2,
+                },
+                'lore': [
+                    'Rebound: The aura effect bounces back to hit a second time',
+                ]
+            },
+            'grade3': {
+                'level': 56,
+                'mana': 8,
+                'damage': 2,
+                'conversionOrder': ['waterDamage'],
+                'conversion': {
+                    'waterDamage': .3,
+                },
+                'lore': [
+                    'Rebound: The aura effect bounces back to hit a second time',
+                    'Enclosure: Creates a temporary cage near the totem which traps mobs in',
+                ]
+            }
         },
         '4': {
-
+            'name': 'Uproot',
+            'grade1': {
+                'level': 31,
+                'mana': 6,
+                'damage': 1,
+                'conversionOrder': ['earthDamage'],
+                'conversion': {
+                    'earthDamage': .1,
+                }
+            },
+            'grade2': {
+                'level': 46,
+                'mana': 6,
+                'damage': 1,
+                'conversionOrder': ['earthDamage'],
+                'conversion': {
+                    'earthDamage': .2,
+                }
+            },
+            'grade3': {
+                'level': 66,
+                'mana': 6,
+                'damage': 1,
+                'conversionOrder': ['earthDamage'],
+                'conversion': {
+                    'earthDamage': .3,
+                }
+            },
         },
     },
     "archer": {
@@ -456,9 +894,9 @@ export const CLASSSKILLS = {
             'grade2': {
                 'level': 16,
                 'mana': 6,
-                'damage': '0.2',
+                'damage': 0.2,
                 'arrows': 20,
-                'conversionOrder': ['fireDamage', 'thunderDamage'],
+                'conversionOrder': ['thunderDamage', 'fireDamage'],
                 'conversion': {
                     'fireDamage': 0.15,
                     'thunderDamage': 0.25,
@@ -472,7 +910,7 @@ export const CLASSSKILLS = {
                 'mana': 6,
                 'damage': 0.1,
                 'arrows': 60,
-                'conversionOrder': ['fireDamage', 'thunderDamage'],
+                'conversionOrder': ['thunderDamage', 'fireDamage'],
                 'conversion': {
                     'fireDamage': 0.15,
                     'thunderDamage': 0.25
@@ -551,7 +989,7 @@ export const CLASSSKILLS = {
             },
         },
         '4': {
-            'name': 'After Shield',
+            'name': 'Arrow Shield',
             'grade1': {
                 'level': 31,
                 'mana': 8,
@@ -576,7 +1014,7 @@ export const CLASSSKILLS = {
             'grade3': {
                 'level': 66,
                 'mana': 10,
-                'shieldDamage': 2.5,
+                'shieldDamage': 1,
                 'shieldDamageConversionOrder': ['airDamage'],
                 'shieldDamageConversion': {
                     'airDamage': 0.3

@@ -9,6 +9,7 @@ import BuildStats from "./contents/BuildStats";
 import StatRemain from "./contents/StatRemain";
 import BuildItemUsed from "./contents/BuildItemUsed";
 import { getBuildDamages } from "../../../utils/WynnMath";
+import BuildSpellInfo from "./contents/buildspell/BuildSpellInfo";
 
 export default function BuildDetail() {
 
@@ -26,10 +27,7 @@ export default function BuildDetail() {
   );
 
   const showBuildDetail = useBuildDetailDashBoardStateUpdate();
-
   const currentItemBuild = store.getState().itembuild;
-  console.log(getBuildDamages(currentItemBuild))
-  // getBuildDamage(currentItemBuild)
 
   return (
     <>
@@ -48,6 +46,7 @@ export default function BuildDetail() {
             <StatRemain data={currentItemBuild} />
             <BuildItemUsed data={currentItemBuild} />
             <BuildStats data={currentItemBuild}/>
+            <BuildSpellInfo itemBuildData={currentItemBuild}/>
           </div>
         </div>
       ) : null}
