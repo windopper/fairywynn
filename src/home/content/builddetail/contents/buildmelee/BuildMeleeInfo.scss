@@ -1,0 +1,86 @@
+.buildmeleeinfo-wrapper {
+    position: relative;
+    width: 100%;
+    display: flex;
+    margin: 15px 0px;
+    flex-direction: column;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-items: center;
+}
+
+.buildmeleeinfo-container {
+    background-color: rgb(69, 69, 69);
+    width: 95%;
+    padding: 20px 0;
+    border-radius: 0.5em;
+
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    flex-wrap:  wrap;
+    justify-content: space-around;
+    color: rgb(226, 226, 226);
+    font-size: 1.3rem;
+    font-weight: 600;
+
+
+    .buildmeleeinfo-item {
+
+        div {
+            text-align: center;
+        }
+
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        font-size: 1.5rem;
+        color: rgb(242, 255, 218);
+
+        .attackspeed {
+            font-size: 1rem;
+            color: rgb(177, 177, 177);
+        }
+
+        .dps {
+            font-size: 1.55rem;
+            color: rgb(242, 255, 218);
+            margin: 10px;
+        }
+
+        .damage-container {
+            font-size: 1.2rem;
+        }
+    }
+}
+
+.column-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+.row-container {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.small-info {
+    font-size: 0.8rem;
+    font-style: italic;
+    color:rgba(219, 255, 90, 0.562)
+}
+
+
+@media (max-width: 732px) {
+    .firstitemorder {
+        order: -1;
+    }
+    .buildmeleeinfo-item {
+        flex: 0 0 100%;
+    }
+}

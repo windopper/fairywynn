@@ -1,3 +1,4 @@
+import { getValidStat } from "../../../../utils/WynnMath";
 import { BUILDEQUIPS } from "../../../reducer/itembuild";
 import './StatRemain.scss'
 
@@ -101,11 +102,22 @@ export function StatAssignCalculateFunction(data) {
   }
 }
 
-export default function StatRemain({ data }) {
+export default function StatRemain({ data, statAssigned }) {
 
-    const cal_Data = StatAssignCalculateFunction(data)
+    const currentLevel = data.settings.level
+    const usedStatPoint = statType.map(v => statAssigned.properStatAssign[v]).reduce((a, s) => a + s)
+    const validStat = getValidStat(currentLevel)
+
+    const skillPointRemain = validStat - usedStatPoint;
 
   return <div className="statremain-container">
-      <div></div>
+      <div>
+        {`Assigned Skill Points: ${usedStatPoint}`}
+      </div>
+      <div>
+        {`Skill Point Remaining: `}<span style={{
+          color: skillPointRemain < 0 ? 'rgb(255, 100, 100)' : 'rgb(100, 255, 100)'
+        }}>{skillPointRemain}</span>
+      </div>
   </div>;
 }

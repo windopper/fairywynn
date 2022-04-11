@@ -4,8 +4,7 @@
     width: 98%;
     display: flex;
     flex-direction: column;
-    font-size: 1rem;
-    // font-style: oblique;
+    // font-size: 0.8rem;
     align-items: center;
     justify-content: center;
 
@@ -15,7 +14,7 @@
         font-size: 1.5rem;
     }
 
-    > .buildstats-content {
+    .buildstats-content {
 
         width: 100%;
         display: flex;
@@ -25,7 +24,7 @@
         align-content: center;
         // justify-content: space-evenly;
 
-        > .buildstats-content-part {
+        .buildstats-content-part {
             margin: 2%;
             width: 45%;
             min-width: 300px;
@@ -33,6 +32,10 @@
             border-radius: 0.2em;
             background-color: rgb(58, 58, 58);
 
+            div {
+                font-weight: 600;
+                font-size: 1.25rem;
+            }
         }
     }
 }

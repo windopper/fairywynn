@@ -2,6 +2,7 @@ import "./BuildUtils.scss";
 import { BUILDEQUIPS } from "../../../reducer/itembuild";
 import { majorIdDescription, statsMapping, statsUnit } from "../../EnumParts";
 import { useStore } from "react-redux";
+import { getDefaultDefense, getDefaultHealth, getMinSum, SkillPointToPercentage} from "../../../../utils/WynnMath";
 
 const statTypeColor = {
   neutral: "RGB(252, 165, 14)",
@@ -103,8 +104,10 @@ const ReverseREDOrGREEN = ({ v, content = "" }) => (
 );
 
 export function Health({ data }) {
-  const values = Filter(data, "health");
-  const sum = values.reduce((ac, v) => ac + v);
+  const defaultHealth = getDefaultHealth(data.settings.level)
+  const health = Filter(data, "health");
+  const healthBonus = getMaxSum(data, 'healthBonus')
+  const sum = health.reduce((ac, v) => ac + v) + healthBonus + defaultHealth
 
   return (
     <div
@@ -118,11 +121,44 @@ export function Health({ data }) {
   );
 }
 
+export function EffectiveHealth({ data }) {
+  const defaultHealth = getDefaultHealth(data.settings.level)
+  const defaultDefense = getDefaultDefense(data)
+  const health = Filter(data, "health").reduce((ac, v) => ac + v);
+  const healthBonus = getMaxSum(data, 'healthBonus')
+  const healthSum = health + healthBonus + defaultHealth
+  const defense = SkillPointToPercentage(data.currentBuild.statAssigned.finalStatTypePoints.defense) / 100
+  const agility = SkillPointToPercentage(data.currentBuild.statAssigned.finalStatTypePoints.agility) / 100
+  const effectHealth = healthSum / ((1 - defense) * (1 - agility) * (2 - defaultDefense))
+  const nonAgilityEffectiveHealth = healthSum / ((1 - defense) * (2 - defaultDefense))
+  return (
+    <>
+        <div
+      className="buildutil health"
+      style={{
+        color: "rgb(255, 79, 79)",
+      }}
+    >
+      <div>♥ Effective Health:</div> <div>{Math.round(effectHealth)}</div>
+    </div>
+    <div
+      className="buildutil health"
+      style={{
+        color: "rgb(255, 79, 79)",
+      }}
+    >
+      <div>♥ Non-Agility EHP:</div> <div>{Math.round(nonAgilityEffectiveHealth)}</div>
+    </div>
+    </>
+
+  );
+}
+
 export function HealthRegen({ data }) {
   const result = RawPercentCalculate(
     getMaxSum(data, "healthRegenRaw"),
     getMaxSum(data, "healthRegen")
-  ).toFixed(1)
+  ).toFixed(1);
 
   return (
     <div
@@ -136,6 +172,28 @@ export function HealthRegen({ data }) {
   );
 }
 
+export function EffectiveHealthRegen({data}) {
+  const result = RawPercentCalculate(
+    getMaxSum(data, "healthRegenRaw"),
+    getMaxSum(data, "healthRegen")
+  ).toFixed(1);
+  const defaultDefense = getDefaultDefense(data)
+  const defense = SkillPointToPercentage(data.currentBuild.statAssigned.finalStatTypePoints.defense) / 100
+  const agility = SkillPointToPercentage(data.currentBuild.statAssigned.finalStatTypePoints.agility) / 100
+  const effectiveHPR = result / ((1 - defense) * (1 - agility) * (2 - defaultDefense))
+
+  return (
+    <div
+      className="buildutil healthRegen"
+      style={{
+        color: "rgb(255, 79, 79)",
+      }}
+    >
+      <div>♥ Effective HPR:</div> <REDOrGREEN v={effectiveHPR.toFixed(1)} content={"/4s"} />
+    </div>
+  );
+}
+
 export function ManaRegen({ data }) {
   const result = getMaxSum(data, "manaRegen");
   return (
@@ -145,43 +203,49 @@ export function ManaRegen({ data }) {
         color: "RGB(70, 223, 223)",
       }}
     >
-      <div>Mana Regen: </div>
+      <div>
+        <i className="mana-icon" /> Mana Regen:{" "}
+      </div>
       <REDOrGREEN v={result} content={"/4s"} />
     </div>
   );
 }
 
 export function ElementDefense({ data }) {
+  const store = useStore();
+  const filteredArmorDefenses = BUILDEQUIPS.filter(
+    (v) =>
+      store.getState().itembuild[v] !== undefined &&
+      store.getState().itembuild[v].armorDefense != null
+  );
 
-  const store = useStore()
-  const filteredArmorDefenses = BUILDEQUIPS.filter(v => store.getState().itembuild[v] !== undefined && store.getState().itembuild[v].armorDefense != null)
-  
   const elementDefenseSum = (element) => {
-    if(filteredArmorDefenses.length == 0) {
-      return 0
+    if (filteredArmorDefenses.length == 0) {
+      return 0;
     }
-    return filteredArmorDefenses.map(v => store.getState().itembuild[v].armorDefense[element]).reduce((a , s) => a + s)
-  }
-  
+    return filteredArmorDefenses
+      .map((v) => store.getState().itembuild[v].armorDefense[element])
+      .reduce((a, s) => a + s);
+  };
 
   const earthResult = RawPercentCalculate(
-    elementDefenseSum('earthDefense'),
+    elementDefenseSum("earthDefense"),
     getMaxSum(data, "bonusEarthDefense")
   ).toFixed(1);
   const thunderResult = RawPercentCalculate(
-    elementDefenseSum('thunderDefense'),
+    elementDefenseSum("thunderDefense"),
     getMaxSum(data, "bonusThunderDefense")
   ).toFixed(1);
   const waterResult = RawPercentCalculate(
-    elementDefenseSum('waterDefense'),
+    elementDefenseSum("waterDefense"),
     getMaxSum(data, "bonusWaterDefense")
   ).toFixed(1);
   const fireResult = RawPercentCalculate(
-    elementDefenseSum('fireDefense'),
+    elementDefenseSum("fireDefense"),
     getMaxSum(data, "bonusFireDefense")
   ).toFixed(1);
   const airResult = RawPercentCalculate(
-    elementDefenseSum('airDefense'),
+    elementDefenseSum("airDefense"),
     getMaxSum(data, "bonusAirDefense")
   ).toFixed(1);
 
@@ -273,7 +337,8 @@ export function ManaSteal({ data }) {
 export function ExtraStats({ data }) {
   let divs = null;
   divs = extrastats.map((v) => {
-    const sum = getMaxSum(data, v);
+    let sum = getMaxSum(data, v);
+    if (stateReverse.includes(v)) sum = getMinSum(data, v);
     if (sum === 0) return;
     return (
       <div className="buildutil">
@@ -291,13 +356,13 @@ export function ExtraStats({ data }) {
 
 export function MajorIds({ data }) {
   const filtered = Filter(data, "majorIds");
-  const overlap = []
+  const overlap = [];
   return (
     <>
       {filtered.map((v) => {
-        if(v === 0) return null
-        if(overlap.includes(v[0])) return null
-        overlap.push(v[0])
+        if (v === 0) return null;
+        if (overlap.includes(v[0])) return null;
+        overlap.push(v[0]);
         let name = v[0].toLowerCase();
         name = name.split("_");
         let resultName = "";
@@ -313,7 +378,7 @@ export function MajorIds({ data }) {
                 color: "RGB(100, 247, 252)",
               }}
             >
-              {resultName}: {} 
+              {resultName}: {}
             </span>
             <span
               style={{
@@ -411,7 +476,7 @@ export function getMaxSum(data, value, fixed = false) {
         return getMaxValue(data[v].item[value]);
       }
     })
-    .reduce((ac, v) => ac + v)
+    .reduce((ac, v) => ac + v);
 }
 
 export function isIDed(data) {

@@ -251,3 +251,114 @@ export function computeBuildSpellDamage(
     critical: criticalComputeDamage,
   };
 }
+
+
+export function getMeleeDamage(weaponDamage, elementDamage, statAssigned, attackSpeedMultiplier, meleeDamage, meleeDamageRaw) {
+
+  const ENUM_DAMAGE = [
+    "earthDamage",
+    "thunderDamage",
+    "waterDamage",
+    "fireDamage",
+    "airDamage",
+  ];
+
+  const EXTENDED_ENUM_DAMAGE = [
+    "damage",
+    "earthDamage",
+    "thunderDamage",
+    "waterDamage",
+    "fireDamage",
+    "airDamage",
+  ]
+
+  const ENUM_STATS = [
+    "strength",
+    "dexterity",
+    "intelligence",
+    "defense",
+    "agility",
+  ];
+
+  const getSumAverage = (damages) => {
+    let sum = 0;
+    EXTENDED_ENUM_DAMAGE.forEach(v => {
+      let min = damages[`min${v}`]
+      let max = damages[`max${v}`]
+      sum += (min + max) / 2
+    })
+    return Math.round(sum)
+  }
+
+  const nonCriticalDamage = {
+    mindamage: 0,
+    maxdamage: 0,
+    minearthDamage: 0,
+    maxearthDamage: 0,
+    minthunderDamage: 0,
+    maxthunderDamage: 0,
+    minwaterDamage: 0,
+    maxwaterDamage: 0,
+    minfireDamage: 0,
+    maxfireDamage: 0,
+    minairDamage: 0,
+    maxairDamage: 0,
+  };
+
+  const criticalDamage = {
+    mindamage: 0,
+    maxdamage: 0,
+    minearthDamage: 0,
+    maxearthDamage: 0,
+    minthunderDamage: 0,
+    maxthunderDamage: 0,
+    minwaterDamage: 0,
+    maxwaterDamage: 0,
+    minfireDamage: 0,
+    maxfireDamage: 0,
+    minairDamage: 0,
+    maxairDamage: 0,
+  };
+
+  const strength = SkillPointToPercentage(statAssigned.strength) / 100
+  const dexterity = SkillPointToPercentage(statAssigned.dexterity) / 100
+
+  const neutralModifier = (1 + meleeDamage) * (1 + strength)
+  nonCriticalDamage.mindamage = weaponDamage.mindamage * neutralModifier + meleeDamageRaw * (1 + strength)
+  nonCriticalDamage.maxdamage = weaponDamage.maxdamage * neutralModifier + meleeDamageRaw * (1 + strength)
+
+  const neutralCriticalModifier = (1 + meleeDamage) * (1 + strength + 1)
+  criticalDamage.mindamage = weaponDamage.mindamage * neutralCriticalModifier + meleeDamageRaw * (1 + strength + 1)
+  criticalDamage.maxdamage = weaponDamage.maxdamage * neutralCriticalModifier + meleeDamageRaw * (1 + strength + 1)
+  
+  ENUM_DAMAGE.forEach((v, i) => {
+    // Apply Element Damage, Stat Element and Strength
+    const modifier = (1 + elementDamage[v] + SkillPointToPercentage(statAssigned[ENUM_STATS[i]]) / 100 + meleeDamage) * (1 + strength)
+    nonCriticalDamage[`min${v}`] = weaponDamage[`min${v}`] * modifier
+    nonCriticalDamage[`max${v}`] = weaponDamage[`max${v}`] * modifier
+  })
+
+  ENUM_DAMAGE.forEach((v, i) => {
+    // With Critical
+    const modifier = (1 + elementDamage[v] + SkillPointToPercentage(statAssigned[ENUM_STATS[i]]) / 100 + meleeDamage) * (1 + strength + 1)
+    criticalDamage[`min${v}`] = weaponDamage[`min${v}`] * modifier
+    criticalDamage[`max${v}`] = weaponDamage[`max${v}`] * modifier
+  })
+
+  const nonCriticalSumAverage = getSumAverage(nonCriticalDamage);
+  const criticalSumAverage = getSumAverage(criticalDamage);
+
+  const averageDamagePerHit = (1 - dexterity) * nonCriticalSumAverage + dexterity * criticalSumAverage
+  const averageDps = averageDamagePerHit * attackSpeedMultiplier
+
+  console.log(attackSpeedMultiplier)
+
+  return {
+    nonCritical: roundDamage(nonCriticalDamage),
+    nonCriticalAverage: nonCriticalSumAverage,
+    critical: roundDamage(criticalDamage),
+    criticalAverage: criticalSumAverage,
+    averageDamagePerHit: Math.round(averageDamagePerHit),
+    averageDps: Math.round(averageDps),
+  }
+}

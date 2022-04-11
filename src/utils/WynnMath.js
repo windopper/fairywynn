@@ -15,6 +15,7 @@ import {
   DamageModifier,
   computeFinalDamage,
   computeBuildSpellDamage,
+  getMeleeDamage,
 } from "./WynnDamageCalculation";
 
 const BUILDEQUIPS = [
@@ -302,6 +303,29 @@ export function getMaxSum(itembuildData, targetValue, fixed = false) {
     .reduce((ac, v) => ac + v);
 }
 
+export function getMinSum(itembuildData, targetValue, fixed = false) {
+  let filtered = BUILDEQUIPS.filter(
+    (v) => itembuildData[v] !== undefined
+  ).filter(
+    (v) =>
+      itembuildData[v].item[targetValue] !== undefined &&
+      itembuildData[v].item[targetValue] !== 0
+  );
+
+  if (filtered.length === 0) return 0;
+
+  return filtered
+    .map((v) => {
+      // 자동 감정 된 것은 제외
+      if (isIDed(itembuildData[v].item) || fixed)
+        return itembuildData[v].item[targetValue];
+      else {
+        return getMinValue(itembuildData[v].item[targetValue]);
+      }
+    })
+    .reduce((ac, v) => ac + v);
+}
+
 export function isIDed(data) {
   const identified = "identified";
   return data[identified] == undefined || data[identified] == false
@@ -321,13 +345,67 @@ export function getMaxValue(base) {
   return max;
 }
 
+export function getMinValue(base) {
+  let min;
+  if(base > 0) {
+    min = base * 0.3
+    if(min < 1) min = 1;
+  } else {
+    min = base * 1.3
+    if(min > -1) min = -1;
+  }
+  min = Math.round(min)
+  return min;
+}
+
 export function getDefaultHealth(level) {
   return 5 + 5 * level;
 }
 
+export function getDefaultDefense(itembuild) {
+  if(!itembuild.weapon) return 1
+  switch(itembuild.weapon.item.type.toLowerCase()) {
+    case 'bow': return 0.6
+    case 'spear': return 1.2
+    case 'mage': return 0.8
+    case 'dagger': return 1
+    case 'relik': return 0.5
+    default: return 1
+  }
+}
+
+export function getValidStat(level) {
+  return level <= 100 ? (level - 1) * 2 : 200;
+}
+
+export function getManaUsed(baseMana, intelligentPoint, spellCostRaw, spellCostPct) {
+  return Math.max(1, Math.floor(Math.ceil(baseMana * (1 - SkillPointToPercentage(intelligentPoint) / 100) + spellCostRaw) * (1 + spellCostPct / 100)))
+}
+
+export function computeAttackSpeed(weaponsAttackSpeed, attackSpeedBonusSum) {
+  const attackSpeedEnum = {
+    'SUPER_FAST': 6,
+    'VERY_FAST': 5,
+    'FAST': 4,
+    'NORMAL': 3,
+    'SLOW': 2,
+    'VERY_SLOW': 1,
+    'SUPER_SLOW': 0,
+  }
+
+  const value = attackSpeedEnum[weaponsAttackSpeed]
+  const computedValue = value + attackSpeedBonusSum
+  if(computedValue <= 0) return 'SUPER_SLOW'
+  else if(computedValue === 1) return 'VERY_SLOW'
+  else if(computedValue === 2) return 'SLOW'
+  else if(computedValue === 3) return 'NORMAL'
+  else if(computedValue === 4) return 'FAST'
+  else if(computedValue === 5) return 'VERY_FAST'
+  else if(computedValue >= 6) return 'SUPER_FAST'
+}
+
 export function getAverageDamage(nonCritDamage, critDamage, dexterityPoint) {
   const dexterityPercent = SkillPointToPercentage(dexterityPoint) / 100;
-  console.log(dexterityPercent)
   return (1 - dexterityPercent) * nonCritDamage + dexterityPercent * critDamage
 }
 
@@ -422,7 +500,23 @@ export function getBuildDamages(itembuildData) {
     return wd;
   };
 
-  if (!hasItemTypeInBuild("weapon")) return finalSkillDamages;
+  if (!hasItemTypeInBuild("weapon")) return {
+    'spell': finalSkillDamages,
+    'melee': {
+      mindamage: 0,
+      maxdamage: 0,
+      minearthDamage: 0,
+      maxearthDamage: 0,
+      minthunderDamage: 0,
+      maxthunderDamage: 0,
+      minwaterDamage: 0,
+      maxwaterDamage: 0,
+      minfireDamage: 0,
+      maxfireDamage: 0,
+      minairDamage: 0,
+      maxairDamage: 0,
+    },
+  }
 
   const weaponItem = itembuildData.weapon.item;
   const weaponType = weaponItem.type.toLowerCase();
@@ -430,6 +524,13 @@ export function getBuildDamages(itembuildData) {
   const attackSpeedMultiplier = parseFloat(
     AttackSpeedMultipliers[weaponItem.attackSpeed]
   );
+
+  const attackSpeedMultiplierForMelee = parseFloat(
+    AttackSpeedMultipliers[computeAttackSpeed(weaponItem.attackSpeed, getMaxSum(itembuildData, 'attackSpeedBonus', true))]
+  )
+
+  const meleeDamage = getMaxSum(itembuildData, 'damageBonus') / 100;
+  const meleeDamageRaw = getMaxSum(itembuildData, 'damageBonusRaw');
 
   const elementDamage = {
     earthDamage: getMaxSum(itembuildData, "bonusEarthDamage") / 100,
@@ -448,6 +549,15 @@ export function getBuildDamages(itembuildData) {
   );
 
   const statAssigned = StatAssignCalculateFunction(itembuildData);
+
+  const meleeFinalDamage = getMeleeDamage(
+    weaponDamageSplit,
+    elementDamage,
+    statAssigned.finalStatTypePoints,
+    attackSpeedMultiplierForMelee,
+    meleeDamage,
+    meleeDamageRaw
+  );
 
   switch (weaponType) {
     case "bow": {
@@ -519,7 +629,10 @@ export function getBuildDamages(itembuildData) {
       break;
   }
 
-  return finalSkillDamages;
+  return {
+    spell: finalSkillDamages,
+    melee: meleeFinalDamage,
+  }
 }
 
 // If Weapon Type is Bow
@@ -1162,7 +1275,6 @@ function computeAsShaman(
     let selectedGrade = "";
     // 스킬 등급 선택
     ENUM_GRADE.forEach((v) => {
-      console.log(i)
       if (CLASSSKILLS.shaman[i][v].level < currentLevel) selectedGrade = v;
     });
 

@@ -28,9 +28,13 @@
         background-color: rgb(75, 75, 75);
         cursor: pointer;
     }
+}
 
-
-}   
+.builditemused-searchinfo {
+    position: absolute;
+    top: 0px;
+    background-color: white;
+}
 
 @media (max-width: 800px) {
     .builditemused-item {

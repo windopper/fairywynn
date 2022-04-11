@@ -6,7 +6,7 @@ import { getColorFromTier } from "../../../utils/ColorPicker";
 import { DisplayItem } from "../Item";
 import AddPowderButton from "./AddPowderButton";
 
-export default function BuildItems({ v, equips }) {
+export default function BuildItems({ v, itembuild }) {
 
   const [hover, setHover] = useState(false)
 
@@ -16,23 +16,24 @@ export default function BuildItems({ v, equips }) {
   }
 
   const item = useBuildItemUpdate(v)
-
   let result;
 
-  if (equips[v] !== undefined) {
+  // console.log(itembuild[v])
+
+  if (itembuild[v] !== undefined) {
     result = (
       <div
         className="smallitemlist"
         style={{
-          color: getColorFromTier(equips[v].item),
+          color: getColorFromTier(itembuild[v].item),
         }}
         onMouseEnter={() => onMouseEnter()}
         onMouseLeave={() => onMouseLeave()}
       >
-        {hover ? <div className="item-show-wrapper"><DisplayItem d={equips[v].item}/></div> : null}
-        <RemoveButton type={v} item={equips[v].item}/>
-        <AddPowderButton item={equips[v].item} type={v} />
-        {equips[v].item.name}
+        {hover ? <div className="item-show-wrapper"><DisplayItem d={itembuild[v].item}/></div> : null}
+        <RemoveButton type={v} item={itembuild[v].item}/>
+        <AddPowderButton item={itembuild[v].item} type={v} />
+        {itembuild[v].item.name}
       </div>
     );
   } else {

@@ -207,12 +207,13 @@ export const defenseEmoji = {
 }
 
 export function getDefense(data) {
+    if(data == null) return null;
     const divs = []
     for(let defense in defenses) {
         let type = defenses[defense]
-        if(data[type] == undefined || data[type] == 0) {
+        if(!data[type]) {
             continue;
-        }
+        } else if(data[type] == 0) continue;
         divs.push(
         <div style={{
             color: defenseColor[type],

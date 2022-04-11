@@ -1,13 +1,30 @@
+import { useStore } from "react-redux"
 import { store } from "../.."
-import { GetArmorDefenseWithPowder, GetWeaponDamageWithPowder } from "../../utils/WynnMath"
+import { GetArmorDefenseWithPowder, getBuildDamages, GetWeaponDamageWithPowder, StatAssignCalculateFunction } from "../../utils/WynnMath"
 
 const IMPORTBUILD = 'build/importbuild'
+const UPDATEBUILD = 'build/updatebuild'
 const ADDITEM = 'build/additem'
 const REMOVEITEM = 'build/removeitem'
 const ADDPOWDER = 'build/addpowder'
 const REMOVEPOWDER = 'build/removepowder'
 
 const weapons = ['dagger', 'spear', 'wand', 'bow', 'relik']
+
+const DAMAGES = {
+    mindamage: 0,
+    maxdamage: 0,
+    minearthDamage: 0,
+    maxearthDamage: 0,
+    minthunderDamage: 0,
+    maxthunderDamage: 0,
+    minwaterDamage: 0,
+    maxwaterDamage: 0,
+    minfireDamage: 0,
+    maxfireDamage: 0,
+    minairDamage: 0,
+    maxairDamage: 0,
+  }
 
 export const BUILDEQUIPS = ['helmet', 'chestplate', 'leggings', 'boots', 'weapon', 'ring1', 'ring2', 'bracelet', 'necklace']
 
@@ -17,19 +34,32 @@ const initialState = {
         boosts: []
     },
     currentBuild: {
-        finalStats: {
-            'strength': 0,
-            'dexterity': 0,
-            'intelligence': 0,
-            'defense': 0,
-            'agility': 0,
+        computedDamage: {
+            'spell': {
+                '1': DAMAGES,
+                '2': DAMAGES,
+                '3': DAMAGES,
+                '4': DAMAGES,
+            },
+            'melee': {
+                DAMAGES,
+            }
         },
-        properAssign: {
-            'strength': 0,
-            'dexterity': 0,
-            'intelligence': 0,
-            'defense': 0,
-            'agility': 0,
+        statAssigned: {
+            finalStatTypePoints: {
+                'strength': 0,
+                'dexterity': 0,
+                'intelligence': 0,
+                'defense': 0,
+                'agility': 0,
+            },
+            properStatAssign: {
+                'strength': 0,
+                'dexterity': 0,
+                'intelligence': 0,
+                'defense': 0,
+                'agility': 0,
+            }
         }
     },
     helmet: undefined,
@@ -47,6 +77,14 @@ export const importbuild = (build) => {
     return {
         type: IMPORTBUILD,
         build: build,
+    }
+}
+
+export const updatebuild = (buildDamages, statAssigned) => {
+    return {
+        type: UPDATEBUILD,
+        buildDamages: buildDamages,
+        statAssigned: statAssigned
     }
 }
 
@@ -133,6 +171,12 @@ export const itembuild = (state = initialState, action) => {
         }
         case IMPORTBUILD: {
             state = action.build
+            return state
+        }
+        case UPDATEBUILD: {
+            state.currentBuild.computedDamage = action.buildDamages
+            state.currentBuild.statAssigned.properStatAssign = action.statAssigned.properStatAssign
+            state.currentBuild.statAssigned.finalStatTypePoints = action.statAssigned.finalStatTypePoints
             return state
         }
         default: return state

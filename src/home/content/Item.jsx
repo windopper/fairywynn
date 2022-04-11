@@ -116,6 +116,65 @@ export function DisplayItem({d}) {
 </div>
 }
 
+export function DisplayItemWithPowder({equipsData}) {
+
+  const element = ['earth', 'thunder', 'water', 'fire', 'air']
+
+  const elementColor = {
+    "✹": "RGB(255, 85, 83)",
+    "✤": "RGB(4, 155, 5)",
+    "❉": "RGB(70, 223, 223)",
+    "❋": "RGB(228, 226, 227)",
+    "✦": "RGB(255, 255, 85)",
+  };
+
+  const item = equipsData.item
+  const powder = equipsData.powder
+
+  return <div className="item">
+  <div
+    className="name"
+    style={{
+      color: getColorFromTier(item),
+    }}
+  >
+    {item.name}
+  </div>
+  <Gap />
+  {getAttackSpeed(item)}
+  <Gap />
+  <div className="damage">{getDamage(item)}</div>
+  <div className="defense">{getDefense(item)}</div>
+  <Gap />
+  {getRequires(item)}
+  <Gap />
+  {getStats(item)}
+  <Gap />
+  <Gap />
+  {getMajorIds(item)}
+  <Gap />
+  <div className="lore">{item.addedLore}</div>
+  <Gap />
+  <div className="powder" id="leftside">
+    {`[${powder.map(v => <span style={{
+    color: elementColor[v.charAt(0)]
+  }}>{v.charAt(0)}</span>)}]`}
+  </div>
+  <div
+    className="typetier"
+    style={{
+      color: nameColor[item.tier],
+    }}
+    id="leftside"
+  >
+    {item.tier + " " + `${item.type == undefined ? item.accessoryType : item.type}`}
+  </div>
+  <div className="restriction" id="leftside">
+    {item.restrictions}
+  </div>
+</div>
+}
+
 function Gap() {
     return <div className="gap"></div>;
 }

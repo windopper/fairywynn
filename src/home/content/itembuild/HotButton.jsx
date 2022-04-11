@@ -1,24 +1,34 @@
 import "./HotButton.scss";
 import { useCallback, useRef, useState } from "react";
-import { useDispatch, useStore } from "react-redux";
+import { batch, useDispatch, useStore } from "react-redux";
 import { BUILDEQUIPS } from "../../reducer/itembuild";
 import BuildItems from "./BuildItems";
 import useBuildItemsUpdate from "../../hooks/useBuildItemsUpdate";
 import BuildDetail from "../builddetail/BuildDetail";
 import { showBuildDetail } from "../../reducer/builddetail";
 import ExportButton from "./ExportButton";
+import { updatebuild } from "../../reducer/itembuild";
+import { getBuildDamages, StatAssignCalculateFunction } from "../../../utils/WynnMath";
 
 export default function HotButton() {
 
   const dispatch = useDispatch()
   const _ = useBuildItemsUpdate();
   const store = useStore();
-  const equips = store.getState().itembuild;
-  const remain = BUILDEQUIPS.filter((v) => equips[v] !== undefined).length;
-
+  const itembuild = store.getState().itembuild;
+  const remain = BUILDEQUIPS.filter((v) => itembuild[v] !== undefined).length;
   const [hover, setHover] = useState(false);
 
-  const setShowBuildDetail = useCallback(() => dispatch(showBuildDetail), [dispatch])
+  const setShowBuildDetail = useCallback(
+    () => (
+        // dispatch(showBuildDetail)
+      batch(() => {
+        dispatch(updatebuild(getBuildDamages(store.getState().itembuild), StatAssignCalculateFunction(store.getState().itembuild)))
+        dispatch(showBuildDetail)
+      })
+  ),
+    [dispatch]
+  );
 
 
   return (
@@ -38,7 +48,7 @@ export default function HotButton() {
       ) : null}
       {hover
         ? BUILDEQUIPS.map((v, i) => {
-            return <BuildItems v={v} equips={equips} />;
+            return <BuildItems v={v} itembuild={itembuild} />;
           })
         : null}
     </div>

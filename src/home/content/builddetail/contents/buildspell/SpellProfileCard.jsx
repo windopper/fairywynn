@@ -4,7 +4,8 @@ import {
   getEmojiFromElementDamage,
 } from "../../../../../utils/ColorPicker";
 import { CLASSSKILLS } from "../../../../../utils/WynnData";
-import { getAverageDamage, StatAssignCalculateFunction } from "../../../../../utils/WynnMath";
+import { getAverageDamage, getManaUsed, getMinSum, StatAssignCalculateFunction } from "../../../../../utils/WynnMath";
+import { getMaxSum } from "../BuildUtils";
 import "./BuildSpellStyle.scss";
 
 const WEAPONTOCLASS = {
@@ -45,15 +46,25 @@ export default function SpellProfileCard({
   weaponType,
   currentLevel,
 }) {
+  const store = useStore()
+  const itemBuildData = store.getState().itembuild
   const selectedGrade = getSelectedGrade(spellNumber, currentLevel);
   const selectedClass = WEAPONTOCLASS[weaponType];
   const selectedSkill = CLASSSKILLS[selectedClass][spellNumber];
   const skillName = selectedSkill.name;
   const skillLore = selectedSkill[selectedGrade].lore;
 
+  const statAssigned = StatAssignCalculateFunction(itemBuildData)
+  const intelligencePoints = statAssigned.finalStatTypePoints.intelligence
+  const skillBaseCost = selectedSkill[selectedGrade].mana
+  const spellCostRaw = getMinSum(itemBuildData, `spellCostRaw${spellNumber}`, false)
+  const spellCostPct = getMinSum(itemBuildData, `spellCostPct${spellNumber}`, false)
+  const computedCost = getManaUsed(skillBaseCost, intelligencePoints, spellCostRaw, spellCostPct)
+
   return (
     <div className="spellprofilecard-container">
       <div className="spellskillname">{skillName}</div>
+      <div className="spellcost">{computedCost} <i className="mana-icon"/></div>
       <SpellProfileInfo />
     </div>
   );
@@ -227,13 +238,13 @@ function GeneralSpell({ spellDamageData }) {
   return (
     <>
     <div className="critical-info">total Average</div>
-    <div>{Math.round(totalAverage)}</div>
+    <div className="totalAverage-info">{Math.round(totalAverage)}</div>
       <div className="group-row-container">
         <div className="group-row">
           <div className="critical-info">nonCrit Average</div>
           <div>{`${nonCritAverage}`}</div>
           <div className="critical-info">nonCritical</div>
-          <SpellDamageContainerDesign
+          <DamageContainerDesign
             spellMinMaxData={spellDamageData.nonCritical}
           />
         </div>
@@ -241,7 +252,7 @@ function GeneralSpell({ spellDamageData }) {
         <div className="critical-info">crit Average</div>
           <div>{`${critAverage}`}</div>
           <div className="critical-info">critical</div>
-          <SpellDamageContainerDesign
+          <DamageContainerDesign
             spellMinMaxData={spellDamageData.critical}
           />
         </div>
@@ -250,7 +261,7 @@ function GeneralSpell({ spellDamageData }) {
   );
 }
 
-function SpellDamageContainerDesign({ spellMinMaxData }) {
+export function DamageContainerDesign({ spellMinMaxData }) {
   let filteredKey = [];
   elementDamages.forEach((v) => {
     if (!(spellMinMaxData[`min${v}`] == 0 && spellMinMaxData[`max${v}`] == 0)) {
@@ -288,7 +299,7 @@ function AverageSpellDamage(spellMinMaxData) {
 }
 
 function MageHealContainerDesign({magePulseData}) {
-    let keys = ['firstPulse', 'firstAllyPulse', 'afterPulse', 'afterAllyPulse']
+    let keys = ['firstPulse', 'afterPulse', 'firstAllyPulse', 'afterAllyPulse']
     return keys.filter(v => magePulseData[v]).map((v) => {
         const value = magePulseData[v]
         return (

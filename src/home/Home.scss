@@ -46,3 +46,11 @@
     justify-content: center;
     align-items: center;
 }
+
+
+.mana-icon {
+    font-style: normal;
+    &:before {
+        content: '✺';
+    }
+}

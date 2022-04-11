@@ -33,12 +33,14 @@ const statType = [
 
 export default function BuildRequirements({ data }) {
 
-  const cal_Data = StatAssignCalculateFunction(data)
+  const statAssigned = data.currentBuild.statAssigned;
 
   return (
     <div className="buildrequirements">
       {statType.map((v) => (
-        <RequirementsGetter _statType={v} data={cal_Data} />
+        <>
+        <RequirementsGetter _statType={v} data={statAssigned} />
+        </>
       ))}
     </div>
   );

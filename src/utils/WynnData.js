@@ -477,12 +477,12 @@ export const CLASSSKILLS = {
             'name': 'Vanish',
             'grade1': {
                 'level': 11,
-                'mana': 1,
+                'mana': 2,
                 'duration': '5s',
             },
             'grade2': {
                 'level': 26,
-                'mana': 1,
+                'mana': 2,
                 'duration': '5s',
                 'lore': [
                     'Stealth Attack: Grants a 80% damage and 15% resistance boost while vanished. The bonus lasts an additional 2 seconds after you exit invisbility'
@@ -490,7 +490,7 @@ export const CLASSSKILLS = {
             },
             'grade3': {
                 'level': 46,
-                'mana': 1,
+                'mana': 2,
                 'duration': '5s',
                 'lore': [
                     'Stealth Attack: Grants a 80% damage and 15% resistance boost while vanished. The bonus lasts an additional 2 seconds after you exit invisbility',
