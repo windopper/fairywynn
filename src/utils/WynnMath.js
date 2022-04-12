@@ -17,6 +17,7 @@ import {
   computeBuildSpellDamage,
   getMeleeDamage,
 } from "./WynnDamageCalculation";
+import { getMajorIds, getTotalHealth } from "./WynnUtils";
 
 const BUILDEQUIPS = [
   "helmet",
@@ -260,7 +261,7 @@ export function StatAssignCalculateFunction(itembuildData) {
             properStatAssign[s] += needToAssignMore;
           }
         }
-        if (s !== "weapon") {
+        if (b !== "weapon") {
           finalStatTypePointsWithoutWeapon[s] += additionalPoint;
         }
         finalStatTypePoints[s] += additionalPoint;
@@ -278,6 +279,57 @@ export function StatAssignCalculateFunction(itembuildData) {
     properStatAssign: properStatAssign,
     remainStatPoints: remainStatPoints,
   };
+}
+
+export function ComputeArmorWearSequence(itemBuildData) {
+
+  const statType = [
+    "strength",
+    "dexterity",
+    "intelligence",
+    "defense",
+    "agility",
+  ];
+
+  const requireStatTypePoints = itemBuildData.currentBuild.statAssigned.requireStatTypePoints
+  const properStatAssign = itemBuildData.currentBuild.statAssigned.properStatAssign
+
+  let armorSequence = BUILDEQUIPS.filter(v => itemBuildData[v]).map(v => itemBuildData[v].item)
+  let notPassing = true
+  let currentArmor = null
+
+  let currentStat = {
+    'strength': properStatAssign.strength,
+    'dexterity': properStatAssign.dexterity,
+    'intelligence': properStatAssign.intelligence,
+    'defense': properStatAssign.defense,
+    'agility': properStatAssign.agility
+  }
+
+  let i=0; 
+  while(i<armorSequence.length) {
+    currentArmor = armorSequence[i]
+    let pass = true;
+    for(let j in statType) {
+      const type = statType[j]
+      if(currentStat[type] < currentArmor[type]) {
+        pass = false;
+        break;
+      }
+    }
+    if(pass) {
+      statType.forEach(v => {
+        currentStat[v] += currentArmor[`${v}Points`]
+      })
+      i++;
+    }
+    else {
+      let temp = armorSequence.splice(i, 1)
+      armorSequence.push(temp[0])
+    }
+  }
+
+  return armorSequence
 }
 
 export function getMaxSum(itembuildData, targetValue, fixed = false) {
@@ -372,6 +424,10 @@ export function getDefaultDefense(itembuild) {
     case 'relik': return 0.5
     default: return 1
   }
+}
+
+export function computePoisonDamage(basePoison, strengthPoint) {
+  return Math.max(0, basePoison * (1 + SkillPointToPercentage(strengthPoint) / 100))
 }
 
 export function getValidStat(level) {
@@ -647,6 +703,8 @@ function computeAsArcher(
   weaponItem
 ) {
   const currentLevel = itemBuildData.settings.level;
+  let isHawkEye = getMajorIds(itemBuildData).includes('HAWKEYE')
+
 
   for (let i = 1; i < 5; i++) {
     let selectedGrade = "";
@@ -659,11 +717,13 @@ function computeAsArcher(
 
     if (i == 1) {
       let spellMultiplier = selectedAbility.damage;
+      if(isHawkEye) spellMultiplier = selectedAbility.hawkEyeDamage
       let conversionOrder = selectedAbility.conversionOrder;
       let conversion = selectedAbility.conversion;
 
       let spellTotalSpellMultiplier =
         selectedAbility.damage * selectedAbility.arrows;
+      if(isHawkEye) spellTotalSpellMultiplier = selectedAbility.hawkEyeDamage * 5;
 
       let finalDamage = computeBuildSpellDamage(
         weaponDamage,
@@ -765,6 +825,7 @@ function computeAsAssasin(
   weaponItem
 ) {
   const currentLevel = itemBuildData.settings.level;
+  let isCherryBomb = getMajorIds(itemBuildData).includes('CHERRY_BOMBS')
 
   for (let i = 1; i < 5; i++) {
     let selectedGrade = "";
@@ -842,10 +903,17 @@ function computeAsAssasin(
       continue;
     }
     else if(i==4) {
+
       let spellMultiplier = selectedAbility.damage;
+      if(isCherryBomb) {
+        spellMultiplier = selectedAbility.cherryBombDamage;
+      }
       let conversionOrder = selectedAbility.conversionOrder;
       let conversion = selectedAbility.conversion;
       let totalHits = selectedAbility.totalCount
+      if(isCherryBomb) {
+        totalHits = 3
+      }
   
       let oneHitDamage = computeBuildSpellDamage(
         weaponDamage,
@@ -875,6 +943,7 @@ function computeAsAssasin(
         'hitDamage': oneHitDamage,
         'totalHitDamage': totalHitDamage,
       }
+
       continue;
     } else {
       let spellMultiplier = selectedAbility.damage;
@@ -901,7 +970,11 @@ function computeAsAssasin(
 }
 
 function getMageWaterHealRate(waterDamage) {
-  return Math.min(1.75, 1 + 0.5 * waterDamage);
+  return Math.max(0.5, Math.min(1.75, 1 + 0.5 * waterDamage));
+}
+
+function getShamanWaterHealRate(waterDamage) {
+  return Math.max(0, Math.min(1.75, 1 + 0.5 * waterDamage));
 }
 
 function computeAsMage(
@@ -916,8 +989,7 @@ function computeAsMage(
 ) {
   const currentLevel = itemBuildData.settings.level;
   const currentHealth =
-    getMaxSum(itemBuildData, "health", true) + getDefaultHealth(currentLevel);
-  console.log(currentHealth);
+    getMaxSum(itemBuildData, "health", true) + getDefaultHealth(currentLevel) + getMaxSum(itemBuildData, "healthBonus", true);
 
   for (let i = 1; i < 5; i++) {
     let selectedGrade = "";
@@ -1052,6 +1124,8 @@ function computeAsWarrior(
   weaponItem
 ) {
   const currentLevel = itemBuildData.settings.level;
+  const isRally = getMajorIds(itemBuildData).includes('RALLY')
+  const currentHealth = getTotalHealth(itemBuildData)
 
   for (let i = 1; i < 5; i++) {
     let selectedGrade = "";
@@ -1098,7 +1172,19 @@ function computeAsWarrior(
         };
         continue;
       }
-    } 
+    }
+    else if(i == 2 && isRally) {
+      const waterDamage = elementDamage.waterDamage
+      console.log(waterDamage)
+      console.log(currentHealth)
+      const selfHeal = currentHealth * 0.1 * getMageWaterHealRate(waterDamage)
+      const allyHeal = currentHealth * 0.15 * getMageWaterHealRate(waterDamage)
+      finalSkillDamage[i] = {
+        'selfHeal': selfHeal,
+        'allyHeal': allyHeal
+      }
+      continue;
+    }
     else if (i == 3) {
       if (selectedGrade == "grade2") {
         let firstSpellMultiplier = selectedAbility.firstDamage;
@@ -1269,6 +1355,7 @@ function computeAsShaman(
   itemBuildData,
   weaponItem
 ) {
+
   const currentLevel = itemBuildData.settings.level;
 
   for (let i = 1; i < 5; i++) {
@@ -1277,6 +1364,8 @@ function computeAsShaman(
     ENUM_GRADE.forEach((v) => {
       if (CLASSSKILLS.shaman[i][v].level < currentLevel) selectedGrade = v;
     });
+    
+    if(selectedGrade === "") continue;
 
     const selectedAbility = CLASSSKILLS.shaman[i][selectedGrade];
 
@@ -1317,6 +1406,8 @@ function computeAsShaman(
         'smashDamage': smashDamage,
         'tickDamage': finalDamage,
       }
+
+
   
       continue;
     }
@@ -1340,5 +1431,17 @@ function computeAsShaman(
 
     finalSkillDamage[i] = finalDamage;
   }
+
+  if(currentLevel >= 16) {
+    const waterDamage = elementDamage.waterDamage;
+    const currentHealth = getTotalHealth(itemBuildData)
+    const healRate = getShamanWaterHealRate(waterDamage)
+    const heal = 0.03 * currentHealth * healRate
+    finalSkillDamage[1] = {
+      ...finalSkillDamage[1],
+      'Heal': heal
+    }
+  }
+  console.log(finalSkillDamage)
   return finalSkillDamage
 }

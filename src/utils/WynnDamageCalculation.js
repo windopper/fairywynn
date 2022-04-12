@@ -1,6 +1,7 @@
 import { SkillPointToPercentage } from "./WynnMath";
 import { AttackSpeedMultipliers } from "./WynnData";
 import { deepCopy } from "./FairyWynnUtil";
+import { getAbilityDamageBoostMultiplier, getPowderDamageBoostMultiplier } from "./WynnUtils";
 
 const initialAdditionalElementDamage = {
   earthDamage: 0,
@@ -126,7 +127,8 @@ export function computeFinalDamage(
   weaponDamage,
   damageModifier,
   attackSpeedMultiplier,
-  spellDamageMultiplier
+  spellDamageMultiplier,
+  abilityBoostMultiplier,
 ) {
   const ENUM_DAMAGE = [
     "damage",
@@ -137,8 +139,8 @@ export function computeFinalDamage(
     "airDamage",
   ];
   ENUM_DAMAGE.forEach((v) => {
-    weaponDamage[`min${v}`] = weaponDamage[`min${v}`] * damageModifier[v] * attackSpeedMultiplier * spellDamageMultiplier;
-    weaponDamage[`max${v}`] = weaponDamage[`max${v}`] * damageModifier[v] * attackSpeedMultiplier * spellDamageMultiplier;
+    weaponDamage[`min${v}`] = weaponDamage[`min${v}`] * damageModifier[v] * attackSpeedMultiplier * spellDamageMultiplier * abilityBoostMultiplier;
+    weaponDamage[`max${v}`] = weaponDamage[`max${v}`] * damageModifier[v] * attackSpeedMultiplier * spellDamageMultiplier * abilityBoostMultiplier;
   });
   return weaponDamage;
 }
@@ -174,9 +176,13 @@ export function computeBuildSpellDamage(
   isCritical = false,
   additionalElementDamage = initialAdditionalElementDamage
 ) {
+
   const originalNeutralDamage = weaponItem["damage"];
   const minOriginNeutralDamage = parseInt(originalNeutralDamage.split("-")[0]);
   const maxOriginNeutralDamage = parseInt(originalNeutralDamage.split("-")[1]);
+
+  const abilityBoostMultiplier = getAbilityDamageBoostMultiplier()
+
   const attackSpeedMultiplier = parseFloat(
     AttackSpeedMultipliers[weaponItem.attackSpeed]
   );
@@ -201,13 +207,17 @@ export function computeBuildSpellDamage(
     false,
     additionalElementDamage
   );
+
+
   let computeDamage = computeFinalDamage(
     convertedWeaponDamage,
     modifier,
     attackSpeedMultiplier,
-    spellDamageMultiplier
+    spellDamageMultiplier,
+    abilityBoostMultiplier
   );
-  let computeSpellDamageRaw = spellDamageRaw * spellDamageMultiplier * (SkillPointToPercentage(statAssigned.strength) / 100 + 1)
+
+  let computeSpellDamageRaw = spellDamageRaw * spellDamageMultiplier * (SkillPointToPercentage(statAssigned.strength) / 100 + 1) * abilityBoostMultiplier
 
   computeDamage.mindamage += computeSpellDamageRaw;
   computeDamage.maxdamage += computeSpellDamageRaw;
@@ -234,9 +244,10 @@ export function computeBuildSpellDamage(
     criticalConvertedWeaponDamage,
     criticalModifier,
     attackSpeedMultiplier,
-    spellDamageMultiplier
+    spellDamageMultiplier,
+    abilityBoostMultiplier
   );
-  let criticalComputeSpellDamageRaw = spellDamageRaw * spellDamageMultiplier * (SkillPointToPercentage(statAssigned.strength) / 100 + 1 + 1);
+  let criticalComputeSpellDamageRaw = spellDamageRaw * spellDamageMultiplier * (SkillPointToPercentage(statAssigned.strength) / 100 + 1 + 1) * abilityBoostMultiplier;
 
   criticalComputeDamage.mindamage += criticalComputeSpellDamageRaw;
   criticalComputeDamage.maxdamage += criticalComputeSpellDamageRaw;
@@ -323,26 +334,28 @@ export function getMeleeDamage(weaponDamage, elementDamage, statAssigned, attack
   const strength = SkillPointToPercentage(statAssigned.strength) / 100
   const dexterity = SkillPointToPercentage(statAssigned.dexterity) / 100
 
+  const abilityBoostMultiplier = getAbilityDamageBoostMultiplier()
+
   const neutralModifier = (1 + meleeDamage) * (1 + strength)
-  nonCriticalDamage.mindamage = weaponDamage.mindamage * neutralModifier + meleeDamageRaw * (1 + strength)
-  nonCriticalDamage.maxdamage = weaponDamage.maxdamage * neutralModifier + meleeDamageRaw * (1 + strength)
+  nonCriticalDamage.mindamage = weaponDamage.mindamage * neutralModifier * abilityBoostMultiplier + meleeDamageRaw * (1 + strength) * abilityBoostMultiplier
+  nonCriticalDamage.maxdamage = weaponDamage.maxdamage * neutralModifier * abilityBoostMultiplier + meleeDamageRaw * (1 + strength) * abilityBoostMultiplier
 
   const neutralCriticalModifier = (1 + meleeDamage) * (1 + strength + 1)
-  criticalDamage.mindamage = weaponDamage.mindamage * neutralCriticalModifier + meleeDamageRaw * (1 + strength + 1)
-  criticalDamage.maxdamage = weaponDamage.maxdamage * neutralCriticalModifier + meleeDamageRaw * (1 + strength + 1)
+  criticalDamage.mindamage = weaponDamage.mindamage * neutralCriticalModifier * abilityBoostMultiplier + meleeDamageRaw * (1 + strength + 1) * abilityBoostMultiplier
+  criticalDamage.maxdamage = weaponDamage.maxdamage * neutralCriticalModifier * abilityBoostMultiplier + meleeDamageRaw * (1 + strength + 1) * abilityBoostMultiplier
   
   ENUM_DAMAGE.forEach((v, i) => {
     // Apply Element Damage, Stat Element and Strength
     const modifier = (1 + elementDamage[v] + SkillPointToPercentage(statAssigned[ENUM_STATS[i]]) / 100 + meleeDamage) * (1 + strength)
-    nonCriticalDamage[`min${v}`] = weaponDamage[`min${v}`] * modifier
-    nonCriticalDamage[`max${v}`] = weaponDamage[`max${v}`] * modifier
+    nonCriticalDamage[`min${v}`] = weaponDamage[`min${v}`] * modifier * abilityBoostMultiplier
+    nonCriticalDamage[`max${v}`] = weaponDamage[`max${v}`] * modifier * abilityBoostMultiplier
   })
 
   ENUM_DAMAGE.forEach((v, i) => {
     // With Critical
     const modifier = (1 + elementDamage[v] + SkillPointToPercentage(statAssigned[ENUM_STATS[i]]) / 100 + meleeDamage) * (1 + strength + 1)
-    criticalDamage[`min${v}`] = weaponDamage[`min${v}`] * modifier
-    criticalDamage[`max${v}`] = weaponDamage[`max${v}`] * modifier
+    criticalDamage[`min${v}`] = weaponDamage[`min${v}`] * modifier * abilityBoostMultiplier
+    criticalDamage[`max${v}`] = weaponDamage[`max${v}`] * modifier * abilityBoostMultiplier
   })
 
   const nonCriticalSumAverage = getSumAverage(nonCriticalDamage);
@@ -350,8 +363,6 @@ export function getMeleeDamage(weaponDamage, elementDamage, statAssigned, attack
 
   const averageDamagePerHit = (1 - dexterity) * nonCriticalSumAverage + dexterity * criticalSumAverage
   const averageDps = averageDamagePerHit * attackSpeedMultiplier
-
-  console.log(attackSpeedMultiplier)
 
   return {
     nonCritical: roundDamage(nonCriticalDamage),

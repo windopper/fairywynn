@@ -5,6 +5,7 @@ import {
 } from "../../../../../utils/ColorPicker";
 import { CLASSSKILLS } from "../../../../../utils/WynnData";
 import { getAverageDamage, getManaUsed, getMinSum, StatAssignCalculateFunction } from "../../../../../utils/WynnMath";
+import { getMajorIds } from "../../../../../utils/WynnUtils";
 import { getMaxSum } from "../BuildUtils";
 import "./BuildSpellStyle.scss";
 
@@ -54,12 +55,14 @@ export default function SpellProfileCard({
   const skillName = selectedSkill.name;
   const skillLore = selectedSkill[selectedGrade].lore;
 
-  const statAssigned = StatAssignCalculateFunction(itemBuildData)
-  const intelligencePoints = statAssigned.finalStatTypePoints.intelligence
+  const statAssigned = store.getState().itembuild.currentBuild.statAssigned.finalStatTypePoints
+  const intelligencePoints = statAssigned.intelligence
   const skillBaseCost = selectedSkill[selectedGrade].mana
   const spellCostRaw = getMinSum(itemBuildData, `spellCostRaw${spellNumber}`, false)
   const spellCostPct = getMinSum(itemBuildData, `spellCostPct${spellNumber}`, false)
   const computedCost = getManaUsed(skillBaseCost, intelligencePoints, spellCostRaw, spellCostPct)
+
+  const weaponItem = itemBuildData.weapon.item
 
   return (
     <div className="spellprofilecard-container">
@@ -77,16 +80,27 @@ export default function SpellProfileCard({
 
     // Shaman Type
     if(weaponType == 'relik') {
-        if (spellDamageData.smashDamage && spellDamageData.tickDamage) {
-            return (
-              <>
-                <div className="spelldetaildamagename">SmashDamage</div>
-                <GeneralSpell spellDamageData={spellDamageData.smashDamage} />
-                <div className="spelldetaildamagename">TickDamage</div>
-                <GeneralSpell spellDamageData={spellDamageData.tickDamage} />
-              </>
-            );
-          }
+      if (spellDamageData.smashDamage && spellDamageData.tickDamage && spellDamageData.Heal) {
+        return (
+          <>
+            <ShamanHealContainerDesign warriorRallyData={spellDamageData} />
+            <div className="spelldetaildamagename">SmashDamage</div>
+            <GeneralSpell spellDamageData={spellDamageData.smashDamage} />
+            <div className="spelldetaildamagename">TickDamage</div>
+            <GeneralSpell spellDamageData={spellDamageData.tickDamage} />
+          </>
+        );
+      }
+      if (spellDamageData.smashDamage && spellDamageData.tickDamage) {
+        return (
+          <>
+            <div className="spelldetaildamagename">SmashDamage</div>
+            <GeneralSpell spellDamageData={spellDamageData.smashDamage} />
+            <div className="spelldetaildamagename">TickDamage</div>
+            <GeneralSpell spellDamageData={spellDamageData.tickDamage} />
+          </>
+        );
+      }
     }
     // Warrior Type
     else if (weaponType == "spear") {
@@ -101,6 +115,15 @@ export default function SpellProfileCard({
             <GeneralSpell spellDamageData={spellDamageData.secondDamage} />
           </>
         );
+      }
+      // Charge Rally
+      if(spellDamageData.selfHeal && spellDamageData.allyHeal && spellNumber == 2) {
+        return (
+          <>
+          <div className="spelldetaildamagename">Rally</div>
+          <RallyHealContainerDesign warriorRallyData={spellDamageData} />
+          </>
+        )
       }
       // UpperCut
       else if (spellDamageData.firstDamage && spellDamageData.secondDamage && spellNumber === 3 && currentLevel < 56) {
@@ -180,10 +203,22 @@ export default function SpellProfileCard({
               );
         }
         else if(spellDamageData.hitDamage && spellDamageData.totalHitDamage && spellNumber == 4) {
+          if(getMajorIds(itemBuildData).includes('CHERRY_BOMBS')) {
+            return (
+              <>
+                <div className="spelldetaildamagename">Cherry Blossom ( 3 Hits )</div>
+                <GeneralSpell spellDamageData={spellDamageData.totalHitDamage} />
+                <div className="spelldetaildamagename">Cherry Blossom ( Per Bomb )</div>
+                <GeneralSpell spellDamageData={spellDamageData.hitDamage} />
+              </>
+            );
+          }
             return (
                 <>
                   <div className="spelldetaildamagename">Tick Damage</div>
                   <GeneralSpell spellDamageData={spellDamageData.hitDamage} />
+                  <div className="spelldetaildamagename">Total Damage ( 10 Hits )</div>
+                  <GeneralSpell spellDamageData={spellDamageData.totalHitDamage} />
                 </>
               );
         }
@@ -191,6 +226,17 @@ export default function SpellProfileCard({
     // Archer Type
     else if(weaponType == 'bow') {
         if(spellDamageData.perArrow && spellDamageData.totalArrow && spellNumber == 1) {
+          console.log(getMajorIds(itemBuildData))
+          if(getMajorIds(itemBuildData).includes('HAWKEYE')) {
+            return (
+              <>
+              <div className="spelldetaildamagename">(Hawk Eye) Total Arrow</div>
+              <GeneralSpell spellDamageData={spellDamageData.totalArrow} />
+              <div className="spelldetaildamagename">(Hawk Eye) Per Arrow</div>
+              <GeneralSpell spellDamageData={spellDamageData.perArrow} />
+            </>
+            )
+          }
             return (
                 <>
                   <div className="spelldetaildamagename">Total Arrow</div>
@@ -314,4 +360,38 @@ function MageHealContainerDesign({magePulseData}) {
             </>
         )
     })
+}
+function RallyHealContainerDesign({warriorRallyData}) {
+  let keys = ['selfHeal', 'allyHeal']
+  return keys.filter(v => warriorRallyData[v]).map((v) => {
+      const value = warriorRallyData[v]
+      return (
+          <>
+          <div className="critical-info">{v.slice(0, 1).toUpperCase()+v.slice(1)}</div>
+          <div style={{
+              color: 'rgb(256, 100, 100)',
+          }}>
+              
+              {`♥ ${Math.round(value)}`}
+          </div>
+          </>
+      )
+  })
+}
+
+function ShamanHealContainerDesign({warriorRallyData}) {
+  let keys = ['Heal']
+  return keys.filter(v => warriorRallyData[v]).map((v) => {
+      const value = warriorRallyData[v]
+      return (
+          <>
+          <div className="critical-info">{v.slice(0, 1).toUpperCase()+v.slice(1)}</div>
+          <div style={{
+              color: 'rgb(256, 100, 100)',
+          }}>
+              {`♥ ${Math.round(value)}`}
+          </div>
+          </>
+      )
+  })
 }

@@ -3,6 +3,7 @@ import { BUILDEQUIPS } from "../../../reducer/itembuild";
 import { majorIdDescription, statsMapping, statsUnit } from "../../EnumParts";
 import { useStore } from "react-redux";
 import { getDefaultDefense, getDefaultHealth, getMinSum, SkillPointToPercentage} from "../../../../utils/WynnMath";
+import { getTotalHealth } from "../../../../utils/WynnUtils";
 
 const statTypeColor = {
   neutral: "RGB(252, 165, 14)",
@@ -104,10 +105,7 @@ const ReverseREDOrGREEN = ({ v, content = "" }) => (
 );
 
 export function Health({ data }) {
-  const defaultHealth = getDefaultHealth(data.settings.level)
-  const health = Filter(data, "health");
-  const healthBonus = getMaxSum(data, 'healthBonus')
-  const sum = health.reduce((ac, v) => ac + v) + healthBonus + defaultHealth
+  const sum = getTotalHealth(data)
 
   return (
     <div
@@ -122,11 +120,8 @@ export function Health({ data }) {
 }
 
 export function EffectiveHealth({ data }) {
-  const defaultHealth = getDefaultHealth(data.settings.level)
   const defaultDefense = getDefaultDefense(data)
-  const health = Filter(data, "health").reduce((ac, v) => ac + v);
-  const healthBonus = getMaxSum(data, 'healthBonus')
-  const healthSum = health + healthBonus + defaultHealth
+  const healthSum = getTotalHealth(data)
   const defense = SkillPointToPercentage(data.currentBuild.statAssigned.finalStatTypePoints.defense) / 100
   const agility = SkillPointToPercentage(data.currentBuild.statAssigned.finalStatTypePoints.agility) / 100
   const effectHealth = healthSum / ((1 - defense) * (1 - agility) * (2 - defaultDefense))

@@ -1,4 +1,4 @@
-import { useCallback, useRef } from "react";
+import { useCallback, useMemo, useRef } from "react";
 import { hideBuildDetail } from "../../reducer/builddetail";
 import { batch, useDispatch, useStore } from "react-redux";
 import useBuildDetailDashBoardStateUpdate from "../../hooks/useBuildDetailDashBoardStateUpdate";
@@ -7,11 +7,13 @@ import BuildStats from "./contents/BuildStats";
 import StatRemain from "./contents/StatRemain";
 import BuildItemUsed from "./contents/BuildItemUsed";
 import BuildSpellInfo from "./contents/buildspell/BuildSpellInfo";
-import { getBuildDamages, StatAssignCalculateFunction } from "../../../utils/WynnMath";
 import "./BuildDetail.scss";
 import BuildWarn from "./contents/buildspell/BuildWarn";
 import BuildMeleeInfo from "./contents/buildmelee/BuildMeleeInfo";
 import { updatebuild } from "../../reducer/itembuild";
+import BuildAssignSequence from "./contents/BuildAssignSequence";
+import BuildBoosts from "./contents/BuildBoosts";
+import useBuildSettingUpdate from "../../hooks/useBuildSettingUpdate";
 
 export default function BuildDetail() {
 
@@ -29,6 +31,7 @@ export default function BuildDetail() {
   );
 
   const showBuildDetail = useBuildDetailDashBoardStateUpdate();
+  useBuildSettingUpdate()
 
   const currentItemBuild = store.getState().itembuild;
   // console.log(currentItemBuild)
@@ -37,6 +40,8 @@ export default function BuildDetail() {
   const computedDamage = currentItemBuild.currentBuild.computedDamage
   const meleeDamages = computedDamage.melee
   const spellDamages = computedDamage.spell
+
+  const buildBoostsMemo = useMemo(() => <BuildBoosts />, [])
 
   return (
     <>
@@ -54,8 +59,12 @@ export default function BuildDetail() {
             <BuildWarn itemBuildData={currentItemBuild} statAssigned={statAssigned}/>
             <BuildRequirements data={currentItemBuild} />
             <StatRemain data={currentItemBuild} statAssigned={statAssigned}/>
+            <Title title={'Build Item'} />
             <BuildItemUsed data={currentItemBuild} />
+            <Title title={'Build Sequence'} />
+            <BuildAssignSequence itemBuildData={currentItemBuild}/>
             <BuildStats data={currentItemBuild}/>
+            {buildBoostsMemo}
             <BuildMeleeInfo computedMeleeDamages={meleeDamages} itemBuildData={currentItemBuild}/>
             <BuildSpellInfo itemBuildData={currentItemBuild} computedBuildDamages={computedDamage}/>
           </div>
@@ -63,4 +72,18 @@ export default function BuildDetail() {
       ) : null}
     </>
   );
+}
+
+function Title({title}) {
+  return (
+    <div className="title">{title}</div>
+  )
+}
+
+function BlankSpace({value}) {
+  return (
+    <div style={{
+      height: {value}
+    }}></div>
+  )
 }

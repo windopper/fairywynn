@@ -1,4 +1,4 @@
-import { computeAttackSpeed } from '../../../../../utils/WynnMath';
+import { computeAttackSpeed, computePoisonDamage } from '../../../../../utils/WynnMath';
 import { hasItemTypeInBuild } from '../../../../reducer/itembuild'
 import { DamageContainerDesign } from '../buildspell/SpellProfileCard';
 import { getMaxSum } from '../BuildUtils';
@@ -10,6 +10,10 @@ export default function BuildMeleeInfo({itemBuildData, computedMeleeDamages}) {
 
     const weaponItem = itemBuildData.weapon.item
     const armorsAttackSpeedBonus = getMaxSum(itemBuildData, 'attackSpeedBonus')
+    const poison = getMaxSum(itemBuildData, 'poison')
+    const strengthPoint = itemBuildData.currentBuild.statAssigned.finalStatTypePoints.strength
+    const computedPoisonDamage = computePoisonDamage(poison, strengthPoint)
+    const computedPoisonPerSec = computedPoisonDamage / 3
     const attackSpeed = refactorAttackSpeed(computeAttackSpeed(weaponItem.attackSpeed, armorsAttackSpeedBonus))
 
     return (
@@ -35,6 +39,10 @@ export default function BuildMeleeInfo({itemBuildData, computedMeleeDamages}) {
                 <div className="small-info">Per Hit</div>
                 <div>{computedMeleeDamages.averageDamagePerHit}</div>
               </div>
+            </div>
+            <div className='column-container'>
+              <div className='small-info'>Poison Per Sec</div>
+              <div>{Math.round(computedPoisonPerSec)}</div>
             </div>
           </div>
           <div className="buildmeleeinfo-item">

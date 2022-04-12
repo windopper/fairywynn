@@ -1,17 +1,19 @@
 .builditemused-container {
-    margin-top: 50px;
+    margin: 20px 0px;
     display: flex;
     flex-direction: row;
     justify-content: space-evenly;
-    align-items: center;
+    align-items: stretch;
     flex-wrap: wrap;
     width: 100%;
 }
 
 .builditemused-item {
+    position: relative;
     width: 27%;
     margin: 5px;
-    height: 50px;
+    min-height: 50px;
+    padding: 5px 0px;
     background-color: rgb(31, 31, 31);
     border-radius: 0.5em;
     border: 5px solid rgb(156, 156, 156);
@@ -20,7 +22,7 @@
     // min-width: 200px;
 
     display: flex;
-    flex-direction: row;
+    flex-direction: column;
     align-items: center;
     justify-content: center;
 
@@ -28,11 +30,25 @@
         background-color: rgb(75, 75, 75);
         cursor: pointer;
     }
+
+    .builditemused-item-powder {
+        display: flex;
+        flex-direction: row;
+        flex-wrap: wrap;
+        margin: 5px;
+    }
 }
 
 .builditemused-searchinfo {
     position: absolute;
     top: 0px;
+    background-color: white;
+}
+
+.builditemoption-wrapper {
+    position: absolute;
+    width: 100px;
+    height: 100px;
     background-color: white;
 }
 

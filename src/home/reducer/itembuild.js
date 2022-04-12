@@ -6,6 +6,10 @@ const IMPORTBUILD = 'build/importbuild'
 const UPDATEBUILD = 'build/updatebuild'
 const ADDITEM = 'build/additem'
 const REMOVEITEM = 'build/removeitem'
+const ADDPOWDERBOOST = 'build/addpowderboost'
+const REMOVEPOWDERBOOST = 'build/removepowderboost'
+const ADDABILITYBOOST = 'build/addabilityboost'
+const REMOVEABILITYBOOST = 'build/removeabilityboost'
 const ADDPOWDER = 'build/addpowder'
 const REMOVEPOWDER = 'build/removepowder'
 
@@ -31,7 +35,9 @@ export const BUILDEQUIPS = ['helmet', 'chestplate', 'leggings', 'boots', 'weapon
 const initialState = {
     settings: {
         level: 106,
-        boosts: []
+        boosts: [],
+        powderBoostValue: 1,
+        abilityBoostValue: 1,
     },
     currentBuild: {
         computedDamage: {
@@ -54,6 +60,13 @@ const initialState = {
                 'agility': 0,
             },
             properStatAssign: {
+                'strength': 0,
+                'dexterity': 0,
+                'intelligence': 0,
+                'defense': 0,
+                'agility': 0,
+            },
+            requireStatTypePoints: {
                 'strength': 0,
                 'dexterity': 0,
                 'intelligence': 0,
@@ -100,6 +113,38 @@ export const removeitem = (type) => {
     return {
         type: REMOVEITEM,
         equip: type
+    }
+}
+
+export const addpowderboost = (boostValue, name) => {
+    return {
+        type: ADDPOWDERBOOST,
+        boostValue: boostValue,
+        boostName: name
+    }
+}
+
+export const removepowderboost = (boostValue, name) => {
+    return {
+        type: REMOVEPOWDERBOOST,
+        boostValue: boostValue,
+        boostName: name
+    }
+}
+
+export const addabilityboost = (boostValue, name) => {
+    return {
+        type: ADDABILITYBOOST,
+        boostValue: boostValue,
+        boostName: name
+    }
+}
+
+export const removeabilityboost = (boostValue, name) => {
+    return {
+        type: REMOVEABILITYBOOST,
+        boostValue: boostValue,
+        boostName: name
     }
 }
 
@@ -177,10 +222,43 @@ export const itembuild = (state = initialState, action) => {
             state.currentBuild.computedDamage = action.buildDamages
             state.currentBuild.statAssigned.properStatAssign = action.statAssigned.properStatAssign
             state.currentBuild.statAssigned.finalStatTypePoints = action.statAssigned.finalStatTypePoints
+            state.currentBuild.statAssigned.requireStatTypePoints = action.statAssigned.requireStatTypePoints
             return state
+        }
+        case ADDPOWDERBOOST: {
+            if(!state.settings.boosts.includes(action.boostName)) {
+                state.settings.powderBoostValue += action.boostValue
+                state.settings.boosts.push(action.boostName)
+            }
+            break;
+        }
+        case REMOVEPOWDERBOOST: {
+            if(state.settings.boosts.includes(action.boostName)) {
+                state.settings.powderBoostValue -= action.boostValue
+                state.settings.boosts = state.settings.boosts.filter(v => action.boostName !== v)
+            }
+
+            if(state.settings.powderBoostValue <= 1) state.settings.powderBoosts = 1
+            break;
+        }
+        case ADDABILITYBOOST: {
+            if(!state.settings.boosts.includes(action.boostName)) {
+                state.settings.abilityBoostValue += action.boostValue
+                state.settings.boosts.push(action.boostName)
+            }
+            break;
+        }
+        case REMOVEABILITYBOOST: {
+            if(state.settings.boosts.includes(action.boostName)) {
+                state.settings.abilityBoostValue -= action.boostValue
+                state.settings.boosts = state.settings.boosts.filter(v => action.boostName !== v)
+            }
+            if(state.settings.abilityBoostValue <= 1) state.settings.abilityBoosts = 1
+            break;
         }
         default: return state
     }
+    return state;
 }
 
 export const hasItemInBuild = (item) => {

@@ -8,7 +8,8 @@
 
 .buildwarn {
     width: 95%;
-    margin: 15px 15px;
+    margin: 0px 15px;
+    margin-top: 15px;
     padding-bottom: 10px;
     background-color: rgb(254, 70, 70);
     border-radius: 0.5em;
@@ -24,7 +25,32 @@
         margin: 5px 10px;
     }
 
-    .buildwarn-reason {
+    .reason {
+        font-style: italic;
+        font-size: 1rem;
+    }
+}
+
+.buildcaution {
+    width: 95%;
+    margin: 0px 15px;
+    margin-top: 15px;
+    padding-bottom: 10px;
+    background-color: rgb(254, 196, 70);
+    border-radius: 0.5em;
+    border: 5px solid rgb(255, 255, 96);
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    color: white;
+    font-weight: 700;
+    font-size: 1.2rem;
+
+    div {
+        margin: 5px 10px;
+    }
+
+    .reason {
         font-style: italic;
         font-size: 1rem;
     }

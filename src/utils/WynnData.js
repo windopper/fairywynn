@@ -546,6 +546,7 @@ export const CLASSSKILLS = {
                 'level': 31,
                 'mana': 8,
                 'damage': 0.6,
+                'cherryBombDamage': 1.1,
                 'duration': '5s',
                 'totalCount': 10,
                 'conversionOrder': ['earthDamage', 'airDamage'],
@@ -558,6 +559,7 @@ export const CLASSSKILLS = {
                 'level': 46,
                 'mana': 8,
                 'damage': 0.6,
+                'cherryBombDamage': 1.1,
                 'duration': '5s',
                 'totalCount': 10,
                 'conversionOrder': ['earthDamage', 'airDamage'],
@@ -573,6 +575,7 @@ export const CLASSSKILLS = {
                 'level': 66,
                 'mana': 8,
                 'damage': 0.6,
+                'cherryBombDamage': 1.1,
                 'duration': '5s',
                 'totalCount': 10, //  maximum hits
                 'conversionOrder': ['earthDamage', 'airDamage'],
@@ -885,6 +888,7 @@ export const CLASSSKILLS = {
                 'level': 1,
                 'mana': 6,
                 'damage': 0.3,
+                'hawkEyeDamage': 0.8,
                 'arrows': 10,
                 'conversionOrder': ['fireDamage'],
                 'conversion': {
@@ -895,6 +899,7 @@ export const CLASSSKILLS = {
                 'level': 16,
                 'mana': 6,
                 'damage': 0.2,
+                'hawkEyeDamage': 0.8,
                 'arrows': 20,
                 'conversionOrder': ['thunderDamage', 'fireDamage'],
                 'conversion': {
@@ -909,6 +914,7 @@ export const CLASSSKILLS = {
                 'level': 36,
                 'mana': 6,
                 'damage': 0.1,
+                'hawkEyeDamage': 0.8,
                 'arrows': 60,
                 'conversionOrder': ['thunderDamage', 'fireDamage'],
                 'conversion': {
@@ -1034,7 +1040,7 @@ export const CLASSSKILLS = {
     }
 }
 
-export const BOOSTS = {
+export const POWDERBOOSTS = {
 
     // Wind Prison Only Boosts Air Damage
     'Wind Prison': {
@@ -1063,6 +1069,13 @@ export const BOOSTS = {
     'Concentration': 1.5,
     'Endurance': 2,
     'Dodge': 1.5
+
+}
+
+export const ABILITYBOOSTS = {
+    'Vanish': {
+        
+    }
 }
 
 export const AttackSpeedMultipliers = {
