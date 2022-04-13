@@ -14,8 +14,15 @@ import { updatebuild } from "../../reducer/itembuild";
 import BuildAssignSequence from "./contents/BuildAssignSequence";
 import BuildBoosts from "./contents/BuildBoosts";
 import useBuildSettingUpdate from "../../hooks/useBuildSettingUpdate";
+import BuildAnalysis from "./contents/buildanalysis/BuildAnalysis";
+import HideButton from "./HideButton";
 
 export default function BuildDetail() {
+
+  const showBuildDetail = useBuildDetailDashBoardStateUpdate();
+  useBuildSettingUpdate()
+
+  console.log(showBuildDetail)
 
   const isCursorInside = useRef(false);
 
@@ -30,10 +37,9 @@ export default function BuildDetail() {
     [dispatch]
   );
 
-  const showBuildDetail = useBuildDetailDashBoardStateUpdate();
-  useBuildSettingUpdate()
-
   const currentItemBuild = store.getState().itembuild;
+  const weaponItem = currentItemBuild.weapon
+  const hasWeapon = weaponItem !== undefined
   // console.log(currentItemBuild)
 
   const statAssigned = currentItemBuild.currentBuild.statAssigned
@@ -41,7 +47,7 @@ export default function BuildDetail() {
   const meleeDamages = computedDamage.melee
   const spellDamages = computedDamage.spell
 
-  const buildBoostsMemo = useMemo(() => <BuildBoosts />, [])
+  const buildBoostsMemo = useMemo(() => <BuildBoosts />, [showBuildDetail])
 
   return (
     <>
@@ -49,6 +55,7 @@ export default function BuildDetail() {
         <div
           className="build-detail-wrapper"
           onClick={() => (isCursorInside.current ? null : hideDashBoard())}
+          // onScrollCapture={(e) => console.log(e)}
         >
           {/* <HideButton /> */}
           <div
@@ -56,7 +63,10 @@ export default function BuildDetail() {
             onMouseEnter={() => onEnter()}
             onMouseLeave={() => onLeave()}
           >
+            <div style={{width: '100%'}}><HideButton /></div>
             <BuildWarn itemBuildData={currentItemBuild} statAssigned={statAssigned}/>
+
+            <div className="detail-column-container first-container">
             <BuildRequirements data={currentItemBuild} />
             <StatRemain data={currentItemBuild} statAssigned={statAssigned}/>
             <Title title={'Build Item'} />
@@ -67,6 +77,14 @@ export default function BuildDetail() {
             {buildBoostsMemo}
             <BuildMeleeInfo computedMeleeDamages={meleeDamages} itemBuildData={currentItemBuild}/>
             <BuildSpellInfo itemBuildData={currentItemBuild} computedBuildDamages={computedDamage}/>
+            </div>
+            <div className="detail-column-container second-container">
+              <Title title={'Build Analysis'} />
+              <BuildAnalysis itemBuildData={currentItemBuild} computedMeleeDamage={meleeDamages} computedSpellDamage={spellDamages}/>
+            </div>
+
+            {/* {hasWeapon ? <Title title={'Build Analysis'} /> : null} */}
+            
           </div>
         </div>
       ) : null}

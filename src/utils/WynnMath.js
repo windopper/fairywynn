@@ -410,6 +410,22 @@ export function getMinValue(base) {
   return min;
 }
 
+export function RawPercentCalculate(raw, percent) {
+  if (raw === 0) return 0;
+  else if (percent === 0) return raw;
+  if (raw > 0 && percent > 0) {
+    return (raw * (percent + 100)) / 100;
+  } else if (raw > 0 && percent < 0) {
+    if (percent <= -100) return 0;
+    return (raw * (percent + 100)) / 100;
+  } else if (raw < 0 && percent > 0) {
+    if (percent >= 100) return 0;
+    return (raw * (100 - percent)) / 100;
+  } else if (raw < 0 && percent < 0) {
+    return (raw * (-percent + 100)) / 100;
+  }
+}
+
 export function getDefaultHealth(level) {
   return 5 + 5 * level;
 }

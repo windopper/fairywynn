@@ -1,0 +1,32 @@
+.buildanalysis-wrapper {
+    width: 100%;
+    margin: 20px 0px;
+
+    .container {
+        width: 95%;
+        background-color: rgb(69, 69, 69);
+        // color: rgb(255, 131, 131);
+        border-radius: 0.5em;
+        .canvas-wrapper {
+            width: 95%;
+            max-width: 350px;
+        }
+    }
+}
+
+.buildanalysis-row-container {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    flex-wrap: wrap;
+}
+
+.row-center-container {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    flex-wrap: wrap;
+}
+

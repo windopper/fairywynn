@@ -13,9 +13,9 @@ export default function BuildAssignSequence({itemBuildData}) {
     const properStatAssign = itemBuildData.currentBuild.statAssigned.properStatAssign
 
     return (
-      <div className="buildassignsequence-wrapper row-container">
-        <div className="container">
-          <div className="column-container">
+      <div className="buildassignsequence-wrapper buildassignsequence-row-container">
+        <div className="buildassignsequence-container">
+          <div className="buildassignsequence-column-container">
             <div className="text">You Should Assign: </div>
             {statType.map((v, i) => (
               <div style={{
@@ -30,7 +30,7 @@ export default function BuildAssignSequence({itemBuildData}) {
               </div>
             ))}
           </div>
-          <div className='column-container'>
+          <div className='buildassignsequence-column-container'>
               <div className='text'>Equip Order: </div>
               {equipOrder.map(v => (
               <div style={{

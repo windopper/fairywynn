@@ -245,6 +245,8 @@ export const powderDamageConvert = {
     },
 }
 
+export const CLASSES = ['warrior', 'mage', 'archer', 'assasin', 'shaman']
+
 export const CLASSSKILLS = {
     "warrior": {
         '1': {

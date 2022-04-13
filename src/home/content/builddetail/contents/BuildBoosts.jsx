@@ -1,15 +1,15 @@
 import { useCallback, useState } from "react";
 import { batch, useDispatch, useStore } from "react-redux";
 import { getBuildDamages, StatAssignCalculateFunction } from "../../../../utils/WynnMath";
-import { addabilityboost, removeabilityboost, updatebuild } from "../../../reducer/itembuild";
+import { addabilityboost, addboost, adddefenseboost, removeabilityboost, removeboost, removedefenseboost, updatebuild } from "../../../reducer/itembuild";
 import "./BuildBoosts.scss";
 
 export default function BuildBoosts() {
   return (
-    <div className="buildboosts-wrapper row-container">
-      <div className="container row-container">
-        <ToggleButton text={'Vanish'} value={0.8}/>
-        <ToggleButton text={'War Scream'} value={0.1}/>
+    <div className="buildboosts-wrapper buildboosts-row-container">
+      <div className="buildboosts-container buildboosts-row-container">
+        <ToggleButton text={'Vanish'} value={0.8} defenseValue={0.15}/>
+        <ToggleButton text={'War Scream'} value={0.1} defenseValue={0.2}/>
         <ToggleButton text={'Your Totem'} value={0.3}/>
         <ToggleButton text={'Ally Totem'} value={0.15}/>
         <ToggleButton text={'Bash'} value={0.5}/>
@@ -17,35 +17,38 @@ export default function BuildBoosts() {
     </div>
   );
 
-  function ToggleButton({text, value}) {
+  function ToggleButton({text, value, defenseValue = 0}) {
 
     const store = useStore()
     const itemBuildData = store.getState().itembuild;
-    const [click, setClick] = useState(false);
+    // const [click, setClick] = useState(false);
     const dispatch = useDispatch()
 
-    const addAbilitykDispatch = useCallback(() => batch(() => {
-        dispatch(addabilityboost(value, text))
+    const addAbilityDispatch = useCallback(() => batch(() => {
+        dispatch(addboost(value, defenseValue, text))
         dispatch(updatebuild(getBuildDamages(itemBuildData), StatAssignCalculateFunction(itemBuildData)))
     }), [dispatch])
 
-    const removeAbilitykDispatch = useCallback(() => batch(() => {
-        dispatch(removeabilityboost(value, text))
+    const removeAbilityDispatch = useCallback(() => batch(() => {
+        dispatch(removeboost(value, defenseValue, text))
         dispatch(updatebuild(getBuildDamages(itemBuildData), StatAssignCalculateFunction(itemBuildData)))
     }), [dispatch])
 
-    if(click) {
-        addAbilitykDispatch()
-
-    } else {
-        removeAbilitykDispatch()
+    const click = (e) => {
+      if(e.target.checked) {
+        addAbilityDispatch()
+      } else {
+        removeAbilityDispatch()
+      }
     }
 
+
+
     return (
-      <div className="switch-button-wrapper column-container">
+      <div className="switch-button-wrapper buildboosts-column-container">
           <div className="buildboost-title">{text}<span className="buildboost-value">&nbsp;+{value*100}%</span></div>
         <label className="switch-button">
-          <input type="checkbox" onChange={(e) => setClick(e.target.checked)}/>{" "}
+          <input type="checkbox" onChange={(e) => click(e)}/>{" "}
           <span className="onoff-switch"></span>
         </label>
       </div>

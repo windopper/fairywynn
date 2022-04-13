@@ -1,15 +1,23 @@
 import { useStore } from "react-redux"
 import { store } from "../.."
 import { GetArmorDefenseWithPowder, getBuildDamages, GetWeaponDamageWithPowder, StatAssignCalculateFunction } from "../../utils/WynnMath"
+import { stats } from "../content/EnumParts"
 
 const IMPORTBUILD = 'build/importbuild'
 const UPDATEBUILD = 'build/updatebuild'
 const ADDITEM = 'build/additem'
 const REMOVEITEM = 'build/removeitem'
+
 const ADDPOWDERBOOST = 'build/addpowderboost'
 const REMOVEPOWDERBOOST = 'build/removepowderboost'
 const ADDABILITYBOOST = 'build/addabilityboost'
 const REMOVEABILITYBOOST = 'build/removeabilityboost'
+const ADDDEFENSEBOOST = 'build/adddefenseboost'
+const REMOVEDEFENSEBOOST = 'build/removedefenseboost'
+
+const ADDBOOST = 'build/addboost'
+const REMOVEBOOST = 'build/removeboost'
+
 const ADDPOWDER = 'build/addpowder'
 const REMOVEPOWDER = 'build/removepowder'
 
@@ -36,6 +44,8 @@ const initialState = {
     settings: {
         level: 106,
         boosts: [],
+        defenseBoosts: [],
+        defenseBoostValue: 1,
         powderBoostValue: 1,
         abilityBoostValue: 1,
     },
@@ -50,6 +60,9 @@ const initialState = {
             'melee': {
                 DAMAGES,
             }
+        },
+        computedStat: {
+
         },
         statAssigned: {
             finalStatTypePoints: {
@@ -148,6 +161,40 @@ export const removeabilityboost = (boostValue, name) => {
     }
 }
 
+export const adddefenseboost = (boostValue, name) => {
+    return {
+        type: ADDDEFENSEBOOST,
+        boostValue: boostValue,
+        boostName: name,
+    }
+}
+
+export const removedefenseboost = (boostValue, name) => {
+    return {
+        type: REMOVEDEFENSEBOOST,
+        boostValue: boostValue,
+        boostName: name,
+    }
+}
+
+export const addboost = (ability, defense, name) => {
+    return {
+        type: ADDBOOST,
+        abilityBoost: ability,
+        defenseBoost: defense,
+        name: name,
+    }
+}
+
+export const removeboost = (ability, defense, name) => {
+    return {
+        type: REMOVEBOOST,
+        abilityBoost: ability,
+        defenseBoost: defense,
+        name: name,
+    }
+}
+
 export const addpowder = (equipType, powder) => {
     return {
         type: ADDPOWDER,
@@ -238,7 +285,7 @@ export const itembuild = (state = initialState, action) => {
                 state.settings.boosts = state.settings.boosts.filter(v => action.boostName !== v)
             }
 
-            if(state.settings.powderBoostValue <= 1) state.settings.powderBoosts = 1
+            if(state.settings.powderBoostValue <= 1) state.settings.powderBoostValue = 1
             break;
         }
         case ADDABILITYBOOST: {
@@ -253,7 +300,47 @@ export const itembuild = (state = initialState, action) => {
                 state.settings.abilityBoostValue -= action.boostValue
                 state.settings.boosts = state.settings.boosts.filter(v => action.boostName !== v)
             }
-            if(state.settings.abilityBoostValue <= 1) state.settings.abilityBoosts = 1
+            if(state.settings.abilityBoostValue <= 1) state.settings.abilityBoostValue = 1
+            break;
+        }
+        case ADDDEFENSEBOOST: {
+            if(!state.settings.defenseBoosts.includes(action.boostName)) {
+                state.settings.defenseBoostValue += action.boostValue
+                state.settings.defenseBoosts.push(action.boostName)
+            }
+            break;
+        }
+        case REMOVEDEFENSEBOOST: {
+            if(state.settings.defenseBoosts.includes(action.boostName)) {
+                state.settings.defenseBoostValue -= action.boostValue
+                state.settings.defenseBoosts = state.settings.defenseBoosts.filter(v => action.boostName !== v)
+            }
+            if(state.settings.defenseBoostValue <= 1) state.settings.defenseBoostValue = 1
+            break;
+        }
+        case ADDBOOST: {
+            if(!state.settings.boosts.includes(action.name) && action.abilityBoost != 0) {
+                state.settings.abilityBoostValue += action.abilityBoost
+                state.settings.boosts.push(action.name)
+            }
+            if(!state.settings.defenseBoosts.includes(action.name) && action.defenseBoost != 0) {
+                state.settings.defenseBoostValue += action.defenseBoost
+                state.settings.defenseBoosts.push(action.name)
+            }
+            break;
+        }
+        case REMOVEBOOST: {
+            if(state.settings.boosts.includes(action.name)) {
+                state.settings.abilityBoostValue -= action.abilityBoost
+                state.settings.boosts = state.settings.boosts.filter(v => action.name !== v)
+            }
+            if(state.settings.abilityBoostValue <= 1) state.settings.abilityBoostValue = 1
+
+            if(state.settings.defenseBoosts.includes(action.name)) {
+                state.settings.defenseBoostValue -= action.defenseBoost
+                state.settings.defenseBoosts = state.settings.defenseBoosts.filter(v => action.name !== v)
+            }
+            if(state.settings.defenseBoostValue <= 1) state.settings.defenseBoostValue = 1
             break;
         }
         default: return state
@@ -275,4 +362,8 @@ export const hasItemInBuild = (item) => {
 
 export const hasItemTypeInBuild = (equipType) => {
     return store.getState().itembuild[equipType] !== undefined
+}
+
+export const getDefenseBoost = () => {
+    return store.getState().itembuild.settings.defenseBoostValue
 }

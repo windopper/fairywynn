@@ -1,5 +1,5 @@
 import "./BuildUtils.scss";
-import { BUILDEQUIPS } from "../../../reducer/itembuild";
+import { BUILDEQUIPS, getDefenseBoost } from "../../../reducer/itembuild";
 import { majorIdDescription, statsMapping, statsUnit } from "../../EnumParts";
 import { useStore } from "react-redux";
 import { getDefaultDefense, getDefaultHealth, getMinSum, SkillPointToPercentage} from "../../../../utils/WynnMath";
@@ -120,12 +120,13 @@ export function Health({ data }) {
 }
 
 export function EffectiveHealth({ data }) {
+
   const defaultDefense = getDefaultDefense(data)
   const healthSum = getTotalHealth(data)
   const defense = SkillPointToPercentage(data.currentBuild.statAssigned.finalStatTypePoints.defense) / 100
   const agility = SkillPointToPercentage(data.currentBuild.statAssigned.finalStatTypePoints.agility) / 100
-  const effectHealth = healthSum / ((1 - defense) * (1 - agility) * (2 - defaultDefense))
-  const nonAgilityEffectiveHealth = healthSum / ((1 - defense) * (2 - defaultDefense))
+  const effectHealth = healthSum / ((1 - defense) * (1 - agility) * (2 - defaultDefense) * (2 - getDefenseBoost()))
+  const nonAgilityEffectiveHealth = healthSum / ((1 - defense) * (2 - defaultDefense) * (2 - getDefenseBoost()))
   return (
     <>
         <div

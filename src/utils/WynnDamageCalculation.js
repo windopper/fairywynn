@@ -373,3 +373,23 @@ export function getMeleeDamage(weaponDamage, elementDamage, statAssigned, attack
     averageDps: Math.round(averageDps),
   }
 }
+
+
+const elementDamages = [
+  "damage",
+  "earthDamage",
+  "thunderDamage",
+  "waterDamage",
+  "fireDamage",
+  "airDamage",
+];
+
+export function AverageSpellDamage(spellMinMaxData) {
+  let average = 0
+  elementDamages.forEach(v => {
+      const min = spellMinMaxData[`min${v}`];
+      const max = spellMinMaxData[`max${v}`];
+      average += (min + max) / 2
+  })
+  return Math.round(average)
+}

@@ -5,7 +5,7 @@ import {
 } from "../../../../../utils/ColorPicker";
 import { CLASSSKILLS } from "../../../../../utils/WynnData";
 import { getAverageDamage, getManaUsed, getMinSum, StatAssignCalculateFunction } from "../../../../../utils/WynnMath";
-import { getMajorIds } from "../../../../../utils/WynnUtils";
+import { getComputedManaCost, getMajorIds } from "../../../../../utils/WynnUtils";
 import { getMaxSum } from "../BuildUtils";
 import "./BuildSpellStyle.scss";
 
@@ -49,18 +49,15 @@ export default function SpellProfileCard({
 }) {
   const store = useStore()
   const itemBuildData = store.getState().itembuild
-  const selectedGrade = getSelectedGrade(spellNumber, currentLevel);
   const selectedClass = WEAPONTOCLASS[weaponType];
+
+  const selectedGrade = getSelectedGrade(spellNumber, currentLevel);
+  
   const selectedSkill = CLASSSKILLS[selectedClass][spellNumber];
   const skillName = selectedSkill.name;
   const skillLore = selectedSkill[selectedGrade].lore;
 
-  const statAssigned = store.getState().itembuild.currentBuild.statAssigned.finalStatTypePoints
-  const intelligencePoints = statAssigned.intelligence
-  const skillBaseCost = selectedSkill[selectedGrade].mana
-  const spellCostRaw = getMinSum(itemBuildData, `spellCostRaw${spellNumber}`, false)
-  const spellCostPct = getMinSum(itemBuildData, `spellCostPct${spellNumber}`, false)
-  const computedCost = getManaUsed(skillBaseCost, intelligencePoints, spellCostRaw, spellCostPct)
+  const computedCost = getComputedManaCost(selectedClass, spellNumber, itemBuildData)
 
   const weaponItem = itemBuildData.weapon.item
 
@@ -226,7 +223,6 @@ export default function SpellProfileCard({
     // Archer Type
     else if(weaponType == 'bow') {
         if(spellDamageData.perArrow && spellDamageData.totalArrow && spellNumber == 1) {
-          console.log(getMajorIds(itemBuildData))
           if(getMajorIds(itemBuildData).includes('HAWKEYE')) {
             return (
               <>
@@ -277,6 +273,7 @@ function GeneralSpell({ spellDamageData }) {
 
     const store = useStore()
     const statAssigned = StatAssignCalculateFunction(store.getState().itembuild)
+    // const nonCritAverage = spellDamageData.nonCriticalAverage;
     const nonCritAverage = AverageSpellDamage(spellDamageData.nonCritical);
     const critAverage = AverageSpellDamage(spellDamageData.critical)
     const totalAverage = getAverageDamage(nonCritAverage, critAverage, statAssigned.finalStatTypePoints.dexterity)

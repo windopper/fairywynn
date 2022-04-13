@@ -7,7 +7,7 @@
 }
 
 .buildwarn {
-    width: 95%;
+    width: 100%;
     margin: 0px 15px;
     margin-top: 15px;
     padding-bottom: 10px;
@@ -32,10 +32,11 @@
 }
 
 .buildcaution {
-    width: 95%;
+    width: 100%;
     margin: 0px 15px;
     margin-top: 15px;
     padding-bottom: 10px;
+    margin-bottom: 15px;
     background-color: rgb(254, 196, 70);
     border-radius: 0.5em;
     border: 5px solid rgb(255, 255, 96);
