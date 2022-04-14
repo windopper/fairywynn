@@ -196,7 +196,6 @@ export default function BuildAnalysis({itemBuildData, computedMeleeDamage, compu
         const healthRegenRaw = getMaxSum(itemBuildData, 'healthRegenRaw');
         const healthRegenPct = getMaxSum(itemBuildData, 'healthRegen')
         const computed = RawPercentCalculate(healthRegenRaw, healthRegenPct)
-        if(classType === 'mage' || classType === 'shaman') return 100
         return getScore(500, computed)
     }
 

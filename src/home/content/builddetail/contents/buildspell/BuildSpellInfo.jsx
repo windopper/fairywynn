@@ -12,7 +12,7 @@ export default function BuildSpellInfo({itemBuildData, computedBuildDamages}) {
     const thirdSpell = computedBuildDamages.spell[3]
     const fourthSpell = computedBuildDamages.spell[4]
 
-    if(!hasItemTypeInBuild('weapon')) {
+    if(!hasItemTypeInBuild('weapon', itemBuildData)) {
         return (
             <div className='buildspellinfo-container'>
                 <EmptySpellCard />

@@ -1,10 +1,12 @@
 import { useCallback, useState } from "react";
 import { batch, useDispatch, useStore } from "react-redux";
 import { getBuildDamages, StatAssignCalculateFunction } from "../../../../utils/WynnMath";
-import { addabilityboost, addboost, adddefenseboost, removeabilityboost, removeboost, removedefenseboost, updatebuild } from "../../../reducer/itembuild";
+import useBuildSettingReset from "../../../hooks/useBuildSettingReset";
+import { addabilityboost, addboost, adddefenseboost, reCalculateBuildAndUpdate, removeabilityboost, removeboost, removedefenseboost, updatebuild } from "../../../reducer/itembuild";
 import "./BuildBoosts.scss";
 
 export default function BuildBoosts() {
+  const resetCode = useBuildSettingReset()
   return (
     <div className="buildboosts-wrapper buildboosts-row-container">
       <div className="buildboosts-container buildboosts-row-container">
@@ -24,15 +26,15 @@ export default function BuildBoosts() {
     // const [click, setClick] = useState(false);
     const dispatch = useDispatch()
 
-    const addAbilityDispatch = useCallback(() => batch(() => {
-        dispatch(addboost(value, defenseValue, text))
-        dispatch(updatebuild(getBuildDamages(itemBuildData), StatAssignCalculateFunction(itemBuildData)))
-    }), [dispatch])
+    const addAbilityDispatch = useCallback(() => {
+      dispatch(addboost(value, defenseValue, text))
+      reCalculateBuildAndUpdate(itemBuildData)
+    }, [dispatch])
 
-    const removeAbilityDispatch = useCallback(() => batch(() => {
-        dispatch(removeboost(value, defenseValue, text))
-        dispatch(updatebuild(getBuildDamages(itemBuildData), StatAssignCalculateFunction(itemBuildData)))
-    }), [dispatch])
+    const removeAbilityDispatch = useCallback(() => {
+      dispatch(removeboost(value, defenseValue, text))
+      reCalculateBuildAndUpdate(itemBuildData)
+    }, [dispatch])
 
     const click = (e) => {
       if(e.target.checked) {
@@ -41,8 +43,6 @@ export default function BuildBoosts() {
         removeAbilityDispatch()
       }
     }
-
-
 
     return (
       <div className="switch-button-wrapper buildboosts-column-container">

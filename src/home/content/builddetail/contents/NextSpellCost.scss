@@ -1,0 +1,46 @@
+.nextspellcost-wrapper {
+    width: 100%;
+    
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;    // margin: 20px 0px;
+    margin-top: 20px;
+
+    .nextspellcost-container {
+        width: 95%;
+        border-radius: 0.2em;
+        background-color: rgb(69, 69, 69);
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        color: white;
+        font-size: 1.3rem;
+        font-weight: 600;
+
+        .nextspellcost-title {
+            
+        }
+
+        .nextspellcost-content {
+            display: flex;
+            flex-direction: row;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.1rem;
+        }
+
+        .nextspellcost-mana {
+            color:aqua;
+        }
+
+        .nextspellcost-card {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            margin: 5px;
+        }
+    }
+}

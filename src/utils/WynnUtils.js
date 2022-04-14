@@ -36,6 +36,27 @@ export function getComputedManaCost(selectedClass, spellNumber, itemBuildData) {
     return computedCost
 }
 
+export function getComputedManaAndNextIntelligencePoint(selectedClass, spellNumber, itemBuildData) {
+    const selectedSkill = CLASSSKILLS[selectedClass][spellNumber];
+    const selectedGrade = getSelectedGrade(spellNumber, itemBuildData.settings.level)
+
+    const statAssigned = store.getState().itembuild.currentBuild.statAssigned.finalStatTypePoints
+
+    let BaseintelligencePoints = statAssigned.intelligence
+
+    let intelligencePoints = BaseintelligencePoints
+    const skillBaseCost = selectedSkill[selectedGrade].mana
+    const spellCostRaw = getMinSum(itemBuildData, `spellCostRaw${spellNumber}`, false)
+    const spellCostPct = getMinSum(itemBuildData, `spellCostPct${spellNumber}`, false)
+    const computedCost = getManaUsed(skillBaseCost, intelligencePoints, spellCostRaw, spellCostPct)
+    let futureCost = computedCost
+    while(intelligencePoints < 151 && futureCost === computedCost) {
+        intelligencePoints++
+        futureCost = getManaUsed(skillBaseCost, intelligencePoints, spellCostRaw, spellCostPct)
+    }
+    return [computedCost, futureCost, intelligencePoints-BaseintelligencePoints]
+}
+
 export function getSelectedGrade(spellNumber, currentLevel) {
     const ENUM_GRADE = ["grade1", "grade2", "grade3"];
     let selectedGrade = "";

@@ -727,7 +727,7 @@ export const CLASSSKILLS = {
             },
             'grade3': {
                 'level': 66,
-                'mana': 8,
+                'mana': 4,
                 'damage': 0.7,
                 'conversionOrder': ['waterDamage'],
                 'conversion': {

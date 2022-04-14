@@ -6,7 +6,7 @@ import './BuildMeleeInfo.scss'
 
 export default function BuildMeleeInfo({itemBuildData, computedMeleeDamages}) {
 
-    if(!hasItemTypeInBuild('weapon')) return null;
+    if(!hasItemTypeInBuild('weapon', itemBuildData)) return null;
 
     const weaponItem = itemBuildData.weapon.item
     const armorsAttackSpeedBonus = getMaxSum(itemBuildData, 'attackSpeedBonus')

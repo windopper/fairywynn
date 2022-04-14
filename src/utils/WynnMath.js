@@ -35,10 +35,11 @@ const ENUM_GRADE = ["grade1", "grade2", "grade3"];
 export function SkillPointToPercentage(x) {
   let sum = 0;
   if (x <= 0) return 0;
+  if(x>=151) return 80.8
   for (let i = 1; i <= x; i++) {
     sum += 0.9908 ** i;
   }
-  const round = Math.round(sum * 10) / 10;
+  // const round = Math.round(sum * 10) / 10;
   // console.log(round)
   return sum;
 }
@@ -188,6 +189,10 @@ export function StatAssignCalculateFunction(itembuildData) {
     "agility",
   ];
 
+  // console.log(itembuildData.settings.manuallyUpdateStat)
+
+  const manuallyUpdateStat = itembuildData.settings.manuallyUpdateStat
+ 
   let requireStatTypePoints = {
     strength: 0,
     dexterity: 0,
@@ -211,6 +216,7 @@ export function StatAssignCalculateFunction(itembuildData) {
     defense: 0,
     agility: 0,
   };
+
 
   let finalStatTypePointsWithoutWeapon = {
     strength: 0,
@@ -240,7 +246,7 @@ export function StatAssignCalculateFunction(itembuildData) {
   });
 
   statType.forEach((s) => {
-    BUILDEQUIPS.filter((b) => itembuildData[b] !== undefined)
+    BUILDEQUIPS.filter((b) => itembuildData[b])
       .sort((s1, s2) => {
         let v1 = itembuildData[s1].item[s];
         let v2 = itembuildData[s2].item[s];
@@ -252,9 +258,10 @@ export function StatAssignCalculateFunction(itembuildData) {
 
         let requirePoint = itembuildData[b].item[s];
 
-        if (finalStatTypePointsWithoutWeapon[s] < requirePoint) {
+        if (finalStatTypePointsWithoutWeapon[s] < requirePoint && requirePoint > 0) {
           let needToAssignMore =
             requirePoint - finalStatTypePointsWithoutWeapon[s];
+            // console.log(needToAssignMore)
           if (needToAssignMore >= 0) {
             finalStatTypePointsWithoutWeapon[s] += needToAssignMore;
             finalStatTypePoints[s] += needToAssignMore;
@@ -267,6 +274,17 @@ export function StatAssignCalculateFunction(itembuildData) {
         finalStatTypePoints[s] += additionalPoint;
       });
   });
+
+  statType.forEach(s => {
+    if(manuallyUpdateStat[s]) {
+      const value = manuallyUpdateStat[s]
+      finalStatTypePoints[s] += value
+      properStatAssign[s] += value
+      finalStatTypePointsWithoutWeapon[s] += value
+    }
+  })
+
+
 
   let remainStatPoints =
     200 - `${statType.map((v) => properStatAssign[v]).reduce((a, s) => a + s)}`;
@@ -312,7 +330,7 @@ export function ComputeArmorWearSequence(itemBuildData) {
     let pass = true;
     for(let j in statType) {
       const type = statType[j]
-      if(currentStat[type] < currentArmor[type]) {
+      if(currentStat[type] < currentArmor[type] && currentArmor[type] !== 0) {
         pass = false;
         break;
       }
@@ -572,7 +590,7 @@ export function getBuildDamages(itembuildData) {
     return wd;
   };
 
-  if (!hasItemTypeInBuild("weapon")) return {
+  if (!hasItemTypeInBuild("weapon", itembuildData)) return {
     'spell': finalSkillDamages,
     'melee': {
       mindamage: 0,
@@ -620,7 +638,7 @@ export function getBuildDamages(itembuildData) {
     GetWeaponDamageWithPowder("weapon", itembuildData)
   );
 
-  const statAssigned = StatAssignCalculateFunction(itembuildData);
+  const statAssigned = itembuildData.currentBuild.statAssigned
 
   const meleeFinalDamage = getMeleeDamage(
     weaponDamageSplit,

@@ -1,10 +1,17 @@
 import { useStore } from "react-redux"
 import { store } from "../.."
+import { deepCopy } from "../../utils/FairyWynnUtil"
 import { GetArmorDefenseWithPowder, getBuildDamages, GetWeaponDamageWithPowder, StatAssignCalculateFunction } from "../../utils/WynnMath"
 import { stats } from "../content/EnumParts"
 
 const IMPORTBUILD = 'build/importbuild'
 const UPDATEBUILD = 'build/updatebuild'
+const UPDATESTAT = 'build/updatestat'
+const UPdATEBUILDDAMAGE = 'build/updatebuilddamage'
+const MANUALLYUPDATESTAT = 'build/manuallyupdatestat'
+
+const RESETSETTING = 'build/resetsetting'
+
 const ADDITEM = 'build/additem'
 const REMOVEITEM = 'build/removeitem'
 
@@ -41,9 +48,18 @@ const DAMAGES = {
 export const BUILDEQUIPS = ['helmet', 'chestplate', 'leggings', 'boots', 'weapon', 'ring1', 'ring2', 'bracelet', 'necklace']
 
 const initialState = {
+    buildCode: 0,
     settings: {
+        resetCode: 0,
         level: 106,
         boosts: [],
+        manuallyUpdateStat: {
+            'strength': 0,
+            'dexterity': 0,
+            'intelligence': 0,
+            'defense': 0,
+            'agility': 0,
+        },
         defenseBoosts: [],
         defenseBoostValue: 1,
         powderBoostValue: 1,
@@ -106,11 +122,36 @@ export const importbuild = (build) => {
     }
 }
 
-export const updatebuild = (buildDamages, statAssigned) => {
+export const updatebuild = (itemBuildData) => {
     return {
         type: UPDATEBUILD,
-        buildDamages: buildDamages,
-        statAssigned: statAssigned
+    }
+}
+
+export const updateStat = (itemBuildData) => {
+    return {
+        type: UPDATESTAT,
+        statAssigned: StatAssignCalculateFunction(itemBuildData)
+    }
+}
+
+export const updatebuilddamage = (itemBuildData) => {
+    return {
+        type: UPdATEBUILDDAMAGE,
+        computedDamage: getBuildDamages(itemBuildData),
+    }
+}
+
+export const manuallyupdatestat = (manuallyUpdateStat) => {
+    return {
+        type: MANUALLYUPDATESTAT,
+        manuallyUpdateStat: manuallyUpdateStat
+    }
+}
+
+export const resetsetting = () => {
+    return {
+        type: RESETSETTING
     }
 }
 
@@ -211,7 +252,7 @@ export const removepowder = (equipType, location) => {
     }
 }
 
-export const itembuild = (state = initialState, action) => {
+export const itembuild = (state = deepCopy(initialState), action) => {
     switch(action.type) {
         case ADDITEM: {
             let type
@@ -266,11 +307,29 @@ export const itembuild = (state = initialState, action) => {
             return state
         }
         case UPDATEBUILD: {
-            state.currentBuild.computedDamage = action.buildDamages
-            state.currentBuild.statAssigned.properStatAssign = action.statAssigned.properStatAssign
-            state.currentBuild.statAssigned.finalStatTypePoints = action.statAssigned.finalStatTypePoints
-            state.currentBuild.statAssigned.requireStatTypePoints = action.statAssigned.requireStatTypePoints
+            state.buildCode += 1;
             return state
+        }
+        case UPDATESTAT: {
+            const statAssigned = action.statAssigned
+            state.currentBuild.statAssigned.properStatAssign = statAssigned.properStatAssign
+            state.currentBuild.statAssigned.finalStatTypePoints = statAssigned.finalStatTypePoints
+            state.currentBuild.statAssigned.requireStatTypePoints = statAssigned.requireStatTypePoints
+            break;
+        }
+        case UPdATEBUILDDAMAGE: {
+            const computedDamage = action.computedDamage
+            state.currentBuild.computedDamage = computedDamage
+            break;
+        }
+        case RESETSETTING: {
+            state.settings = deepCopy(initialState.settings)
+            state.settings.resetCode++
+            return state;
+        }
+        case MANUALLYUPDATESTAT: {
+            state.settings.manuallyUpdateStat = action.manuallyUpdateStat
+            break;
         }
         case ADDPOWDERBOOST: {
             if(!state.settings.boosts.includes(action.boostName)) {
@@ -348,11 +407,11 @@ export const itembuild = (state = initialState, action) => {
     return state;
 }
 
-export const hasItemInBuild = (item) => {
+export const hasItemInBuild = (item, itembuilddata) => {
     for(let v in BUILDEQUIPS) {
         // console.log(v)
-        if(store.getState().itembuild[BUILDEQUIPS[v]] !== undefined) {
-            if(store.getState().itembuild[BUILDEQUIPS[v]].item.name === item.name) {
+        if(itembuilddata[BUILDEQUIPS[v]]) {
+            if(itembuilddata[BUILDEQUIPS[v]].item.name === item.name) {
                 return true
             }
         }
@@ -360,10 +419,16 @@ export const hasItemInBuild = (item) => {
     return false
 }
 
-export const hasItemTypeInBuild = (equipType) => {
-    return store.getState().itembuild[equipType] !== undefined
+export const hasItemTypeInBuild = (equipType, itembuilddata) => {
+    return itembuilddata[equipType] !== undefined
 }
 
 export const getDefenseBoost = () => {
     return store.getState().itembuild.settings.defenseBoostValue
+}
+
+export const reCalculateBuildAndUpdate = (itemBuildData) => {
+    store.dispatch(updateStat(itemBuildData))
+    store.dispatch(updatebuilddamage(itemBuildData))
+    store.dispatch(updatebuild(itemBuildData))
 }

@@ -1,9 +1,12 @@
-import { useState, useRef } from "react";
+import { useState, useRef, useCallback, useEffect } from "react";
 import { SkillPointToPercentage } from "../../../../utils/WynnMath";
-import { BUILDEQUIPS } from "../../../reducer/itembuild";
+import { BUILDEQUIPS, manuallyupdatestat, reCalculateBuildAndUpdate, updatebuild, updateStat } from "../../../reducer/itembuild";
 import { getMaxSum } from "./BuildUtils";
 import "./BuildRequirements.scss";
 import { StatAssignCalculateFunction } from "./StatRemain";
+import { batch, useDispatch, useSelector } from "react-redux";
+import { deepCopy } from "../../../../utils/FairyWynnUtil";
+import useBuildUpdate from "../../../hooks/useBuildUpdate";
 
 const statTypeColor = {
   neutral: "RGB(252, 165, 14)",
@@ -33,13 +36,11 @@ const statType = [
 
 export default function BuildRequirements({ data }) {
 
-  const statAssigned = data.currentBuild.statAssigned;
-
   return (
     <div className="buildrequirements">
-      {statType.map((v) => (
+      {statType.map((v, i) => (
         <>
-        <RequirementsGetter _statType={v} data={statAssigned} />
+        <RequirementsGetter _statType={v} data={data} key={i}/>
         </>
       ))}
     </div>
@@ -47,24 +48,60 @@ export default function BuildRequirements({ data }) {
 }
 
 function RequirementsGetter({ _statType, data }) {
-  const [show, setShow] = useState(false);
+
+  const MUS = useSelector((state) => state.itembuild.settings.manuallyUpdateStat)
+  const manuallyAssigned = deepCopy(MUS)
+  const statAssigned = useSelector(state => state.itembuild.currentBuild.statAssigned)
+  const buildCode = useBuildUpdate()
+
+  useEffect(() => {
+    ref.current.value = statAssigned.finalStatTypePoints[_statType]
+    inputValue.current = statAssigned.finalStatTypePoints[_statType]
+  }, [buildCode])
+
+  
+  const [change, setChange] = useState(false)
+  const dispatch = useDispatch()
+  const inputValue = useRef(statAssigned.finalStatTypePoints[_statType])
+  const ref = useRef()
+
+  const buildUpdate = () => {
+
+    if(!isNaN(parseInt(inputValue.current, 10))) {
+
+      if(manuallyAssigned[_statType] + parseInt(inputValue.current, 10) - statAssigned.finalStatTypePoints[_statType] >= 0) {
+        manuallyAssigned[_statType] += parseInt(inputValue.current, 10) - statAssigned.finalStatTypePoints[_statType]
+
+        console.log(manuallyAssigned)
+  
+        // Manually Assigned should be positive     
+        dispatch(manuallyupdatestat(manuallyAssigned))  
+        reCalculateBuildAndUpdate(data) 
+      }
+      else {
+        ref.current.value = ref.current.defaultValue
+      }
+    } 
+  }
+  
+  const onChange = (e) => {
+    inputValue.current = e.target.value
+    if(e.target.value === e.target.defaultValue) {
+      setChange(false)
+    } 
+    else {
+      setChange(true)
+    }
+  }
 
   let percent = 0
-  if (data.finalStatTypePoints[_statType] > 0) percent = SkillPointToPercentage(data.finalStatTypePoints[_statType]);
+  if (statAssigned.finalStatTypePoints[_statType] > 0) percent = SkillPointToPercentage(statAssigned.finalStatTypePoints[_statType]);
   
-
   return (
     <div
       className={`${_statType} individual-stat`}
-      onMouseLeave={() => setShow(false)}
-      onMouseEnter={() => setShow(true)}
     >
-      <div
-        className="stat-text"
-        style={{
-          filter: `${show ? "blur(3px)" : ""}`,
-        }}
-      >
+      <div className="stat-text">
         <div
           style={{
             color: statTypeColor[_statType],
@@ -79,20 +116,26 @@ function RequirementsGetter({ _statType, data }) {
         >
           {_statType}
         </div>
-        <div
+        <input
+          defaultValue={statAssigned.finalStatTypePoints[_statType]}
           style={{
             color: statTypeColor[_statType],
           }}
-        >
-          {data.finalStatTypePoints[_statType]}
-        </div>
+          ref={ref}
+          onChange={e => onChange(e)}
+          onKeyDown={(e) => {
+            if(e.key == 'Enter') {
+              buildUpdate()
+              setChange(false)
+            }
+          }}
+        ></input>
+        {change ? <button 
+        onClick={() => {
+          buildUpdate()
+          setChange(false)
+        }}><i className="fa-solid fa-check"></i></button> : null}
       </div>
-      {show ? (
-        <div className="stat-info">
-          <div>{percent.toFixed(1)}%</div>
-          <div>Percentage Value</div>
-        </div>
-      ) : null}
     </div>
   );
 }

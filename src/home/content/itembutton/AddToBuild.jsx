@@ -1,5 +1,5 @@
 import { useCallback } from 'react'
-import { batch, useDispatch } from 'react-redux'
+import { batch, useDispatch, useStore } from 'react-redux'
 import { additem, hasItemInBuild } from '../../reducer/itembuild'
 import { showCheckingPopUps, showWarningPopUps } from '../../reducer/popup'
 import './ItemButton.scss'
@@ -7,12 +7,13 @@ import './ItemButton.scss'
 export default function AddToBuild(props) {
 
     const dispatch = useDispatch()
+    const store = useStore()
 
     const dispatchCallBack = useCallback(() => {
 
         return batch(() => {
             // console.log(hasItemInBuild(props.data))
-            if(hasItemInBuild(props.data)) {
+            if(hasItemInBuild(props.data, store.getState().itembuild)) {
                 showWarningPopUps(props.data.name, 3000)
             } else {
                 showCheckingPopUps(props.data.name, 3000)

@@ -29,6 +29,10 @@
             font-size: 5rem;
             // text-shadow: 2px;
             font-style: normal;
+
+            &:hover {
+                filter: blur(3px);
+            }
         }
         > :nth-child(2) {
             font-size: 1.4rem;
@@ -38,6 +42,44 @@
         > :nth-child(3) {
             font-size: 1.2rem;
             font-weight: bold;
+            background-color: transparent;
+            width: 50px;
+            text-align: center;
+            border: 0px;
+            margin: 2px;
+
+            &:hover {
+                border: 2px solid white;
+                border-radius: 0.2em;
+                margin: 0;
+            }
+        }
+
+        button {
+            background-color: rgb(56, 209, 0);
+            border-radius: 0.2em;
+            border: 2px solid rgb(0, 151, 81);
+            position: absolute;
+            bottom: -22px;
+
+            padding-left: 0px;
+            color: rgb(236, 236, 236);
+            font-size: 1rem;
+            display: flex;
+            flex-direction: row;
+            justify-content: center;
+            align-items: center;
+
+            > i {
+                text-align: center;
+                display: flex;
+                flex-direction: row;
+            }
+
+            &:hover {
+                cursor: pointer;
+                background-color: rgb(68, 243, 5);
+            }
         }
     }
 
@@ -55,6 +97,7 @@
     font-size: 0.5vw;
     color: rgb(230, 230, 230);
 
+    top: 30px;
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -65,5 +108,11 @@
     }
     > :nth-child(2) {
         font-size: 1rem;
+    }
+}
+
+.stat-scroll-select {
+    &:hover {
+        cursor: ns-resize;
     }
 }

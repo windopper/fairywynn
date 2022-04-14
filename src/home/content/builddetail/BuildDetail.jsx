@@ -1,6 +1,6 @@
 import { useCallback, useMemo, useRef } from "react";
 import { hideBuildDetail } from "../../reducer/builddetail";
-import { batch, useDispatch, useStore } from "react-redux";
+import { batch, useDispatch, useSelector, useStore } from "react-redux";
 import useBuildDetailDashBoardStateUpdate from "../../hooks/useBuildDetailDashBoardStateUpdate";
 import BuildRequirements from "./contents/BuildRequirements";
 import BuildStats from "./contents/BuildStats";
@@ -10,19 +10,22 @@ import BuildSpellInfo from "./contents/buildspell/BuildSpellInfo";
 import "./BuildDetail.scss";
 import BuildWarn from "./contents/buildspell/BuildWarn";
 import BuildMeleeInfo from "./contents/buildmelee/BuildMeleeInfo";
-import { updatebuild } from "../../reducer/itembuild";
+import { resetsetting, updatebuild } from "../../reducer/itembuild";
 import BuildAssignSequence from "./contents/BuildAssignSequence";
 import BuildBoosts from "./contents/BuildBoosts";
 import useBuildSettingUpdate from "../../hooks/useBuildSettingUpdate";
 import BuildAnalysis from "./contents/buildanalysis/BuildAnalysis";
 import HideButton from "./HideButton";
+import useBuildUpdate from "../../hooks/useBuildUpdate";
+import ResetButton from "./ResetButton";
+import NextSpellCost from "./contents/NextSpellCost";
 
 export default function BuildDetail() {
 
-  const showBuildDetail = useBuildDetailDashBoardStateUpdate();
-  useBuildSettingUpdate()
 
-  console.log(showBuildDetail)
+  const showBuildDetail = useBuildDetailDashBoardStateUpdate();
+
+  const buildCode = useBuildUpdate()
 
   const isCursorInside = useRef(false);
 
@@ -32,15 +35,11 @@ export default function BuildDetail() {
   const store = useStore();
   const dispatch = useDispatch();
 
-  const hideDashBoard = useCallback(() =>
-      dispatch(hideBuildDetail),
-    [dispatch]
-  );
+  const hideDashBoard = () => dispatch(hideBuildDetail)
 
-  const currentItemBuild = store.getState().itembuild;
+  const currentItemBuild = useSelector(s => s.itembuild)
   const weaponItem = currentItemBuild.weapon
   const hasWeapon = weaponItem !== undefined
-  // console.log(currentItemBuild)
 
   const statAssigned = currentItemBuild.currentBuild.statAssigned
   const computedDamage = currentItemBuild.currentBuild.computedDamage
@@ -55,18 +54,20 @@ export default function BuildDetail() {
         <div
           className="build-detail-wrapper"
           onClick={() => (isCursorInside.current ? null : hideDashBoard())}
-          // onScrollCapture={(e) => console.log(e)}
         >
-          {/* <HideButton /> */}
           <div
             className="build-detail"
             onMouseEnter={() => onEnter()}
             onMouseLeave={() => onLeave()}
           >
-            <div style={{width: '100%'}}><HideButton /></div>
+            <div style={{width: '100%'}} className='top-buttons'>
+              <ResetButton />
+              <HideButton />
+            </div>
             <BuildWarn itemBuildData={currentItemBuild} statAssigned={statAssigned}/>
 
             <div className="detail-column-container first-container">
+              {/* {buildrequirementsMemo} */}
             <BuildRequirements data={currentItemBuild} />
             <StatRemain data={currentItemBuild} statAssigned={statAssigned}/>
             <Title title={'Build Item'} />
@@ -81,10 +82,9 @@ export default function BuildDetail() {
             <div className="detail-column-container second-container">
               <Title title={'Build Analysis'} />
               <BuildAnalysis itemBuildData={currentItemBuild} computedMeleeDamage={meleeDamages} computedSpellDamage={spellDamages}/>
+              <Title title={'Next Spell Costs'} />
+              <NextSpellCost />
             </div>
-
-            {/* {hasWeapon ? <Title title={'Build Analysis'} /> : null} */}
-            
           </div>
         </div>
       ) : null}

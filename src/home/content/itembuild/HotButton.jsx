@@ -1,7 +1,7 @@
 import "./HotButton.scss";
 import { useCallback, useRef, useState } from "react";
 import { batch, useDispatch, useStore } from "react-redux";
-import { BUILDEQUIPS } from "../../reducer/itembuild";
+import { BUILDEQUIPS, reCalculateBuildAndUpdate } from "../../reducer/itembuild";
 import BuildItems from "./BuildItems";
 import useBuildItemsUpdate from "../../hooks/useBuildItemsUpdate";
 import BuildDetail from "../builddetail/BuildDetail";
@@ -20,13 +20,11 @@ export default function HotButton() {
   const [hover, setHover] = useState(false);
 
   const setShowBuildDetail = useCallback(
-    () => (
+    () => {
         // dispatch(showBuildDetail)
-      batch(() => {
-        dispatch(updatebuild(getBuildDamages(store.getState().itembuild), StatAssignCalculateFunction(store.getState().itembuild)))
-        dispatch(showBuildDetail)
-      })
-  ),
+      reCalculateBuildAndUpdate(itembuild)
+      dispatch(showBuildDetail)
+    },
     [dispatch]
   );
 

@@ -334,6 +334,8 @@ export function getMeleeDamage(weaponDamage, elementDamage, statAssigned, attack
   const strength = SkillPointToPercentage(statAssigned.strength) / 100
   const dexterity = SkillPointToPercentage(statAssigned.dexterity) / 100
 
+  // console.log(statAssigned)
+
   const abilityBoostMultiplier = getAbilityDamageBoostMultiplier()
 
   const neutralModifier = (1 + meleeDamage) * (1 + strength)
