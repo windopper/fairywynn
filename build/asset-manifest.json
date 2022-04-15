@@ -1,16 +1,16 @@
 {
   "files": {
-    "main.css": "/fairywynn/static/css/main.e1c6c579.css",
-    "main.js": "/fairywynn/static/js/main.7ed0ae53.js",
+    "main.css": "/fairywynn/static/css/main.85eee06f.css",
+    "main.js": "/fairywynn/static/js/main.aeac143b.js",
     "static/js/787.223bad63.chunk.js": "/fairywynn/static/js/787.223bad63.chunk.js",
     "static/media/logo.svg": "/fairywynn/static/media/logo.6ce24c58023cc2f8fd88fe9d219db6c6.svg",
     "index.html": "/fairywynn/index.html",
-    "main.e1c6c579.css.map": "/fairywynn/static/css/main.e1c6c579.css.map",
-    "main.7ed0ae53.js.map": "/fairywynn/static/js/main.7ed0ae53.js.map",
+    "main.85eee06f.css.map": "/fairywynn/static/css/main.85eee06f.css.map",
+    "main.aeac143b.js.map": "/fairywynn/static/js/main.aeac143b.js.map",
     "787.223bad63.chunk.js.map": "/fairywynn/static/js/787.223bad63.chunk.js.map"
   },
   "entrypoints": [
-    "static/css/main.e1c6c579.css",
-    "static/js/main.7ed0ae53.js"
+    "static/css/main.85eee06f.css",
+    "static/js/main.aeac143b.js"
   ]
 }

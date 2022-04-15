@@ -35,12 +35,12 @@ export default function ItemDisplay({ d, equipType }) {
       <Gap />
       {equipType !== "weapon" ? (
         <div className="defense">
-          {getDefense(store.getState().itembuild[equipType].item)}
+          {getDefense(store.getState().itembuild[equipType].armorDefense)}
         </div>
       ) : (
         <div className="damage">
           {/* <GetDamagesWithPowder equipType={equipType} /> */} 
-          {getDamage(store.getState().itembuild[equipType].item)}
+          {getDamage(store.getState().itembuild[equipType].weaponDamage)}
         </div>
       )}
       <br />

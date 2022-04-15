@@ -305,7 +305,17 @@ export const itembuild = (state = deepCopy(initialState), action) => {
         case IMPORTBUILD: {
             BUILDEQUIPS.forEach(v => {
                 if(action.build[v]) {
-                    state[v] = action.build[v]
+                    if(v === 'weapon') {
+                        state[v] = {
+                            ...action.build[v],
+                            weaponDamage: GetWeaponDamageWithPowder(v, action.build)
+                        }
+                    } else {
+                        state[v] = {
+                            ...action.build[v],
+                            armorDefense: GetArmorDefenseWithPowder(v, action.build)
+                        }
+                    }
                 } else {
                     state[v] = undefined
                 }
