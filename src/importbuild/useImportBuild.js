@@ -7,9 +7,6 @@ import { reCalculateBuildAndUpdate } from "../home/reducer/itembuild"
 
 export default function useImportBuild(importUrl) {
 
-    const hi = 'hi';
-
-
     const importcode = importUrl.split('/')[2]
 
     const navigate = useNavigate()
@@ -18,13 +15,17 @@ export default function useImportBuild(importUrl) {
     
     useEffect(() => {
         if(importUrl.includes('importbuild')) {
-            importData(importcode)
-            console.log('navigate!')
-            navigate('../')
-            setTimeout(() => {
-                reCalculateBuildAndUpdate(store.getState().itembuild)
-                dispatch(showBuildDetail)
-            }, 1000)
+            const succeed = importData(importcode)
+            if(succeed) {
+                console.log('navigate!')
+                navigate('../')
+                setTimeout(() => {
+                    reCalculateBuildAndUpdate(store.getState().itembuild)
+                    dispatch(showBuildDetail)
+                }, 1000)
+            } else {
+                navigate('../')
+            }
         }
     })
     
