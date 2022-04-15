@@ -6,6 +6,7 @@ import { useDispatch, useSelector, useStore } from "react-redux";
 import { COMPLETE, FETCHING } from "../reducer/fetcher";
 import ContentMasonry from "./ContentMasonry";
 import useSearchConditionUpdate from "../hooks/useSearchConditionUpdate";
+import { itemV4 } from "../../data/ItemV4";
 
 export default function Content() {
   const store = useStore();
@@ -16,22 +17,24 @@ export default function Content() {
   const [_, Update] = useState(false)
   const [filteredData, search, filter] = useSearchConditionUpdate(api.current)
 
-
   useEffect(() => {
     console.log("fetching...");
 
-    fetch(`https://api.wynncraft.com/public_api.php?action=itemDB&category=all`)
-      .then((res) => {
-        return res.json();
-      })
-      .then((d) => {
-        console.log(d.items.length + " items uploading");
-        api.current = d
-        console.log(d)
-        Update(u=>!u)
-        dispatch(COMPLETE(d))
-      })
-      .catch((e) => {});
+    // fetch(`https://api.wynncraft.com/public_api.php?action=itemDB&category=all`)
+    //   .then((res) => {
+    //     return res.json();
+    //   })
+    //   .then((d) => {
+    //     console.log(d.items.length + " items uploading");
+    //     api.current = d
+    //     console.log(d)
+    //     Update(u=>!u)
+    //     dispatch(COMPLETE(d))
+    //   })
+    //   .catch((e) => {});
+    api.current = itemV4
+    Update(u => !u)
+    dispatch(COMPLETE(itemV4))
   }, []);
 
 

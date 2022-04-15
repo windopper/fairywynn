@@ -26,7 +26,7 @@ export default function ResetButton() {
             animationName: `${hover ? "infinite-loop" : ""}`,
           }}
         ></i>
-        <div>Reset Build</div>
+        <div>Reload Build</div>
       </div>
     );
 }

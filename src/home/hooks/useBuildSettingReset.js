@@ -8,7 +8,6 @@ export default function useBuildSettingReset() {
     const reRender = () => update(u => !u)
     const listener = () => {
         const current = store.getState().itembuild.settings.resetCode
-        // console.log(store.getState().itembuild.buildCode)
         if(ref.current !== current) {
             ref.current = current
             reRender()

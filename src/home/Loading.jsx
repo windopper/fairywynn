@@ -30,7 +30,7 @@ export default function Loading() {
 
     return (
         <div className="loading" >
-            {preSearch.current.length !== 0 ? `'${searching.current}'의 검색결과` : null}
+            {preSearch.current.length !== 0 ? searching.current === '' ? '모든 아이템 검색결과' : `'${searching.current}'의 검색결과` : null}
             {preSearch.current.length === 0 && searching.current === '' && coreLength.current !== 0 ? '아이템을 검색해주세요' : null}
             {coreLength.current === 0 ? '서버로부터 API를 받아오는 중...' : null}
             <div className="loading-info">

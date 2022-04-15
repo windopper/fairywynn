@@ -17,6 +17,8 @@ import { getColorFromTier } from "../../utils/ColorPicker";
 
 export default function Items(data) {
 
+  // console.log(data)
+
   return data.map((d, i) => {
     return (
         <Item d={d} i={i}/>

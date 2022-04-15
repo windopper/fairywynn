@@ -1,12 +1,10 @@
-import { useCallback, useState } from "react";
-import { batch, useDispatch, useStore } from "react-redux";
-import { getBuildDamages, StatAssignCalculateFunction } from "../../../../utils/WynnMath";
+import { useCallback, useEffect, useRef } from "react";
+import { useDispatch, useSelector, useStore } from "react-redux";
 import useBuildSettingReset from "../../../hooks/useBuildSettingReset";
-import { addabilityboost, addboost, adddefenseboost, reCalculateBuildAndUpdate, removeabilityboost, removeboost, removedefenseboost, updatebuild } from "../../../reducer/itembuild";
+import { addboost, reCalculateBuildAndUpdate, removeboost } from "../../../reducer/itembuild";
 import "./BuildBoosts.scss";
 
 export default function BuildBoosts() {
-  const resetCode = useBuildSettingReset()
   return (
     <div className="buildboosts-wrapper buildboosts-row-container">
       <div className="buildboosts-container buildboosts-row-container">
@@ -21,9 +19,11 @@ export default function BuildBoosts() {
 
   function ToggleButton({text, value, defenseValue = 0}) {
 
+    const resetCode = useBuildSettingReset()
+    
+    const ref = useRef()
     const store = useStore()
     const itemBuildData = store.getState().itembuild;
-    // const [click, setClick] = useState(false);
     const dispatch = useDispatch()
 
     const addAbilityDispatch = useCallback(() => {
@@ -44,11 +44,15 @@ export default function BuildBoosts() {
       }
     }
 
+    useEffect(() => {
+      ref.current.checked = false
+    }, [resetCode])
+
     return (
       <div className="switch-button-wrapper buildboosts-column-container">
           <div className="buildboost-title">{text}<span className="buildboost-value">&nbsp;+{value*100}%</span></div>
         <label className="switch-button">
-          <input type="checkbox" onChange={(e) => click(e)}/>{" "}
+          <input type="checkbox" onChange={(e) => click(e)} ref={ref}/>
           <span className="onoff-switch"></span>
         </label>
       </div>

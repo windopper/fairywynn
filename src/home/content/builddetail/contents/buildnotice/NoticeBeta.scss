@@ -1,0 +1,15 @@
+.noticebeta-wrapper {
+    width: 100%;
+    margin: 0px;
+    margin-top: 15px;
+    .noticebeta-container {
+        width: 95%;
+        background-color: yellow;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        // border: 3px solid gold;
+        border-radius: 0.2em;
+    }
+}

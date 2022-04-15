@@ -71,8 +71,6 @@ function RequirementsGetter({ _statType, data }) {
 
       if(manuallyAssigned[_statType] + parseInt(inputValue.current, 10) - statAssigned.finalStatTypePoints[_statType] >= 0) {
         manuallyAssigned[_statType] += parseInt(inputValue.current, 10) - statAssigned.finalStatTypePoints[_statType]
-
-        console.log(manuallyAssigned)
   
         // Manually Assigned should be positive     
         dispatch(manuallyupdatestat(manuallyAssigned))  

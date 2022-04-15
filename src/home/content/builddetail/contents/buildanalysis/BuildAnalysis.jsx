@@ -18,6 +18,7 @@ import { AverageSpellDamage, getMeleeDamage } from '../../../../../utils/WynnDam
 import { useEffect, useRef, useState } from 'react';
 import useOnScreen from '../../../../hooks/useOnScreen';
 import './BuildAnalysis.scss'
+import { BUILDEQUIPS } from '../../../../reducer/itembuild';
 
 ChartJS.register(
     RadialLinearScale,
@@ -193,6 +194,7 @@ export default function BuildAnalysis({itemBuildData, computedMeleeDamage, compu
     }
 
     function HealthRecoveryScore() {
+      if(BUILDEQUIPS.filter(v => itemBuildData[v]).filter(v => itemBuildData[v].item.majorIds).filter(v => itemBuildData[v].item.majorIds[0] == 'RALLY').length >=1) return 100
         const healthRegenRaw = getMaxSum(itemBuildData, 'healthRegenRaw');
         const healthRegenPct = getMaxSum(itemBuildData, 'healthRegen')
         const computed = RawPercentCalculate(healthRegenRaw, healthRegenPct)

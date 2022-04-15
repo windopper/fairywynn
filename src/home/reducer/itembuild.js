@@ -303,7 +303,13 @@ export const itembuild = (state = deepCopy(initialState), action) => {
             return state
         }
         case IMPORTBUILD: {
-            state = action.build
+            BUILDEQUIPS.forEach(v => {
+                if(action.build[v]) {
+                    state[v] = action.build[v]
+                } else {
+                    state[v] = undefined
+                }
+            })
             return state
         }
         case UPDATEBUILD: {
@@ -324,7 +330,7 @@ export const itembuild = (state = deepCopy(initialState), action) => {
         }
         case RESETSETTING: {
             state.settings = deepCopy(initialState.settings)
-            state.settings.resetCode++
+            state.settings.resetCode += Math.random();
             return state;
         }
         case MANUALLYUPDATESTAT: {

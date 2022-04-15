@@ -56,6 +56,7 @@ export const defenseEmojiReverse = {
 export function getDamage(data) {
 
     const divs = []
+    // console.log(data)
     for(let damage in damages) {
         let type = damages[damage]
         if(data[type] === "0-0" || data[type] == undefined) {
@@ -305,9 +306,12 @@ const identified = 'identified'
 
 export const stats = [
   "healthRegen",
+  "healthRegenRaw",
   "manaRegen",
   "spellDamage",
+  "spellDamageRaw",
   "damageBonus",
+  "damageBonusRaw",
   "lifeSteal",
   "manaSteal",
   "xpBonus",
@@ -326,9 +330,6 @@ export const stats = [
   "healthBonus",
   "soulPoints",
   "emeraldStealing",
-  "healthRegenRaw",
-  "spellDamageRaw",
-  "damageBonusRaw",
   "bonusFireDamage",
   "bonusWaterDamage",
   "bonusAirDamage",

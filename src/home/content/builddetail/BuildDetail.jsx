@@ -8,7 +8,7 @@ import StatRemain from "./contents/StatRemain";
 import BuildItemUsed from "./contents/BuildItemUsed";
 import BuildSpellInfo from "./contents/buildspell/BuildSpellInfo";
 import "./BuildDetail.scss";
-import BuildWarn from "./contents/buildspell/BuildWarn";
+import BuildWarn from "./contents/buildnotice/BuildWarn";
 import BuildMeleeInfo from "./contents/buildmelee/BuildMeleeInfo";
 import { resetsetting, updatebuild } from "../../reducer/itembuild";
 import BuildAssignSequence from "./contents/BuildAssignSequence";
@@ -19,6 +19,7 @@ import HideButton from "./HideButton";
 import useBuildUpdate from "../../hooks/useBuildUpdate";
 import ResetButton from "./ResetButton";
 import NextSpellCost from "./contents/NextSpellCost";
+import NoticeBeta from "./contents/buildnotice/NoticeBeta";
 
 export default function BuildDetail() {
 
@@ -81,6 +82,7 @@ export default function BuildDetail() {
             </div>
             <div className="detail-column-container second-container">
               <Title title={'Build Analysis'} />
+              <NoticeBeta />
               <BuildAnalysis itemBuildData={currentItemBuild} computedMeleeDamage={meleeDamages} computedSpellDamage={spellDamages}/>
               <Title title={'Next Spell Costs'} />
               <NextSpellCost />

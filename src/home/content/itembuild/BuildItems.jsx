@@ -20,7 +20,8 @@ export default function BuildItems({ v, itembuild }) {
 
   // console.log(itembuild[v])
 
-  if (itembuild[v] !== undefined) {
+  // console.log(itembuild[v])
+  if (itembuild[v]) {
     result = (
       <div
         className="smallitemlist"
