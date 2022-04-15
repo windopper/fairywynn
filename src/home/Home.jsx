@@ -7,8 +7,15 @@ import HotButton from './content/itembuild/HotButton'
 import Alerts from '../alerts/Alerts'
 import BuildDetail from './content/builddetail/BuildDetail'
 import PowderBuild from './content/powderbuild/PowderBuild'
+import { useLocation } from 'react-router'
+import useImportBuild from '../importbuild/useImportBuild'
 
 export default function Home() {
+
+    const location = useLocation()
+    useImportBuild(location.pathname)
+    
+    if(location.pathname.includes('importbuild')) return <></>
 
     return (
         <div className='home'>

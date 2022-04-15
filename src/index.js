@@ -3,7 +3,7 @@ import ReactDOM from "react-dom";
 import "./index.css";
 import App from "./App";
 import reportWebVitals from "./reportWebVitals";
-import { BrowserRouter } from "react-router-dom";
+import { BrowserRouter, HashRouter } from "react-router-dom";
 import { applyMiddleware, createStore } from "redux";
 import rootReducer from "./home/reducer/Reducers";
 import { Provider } from "react-redux";
@@ -17,7 +17,6 @@ ReactDOM.render(
       <App />
     </BrowserRouter>
   </Provider>,
-
   document.getElementById("root")
 );
 

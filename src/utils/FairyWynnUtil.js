@@ -68,57 +68,65 @@ export function exportData() {
 
 export function importData(encodedData) {
 
-    let decoded = JSON.parse(atob(encodedData))
-
-    const data = {
-        'helmet': undefined,
-        'chestplate': undefined,
-        'leggings': undefined,
-        'boots': undefined,
-        'weapon': undefined,
-        'ring1': undefined,
-        'ring2': undefined,
-        'bracelet': undefined,
-        'necklace': undefined
-    }
-
-    const MUS = {
-        'strength': 0,
-        'dexterity': 0,
-        'intelligence': 0,
-        'defense': 0,
-        'agility': 0
-    }
-
-    // Powder and Equips
-    BUILDEQUIPS.forEach((v, i) => {
-        
-        if(decoded[i] !== -1 && i <= 8) {
-            let powderParse = []
-            if(decoded[i+5]) {
-                let encodedPowder = decoded[i+5]
-                while(encodedPowder.length > 0) {
-                    let slice = encodedPowder.slice(0, 2)
-                    encodedPowder = encodedPowder.slice(2)
-                    powderParse.push(REVERSEELEMENTMAP[slice.charAt(0)]+REVERSENUMBERCONVERTER[slice.charAt(1)])
+    try {
+        let ab = atob(encodedData)
+        let decoded = JSON.parse(ab)
+    
+        const data = {
+            'helmet': undefined,
+            'chestplate': undefined,
+            'leggings': undefined,
+            'boots': undefined,
+            'weapon': undefined,
+            'ring1': undefined,
+            'ring2': undefined,
+            'bracelet': undefined,
+            'necklace': undefined
+        }
+    
+        const MUS = {
+            'strength': 0,
+            'dexterity': 0,
+            'intelligence': 0,
+            'defense': 0,
+            'agility': 0
+        }
+    
+        // Powder and Equips
+        BUILDEQUIPS.forEach((v, i) => {
+            
+            if(decoded[i] !== -1 && i <= 8) {
+                let powderParse = []
+                if(decoded[i+5]) {
+                    let encodedPowder = decoded[i+5]
+                    while(encodedPowder.length > 0) {
+                        let slice = encodedPowder.slice(0, 2)
+                        encodedPowder = encodedPowder.slice(2)
+                        powderParse.push(REVERSEELEMENTMAP[slice.charAt(0)]+REVERSENUMBERCONVERTER[slice.charAt(1)])
+                    }
+                }
+                data[v] = {
+                    'item': itemV4.items[decoded[i]],
+                    'powder': powderParse
                 }
             }
-            data[v] = {
-                'item': itemV4.items[decoded[i]],
-                'powder': powderParse
-            }
+        })
+    
+        // Manually Update Stat
+        for(let i = 14; i<=18; ++i) {
+            let value = decoded[i]
+            MUS[SKILLPOINTS[i-14]] = value
         }
-    })
-
-    // Manually Update Stat
-    for(let i = 14; i<=18; ++i) {
-        let value = decoded[i]
-        MUS[SKILLPOINTS[i-14]] = value
+    
+    
+        store.dispatch(importbuild(data))
+        store.dispatch(manuallyupdatestat(MUS))
     }
-
-
-    store.dispatch(importbuild(data))
-    store.dispatch(manuallyupdatestat(MUS))
+    catch(e) {
+        console.log(e)
+        return false
+    }
+    return true
 }
 
 export function deepCopy(obj) {

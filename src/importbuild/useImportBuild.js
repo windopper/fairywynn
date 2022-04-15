@@ -5,23 +5,27 @@ import { useDispatch, useStore } from "react-redux"
 import { showBuildDetail } from "../home/reducer/builddetail"
 import { reCalculateBuildAndUpdate } from "../home/reducer/itembuild"
 
-export default function ImportBuild({match}) {
-    const { importcode } = useParams()
+export default function useImportBuild(importUrl) {
+
+    const hi = 'hi';
+
+
+    const importcode = importUrl.split('/')[2]
+
     const navigate = useNavigate()
     const dispatch = useDispatch()
     const store = useStore()
     
     useEffect(() => {
-        importData(importcode)
-        console.log('navigate!')
-        navigate('../')
-        setTimeout(() => {
-            reCalculateBuildAndUpdate(store.getState().itembuild)
-            dispatch(showBuildDetail)
-        }, 1000)
+        if(importUrl.includes('importbuild')) {
+            importData(importcode)
+            console.log('navigate!')
+            navigate('../')
+            setTimeout(() => {
+                reCalculateBuildAndUpdate(store.getState().itembuild)
+                dispatch(showBuildDetail)
+            }, 1000)
+        }
     })
-    return (
-        <>
-        </>
-    )
+    
 }

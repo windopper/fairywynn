@@ -8,9 +8,9 @@ import ImportBuild from './importbuild/ImportBuild';
 function App() {
   return (
     <Routes>
-      <Route path='/' exact element={<Home/>}/>
-      <Route path='/builddetail' element={<BuildDetail />}/>
-      <Route path='/importbuild/:importcode' element={<ImportBuild/>} />
+      <Route path='/*' element={<Home/>}/>
+      {/* <Route exact path='/importbuild/:importcode' element={<ImportBuild/>} />
+      <Route exact path='/builddetail/' element={<BuildDetail />}/> */}
     </Routes>
   );
 }
