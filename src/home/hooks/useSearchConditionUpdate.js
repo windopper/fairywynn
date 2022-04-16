@@ -111,7 +111,7 @@ const filterData = (api, search, filter) => {
       }
     }
 
-    fd = fd.filter((v, i) => i < 500);
+    // fd = fd.filter((v, i) => i < 500);
 
     return fd;
   }

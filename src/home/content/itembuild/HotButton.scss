@@ -10,7 +10,7 @@
     right: 10px;
     transition-duration: 1s;
     color: white;
-    font-style: oblique;
+    
     display: flex;
     align-items: center;
     justify-content: center;
@@ -116,6 +116,7 @@
     background-color: red;
     border: 2px solid rgb(217, 217, 217);
     border-radius: 0.25em;
+    font-style: normal;
 
     &::before {
         content: "\00d7";

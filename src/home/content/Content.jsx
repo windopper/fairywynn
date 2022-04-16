@@ -44,7 +44,7 @@ export default function Content() {
     filteredData.length === 500 ? <div className="searchsize">{`${filteredData.length}개 검색됨 (최대 500개)`}</div> : <div className="searchsize">{`${filteredData.length}개 검색됨`}</div>
      : null}
     {filteredData.length == 0 && search.currentSearch !== "" ? <div className="zerodata">검색 결과가 없습니다</div> : null}
-    <ContentMasonry filteredData={filteredData}/>
+    {filteredData.length !== 0 ? <ContentMasonry filteredData={filteredData}/> : null}
     </>
   );
 

@@ -59,8 +59,20 @@ function RequirementsGetter({ _statType, data }) {
     inputValue.current = statAssigned.finalStatTypePoints[_statType]
   }, [buildCode])
 
+  useEffect(() => {
+    return () => {
+      if(warnTimeOut.current) {
+        clearTimeout(warnTimeOut.current)
+        warnTimeOut.current = undefined
+      }
+  }}, [])
+
   
   const [change, setChange] = useState(false)
+
+  const [lower, setLower] = useState(false)
+  const warnTimeOut = useRef(undefined)
+
   const dispatch = useDispatch()
   const inputValue = useRef(statAssigned.finalStatTypePoints[_statType])
   const ref = useRef()
@@ -78,8 +90,16 @@ function RequirementsGetter({ _statType, data }) {
       }
       else {
         ref.current.value = ref.current.defaultValue
+        onStatLowWarn()
       }
     } 
+  }
+
+  const onStatLowWarn = () => {
+    setLower(true)
+    warnTimeOut.current = setTimeout(() => {
+      setLower(false)
+    }, 2000)
   }
   
   const onChange = (e) => {
@@ -133,6 +153,7 @@ function RequirementsGetter({ _statType, data }) {
           buildUpdate()
           setChange(false)
         }}><i className="fa-solid fa-check"></i></button> : null}
+        {lower ? <div className="stat-warn-low">can't lower than the original stat</div> : null}
       </div>
     </div>
   );

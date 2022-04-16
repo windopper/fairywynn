@@ -116,3 +116,13 @@
         cursor: ns-resize;
     }
 }
+
+.stat-warn-low {
+    position: absolute;
+    bottom: -30px;
+    font-size: 5px;
+    color: red;
+    font-weight: 700;
+    margin: 0px;
+    padding: 0px;
+}

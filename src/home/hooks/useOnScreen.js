@@ -7,7 +7,7 @@ export default function useOnScreen(ref) {
     const options = {
         root: null, // viewport
         rootMargin: "0px",
-        threshold: 1.0,
+        threshold: 0,
     }
   
     const observer = new IntersectionObserver(
@@ -15,7 +15,10 @@ export default function useOnScreen(ref) {
     )
   
     useEffect(() => {
-      observer.observe(ref.current)
+      if(ref.current) {
+        console.log('observe')
+        observer.observe(ref.current)
+      }
       // Remove the observer as soon as the component is unmounted
       return () => { observer.disconnect() }
     }, [])

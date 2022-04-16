@@ -82,7 +82,6 @@ export default function BuildDetail() {
             </div>
             <div className="detail-column-container second-container">
               <Title title={'Build Analysis'} />
-              <NoticeBeta />
               <BuildAnalysis itemBuildData={currentItemBuild} computedMeleeDamage={meleeDamages} computedSpellDamage={spellDamages}/>
               <Title title={'Next Spell Costs'} />
               <NextSpellCost />

@@ -52,7 +52,7 @@ export function exportData() {
             data[i] = itemV4.items.findIndex(p => p.name === itembuild[v].item.name)
             let powderTrans = ''
             itembuild[v].powder.forEach(v2 => powderTrans += ELEMENTMAP[v2.charAt(0)]+NUMBERCONVERTER[v2.charAt(1)])
-            data[i+5] = powderTrans
+            if(i<=4) data[i+9] = powderTrans
         }
     })
 
@@ -99,17 +99,21 @@ export function importData(encodedData) {
             
             if(decoded[i] !== -1 && i <= 8) {
                 let powderParse = []
-                if(decoded[i+5]) {
-                    let encodedPowder = decoded[i+5]
-                    while(encodedPowder.length > 0) {
-                        let slice = encodedPowder.slice(0, 2)
-                        encodedPowder = encodedPowder.slice(2)
-                        powderParse.push(REVERSEELEMENTMAP[slice.charAt(0)]+REVERSENUMBERCONVERTER[slice.charAt(1)])
+                if(decoded[i+9]) {
+                    if(i<=4) {
+                        let encodedPowder = decoded[i+9]
+                        while(encodedPowder.length > 0) {
+                            let slice = encodedPowder.slice(0, 2)
+                            encodedPowder = encodedPowder.slice(2)
+                            powderParse.push(REVERSEELEMENTMAP[slice.charAt(0)]+REVERSENUMBERCONVERTER[slice.charAt(1)])
+                        }
                     }
                 }
-                data[v] = {
-                    'item': itemV4.items[decoded[i]],
-                    'powder': powderParse
+                if(itemV4.items[decoded[i]]) {
+                    data[v] = {
+                        'item': itemV4.items[decoded[i]],
+                        'powder': powderParse
+                    }
                 }
             }
         })
