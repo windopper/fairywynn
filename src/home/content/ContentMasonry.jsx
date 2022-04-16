@@ -28,14 +28,14 @@ export default function ContentMasonry({ filteredData }) {
       if (entry.isIntersecting) {
         io.unobserve(entry.target);
         page.current = page.current + 1
-        setShowableData(filteredData.slice(0, page.current * 40 + 40));
+        setShowableData(filteredData.slice(0, page.current * 60 + 60));
       }
     })
 
   }, options);
 
   useEffect(() => {
-    setShowableData(filteredData.slice(0, 40))
+    setShowableData(filteredData.slice(0, 60))
   }, [])
 
   useEffect(() => {
@@ -78,9 +78,9 @@ export default function ContentMasonry({ filteredData }) {
     >
       {showableData.map((d, i) => {
         if (showableData.length - 15 === i) {
-          return <Item d={d} i={i} ref={observableRef} />;
+          return <Item d={d} i={i} ref={observableRef} key={i}/>;
         } else {
-          return <Item d={d} i={i} ref={null} />;
+          return <Item d={d} i={i} ref={null} key={i}/>;
         }
       })}
     </Masonry>

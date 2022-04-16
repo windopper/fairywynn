@@ -309,6 +309,9 @@ export function ComputeArmorWearSequence(itemBuildData) {
     "agility",
   ];
 
+
+  const weapons = ['relik', 'wand', 'dagger', 'bow', 'spear']
+
   const requireStatTypePoints = itemBuildData.currentBuild.statAssigned.requireStatTypePoints
   const properStatAssign = itemBuildData.currentBuild.statAssigned.properStatAssign
 
@@ -336,9 +339,19 @@ export function ComputeArmorWearSequence(itemBuildData) {
       }
     }
     if(pass) {
-      statType.forEach(v => {
-        currentStat[v] += currentArmor[`${v}Points`]
-      })
+      if(currentArmor.type) {
+        if(!weapons.includes(currentArmor.type.toLowerCase())) {
+          statType.forEach(v => {
+            currentStat[v] += currentArmor[`${v}Points`]
+          })
+        }
+      }
+      else {
+        statType.forEach(v => {
+          currentStat[v] += currentArmor[`${v}Points`]
+        })
+      }
+
       i++;
     }
     else {

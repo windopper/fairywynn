@@ -314,7 +314,7 @@ export function DamageContainerDesign({ spellMinMaxData }) {
   });
   return elementDamages
     .filter((v) => filteredKey.includes(`min${v}`))
-    .map((v) => {
+    .map((v, i) => {
       const color = getColorFromElementDamage(v);
       const emoji = getEmojiFromElementDamage(v);
       const min = spellMinMaxData[`min${v}`];
@@ -324,6 +324,7 @@ export function DamageContainerDesign({ spellMinMaxData }) {
           style={{
             color: color,
           }}
+          key={i}
         >
           {`${emoji} ${min} - ${max}`}
         </div>

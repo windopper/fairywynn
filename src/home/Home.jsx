@@ -13,7 +13,6 @@ import useImportBuild from '../importbuild/useImportBuild'
 export default function Home() {
 
     const location = useLocation()
-    console.log(location.hash)
     useImportBuild(location.hash)
     
     if(location.hash.includes('importbuild')) return <></>

@@ -1,7 +1,7 @@
 import { useStore } from "react-redux"
 import { store } from "../.."
 import { deepCopy } from "../../utils/FairyWynnUtil"
-import { GetArmorDefenseWithPowder, getBuildDamages, GetWeaponDamageWithPowder, StatAssignCalculateFunction } from "../../utils/WynnMath"
+import { GetArmorDefenseWithPowder, getBuildDamages, getMaxSum, GetWeaponDamageWithPowder, StatAssignCalculateFunction } from "../../utils/WynnMath"
 import { stats } from "../content/EnumParts"
 
 const IMPORTBUILD = 'build/importbuild'
@@ -77,9 +77,7 @@ const initialState = {
                 DAMAGES,
             }
         },
-        computedStat: {
-
-        },
+        computedStat: {},
         statAssigned: {
             finalStatTypePoints: {
                 'strength': 0,
@@ -328,6 +326,10 @@ export const itembuild = (state = deepCopy(initialState), action) => {
         }
         case UPDATESTAT: {
             const statAssigned = action.statAssigned
+
+            stats.forEach(v => state.currentBuild.computedStat[v] = getMaxSum(state, v))
+
+            // Stat Assigned
             state.currentBuild.statAssigned.properStatAssign = statAssigned.properStatAssign
             state.currentBuild.statAssigned.finalStatTypePoints = statAssigned.finalStatTypePoints
             state.currentBuild.statAssigned.requireStatTypePoints = statAssigned.requireStatTypePoints

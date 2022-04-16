@@ -521,7 +521,8 @@ export const majorIdDescription = {
     "Hero": 'While under 50% maximum health, nearby allies gain 30`% bonus damage and defense',
     'Sorcery': '30% chance for spells and attacks to cast a second time at no additional cost',
     'Taunt': 'Mobs within 12 blocks target you upon casting War Scream',
-    'Transcendence': '50% chance for spells to cost no mana when cast'
+    'Transcendence': '50% chance for spells to cost no mana when cast',
+    'Arcanes': '50% chance for spells to cost no mana when cast'
 }
 
 export function getMajorIds(data) {

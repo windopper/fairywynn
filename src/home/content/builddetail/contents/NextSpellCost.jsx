@@ -30,11 +30,11 @@ export default function NextSpellCost() {
 
     const card = () => {
         const number = [1, 2, 3, 4]
-        return number.map(v => {
+        return number.map((v, i) => {
             const skillName = CLASSSKILLS[classType][v].name
             const [computedCost, futureCost, futureIntelligence] = getComputedManaAndNextIntelligencePoint(classType, v, itemBuildData)
             return (
-              <div className='nextspellcost-card'>
+              <div className='nextspellcost-card' key={i}>
                 <div className="nextspellcost-title">
                     {skillName}
                 </div>
