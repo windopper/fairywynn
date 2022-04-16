@@ -63,10 +63,12 @@ export function exportData() {
 
     let encoded = btoa(JSON.stringify(data))
     // console.log(data)
-    return window.location.href+"importbuild/"+encoded
+    return window.location.href+"#/importbuild/"+encoded
 }
 
 export function importData(encodedData) {
+
+    console.log(encodedData)
 
     try {
         let ab = atob(encodedData)

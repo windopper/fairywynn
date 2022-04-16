@@ -13,9 +13,10 @@ import useImportBuild from '../importbuild/useImportBuild'
 export default function Home() {
 
     const location = useLocation()
-    useImportBuild(location.pathname)
+    console.log(location.hash)
+    useImportBuild(location.hash)
     
-    if(location.pathname.includes('importbuild')) return <></>
+    if(location.hash.includes('importbuild')) return <></>
 
     return (
         <div className='home'>
