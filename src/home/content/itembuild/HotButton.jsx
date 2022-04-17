@@ -7,8 +7,7 @@ import useBuildItemsUpdate from "../../hooks/useBuildItemsUpdate";
 import BuildDetail from "../builddetail/BuildDetail";
 import { showBuildDetail } from "../../reducer/builddetail";
 import ExportButton from "./ExportButton";
-import { updatebuild } from "../../reducer/itembuild";
-import { getBuildDamages, StatAssignCalculateFunction } from "../../../utils/WynnMath";
+import { updatebuild, resetsetting } from "../../reducer/itembuild";
 
 export default function HotButton() {
 
@@ -22,6 +21,7 @@ export default function HotButton() {
   const setShowBuildDetail = useCallback(
     () => {
         // dispatch(showBuildDetail)
+      dispatch(resetsetting())
       reCalculateBuildAndUpdate(itembuild)
       dispatch(showBuildDetail)
     },

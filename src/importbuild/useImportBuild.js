@@ -4,11 +4,11 @@ import { importData } from "../utils/FairyWynnUtil"
 import { useDispatch, useStore } from "react-redux"
 import { showBuildDetail } from "../home/reducer/builddetail"
 import { reCalculateBuildAndUpdate } from "../home/reducer/itembuild"
+import { showBuildImportFailPopUps } from "../home/reducer/popup"
 
 export default function useImportBuild(importUrl) {
 
     const importcode = importUrl.split('/')[2]
-
     const navigate = useNavigate()
     const dispatch = useDispatch()
     const store = useStore()
@@ -25,6 +25,7 @@ export default function useImportBuild(importUrl) {
                 }, 1000)
             } else {
                 navigate('../')
+                showBuildImportFailPopUps('.', 2000)
             }
         }
     })

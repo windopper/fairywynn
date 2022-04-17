@@ -6,6 +6,8 @@ const REMOVE = 'popup/remove'
 const REGISTERSUCCESS = 'popup/registersuccess'
 const REMOVESUCCESS = 'popup/removesuccess'
 const REGISTERWARN = 'popup/registerwarn'
+const BUILDIMPORTFAIL = 'popup/buildimportfail'
+const COPYTOCLIPBOARD = 'popup/copytoclipboard'
 
 const add = (v, i, alertType) => {
     return {
@@ -89,6 +91,30 @@ export function showRemovingPopUps(text, mili) {
     }, mili)
 }
 
+export function showBuildImportFailPopUps(text, mili) {
+    if(currentTimer) {
+        clearTimeout(currentTimer)
+        store.dispatch(remove())
+    }
+    setTimeout(() => store.dispatch(add(text, mili, BUILDIMPORTFAIL)), 10)
+    currentTimer = setTimeout(() => {
+        store.dispatch(remove())
+        currentTimer = undefined;
+    }, mili)
+}
+
+export function showCopyToClipBoard(text, mili) {
+    if(currentTimer) {
+        clearTimeout(currentTimer)
+        store.dispatch(remove())
+    }
+    setTimeout(() => store.dispatch(add(text, mili, COPYTOCLIPBOARD)), 10)
+    currentTimer = setTimeout(() => {
+        store.dispatch(remove())
+        currentTimer = undefined;
+    }, mili)
+}
+
 export function isRegisteringPopUp(state) {
     return state.alertType === REGISTERSUCCESS
 }
@@ -99,4 +125,12 @@ export function isRemovingPopUp(state) {
 
 export function isRegisteringWarnPopUp(state) {
     return state.alertType === REGISTERWARN
+}
+
+export function isBuildImportFailPopUp(state) {
+    return state.alertType === BUILDIMPORTFAIL
+}
+
+export function isCopyToClipBoardPopUp(state) {
+    return state.alertType === COPYTOCLIPBOARD
 }

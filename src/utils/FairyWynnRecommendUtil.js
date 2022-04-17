@@ -5,6 +5,6 @@ export const getAlternativeArmorList = (itemBuildData) => {
 }
 
 const concludeMainAndSecondaryElement = (itemBuildData) => {
-
+    
 }
 

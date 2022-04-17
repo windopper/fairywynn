@@ -1,7 +1,7 @@
 @keyframes popup-appear{
     0%{
         opacity: 0;
-        transform: translateY(50%);
+        transform: translateY(-50%);
     }
     10%{
         opacity: 1;
@@ -15,22 +15,22 @@
     }
     80%{
         opacity: 1;
-        transform: translateY(-20%);
+        // transform: translateY(20%);
     }
     90%{
 
     }
     100%{
         opacity: 0;
-        transform: translateY(50%);
+        transform: translateY(-50%);
     }
 }
 
 
 .alert {
     position: fixed;
-    bottom: 20px;
-    left: 20px;
+    top: 20px;
+    right: 20px;
     height: 50px;
     min-width: 300px;
 
@@ -67,6 +67,10 @@
 
 .alert.alreadyinbuild {
     background-color: rgb(255, 191, 0);
+}
+
+.alert.importbuildfail {
+    background-color: rgb(255, 73, 73);
 }
 
 
