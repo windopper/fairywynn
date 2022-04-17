@@ -1,16 +1,16 @@
 {
   "files": {
-    "main.css": "/fairywynn/static/css/main.36a08de7.css",
-    "main.js": "/fairywynn/static/js/main.d8497edf.js",
+    "main.css": "/fairywynn/static/css/main.d8207129.css",
+    "main.js": "/fairywynn/static/js/main.5c89067a.js",
     "static/js/787.223bad63.chunk.js": "/fairywynn/static/js/787.223bad63.chunk.js",
     "static/media/logo.svg": "/fairywynn/static/media/logo.6ce24c58023cc2f8fd88fe9d219db6c6.svg",
     "index.html": "/fairywynn/index.html",
-    "main.36a08de7.css.map": "/fairywynn/static/css/main.36a08de7.css.map",
-    "main.d8497edf.js.map": "/fairywynn/static/js/main.d8497edf.js.map",
+    "main.d8207129.css.map": "/fairywynn/static/css/main.d8207129.css.map",
+    "main.5c89067a.js.map": "/fairywynn/static/js/main.5c89067a.js.map",
     "787.223bad63.chunk.js.map": "/fairywynn/static/js/787.223bad63.chunk.js.map"
   },
   "entrypoints": [
-    "static/css/main.36a08de7.css",
-    "static/js/main.d8497edf.js"
+    "static/css/main.d8207129.css",
+    "static/js/main.5c89067a.js"
   ]
 }
